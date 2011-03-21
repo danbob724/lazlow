@@ -30,21 +30,13 @@ bool BumpMaps::OnInitialize ()
         return false;
     }
 
+	float normalized_length = 1 / sqrt(2.0f);
+	
     // Set up the camera.
     mCamera->SetFrustum(60.0f, GetAspectRatio(), 0.1f, 100.0f);
-    APoint camPosition;
-    AVector camDVector;
-    if (mUseTorus)
-    {
-        camPosition = APoint(0.0f, -0.25f, -15.0f);
-        camDVector = AVector(0.0f, 0.0f, 1.0f);
-    }
-    else
-    {
-        camPosition = APoint(0.0f, 0.0f, 2.5f);
-        camDVector = AVector(0.0f, 0.0f, -1.0f);
-    }
-    AVector camUVector(0.0f, 1.0f, 0.0f);
+    APoint camPosition(0.0f, 7.5f, -7.5f);
+    AVector camDVector(0.0f, -normalized_length, normalized_length); 
+    AVector camUVector(0.0f, normalized_length, normalized_length);
     AVector camRVector = camDVector.Cross(camUVector);
     mCamera->SetFrame(camPosition, camDVector, camUVector, camRVector);
 
