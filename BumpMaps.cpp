@@ -50,7 +50,8 @@ bool BumpMaps::OnInitialize ()
     mCuller.SetCamera(mCamera);
     mCuller.ComputeVisibleSet(mScene);
 
-    InitializeCameraMotion(0.01f, 0.001f);
+    //InitializeCameraMotion(0.01f, 0.001f);
+	InitializeCameraMotion(0.01f, 0.001f, 0.01f, 0.001f);
     InitializeObjectMotion(mScene);
     return true;
 }
@@ -93,7 +94,28 @@ void BumpMaps::OnIdle ()
 
     UpdateFrameCount();
 }
-//----------------------------------------------------------------------------
+
+void BumpMaps::InitializeCameraMotion (float trnSpeed, float rotSpeed, float trnSpeedFactor, float rotSpeedFactor)
+{
+    mCameraMoveable = true;
+
+    mTrnSpeed = trnSpeed;
+    mRotSpeed = rotSpeed;
+    mTrnSpeedFactor = trnSpeedFactor;
+    mRotSpeedFactor = rotSpeedFactor;
+
+	/*
+	mWorldAxis[0] = mCamera->GetDVector();
+    mWorldAxis[1] = mCamera->GetUVector();
+    mWorldAxis[2] = mCamera->GetRVector();
+	*/
+	//AVector camDVector(0.0f, -normalized_length, normalized_length); 
+	mWorldAxis[0] = AVector(0.0f, 0.0f, 1.0f);
+	mWorldAxis[1] = AVector(0.0f, 1.0f, 0.0f);
+	mWorldAxis[2] = AVector(1.0f, 0.0f, 0.0f);
+}
+
+//---------------------------------------------------------------------------
 bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 {
 	/*
@@ -145,7 +167,7 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 	case 'a':
 	case 'A':
 	{
-			 mDeletePressed = true;
+			 mInsertPressed = true;
 			 return true;
 	}
 	case 'w':
@@ -163,7 +185,7 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 	case 'd':
 	case 'D':
 		{
-			mInsertPressed = true;
+			mDeletePressed = true;
 			return true;
 		}
 			
@@ -205,13 +227,13 @@ bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
 		case 'a':
 		case 'A':
 		{
-			mDeletePressed = false;
+			mInsertPressed = false;
 			return true;
 		}
 		case 'd':
 		case 'D':
 		{
-			mInsertPressed = false;
+			mDeletePressed = false;
 			return true;
 		}
 		case 's':
