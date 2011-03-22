@@ -331,10 +331,10 @@ void BumpMaps::CreateScene ()
 	playerCharacter->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	//printf("Did the rotations...\n");
 	
-	mesh[0]->LocalTransform.SetTranslate(APoint(-6.0f, 0.0f, 0.0f));
-	mesh[1]->LocalTransform.SetTranslate(APoint(-2.0f, 0.0f, 0.0f));
-	mesh[2]->LocalTransform.SetTranslate(APoint(2.0f, 0.0f, 0.0f));
-	mesh[3]->LocalTransform.SetTranslate(APoint(6.0f, 0.0f, 0.0f));
+	mesh[0]->LocalTransform.SetTranslate(APoint(-6.0f, 100.0f, 0.0f));
+	mesh[1]->LocalTransform.SetTranslate(APoint(0.0f, 0.0f, 0.0f));
+	mesh[2]->LocalTransform.SetTranslate(APoint(2.0f, 100.0f, 0.0f));
+	mesh[3]->LocalTransform.SetTranslate(APoint(6.0f, 100.0f, 0.0f));
 
 	playerLocation = mCamera->GetPosition();
 	playerLocation += AVector(0.0f, -7.5f, 7.5f);
