@@ -307,7 +307,7 @@ void BumpMaps::CreateScene ()
 	mesh[3]->LocalTransform.SetTranslate(APoint(6.0f, 0.0f, 0.0f));
 
 	playerLocation = mCamera->GetPosition();
-	playerLocation += AVector(0.0f, 0.0f, 6.0f);
+	playerLocation += AVector(0.0f, -7.5f, 7.5f);
 	playerCharacter->LocalTransform.SetTranslate(playerLocation);
 	
 	//printf("Did the translation...\n");
