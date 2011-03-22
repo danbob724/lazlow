@@ -70,6 +70,7 @@ void BumpMaps::OnIdle ()
     if (MoveCamera())
     {
         mCuller.ComputeVisibleSet(mScene);
+		playerCharacter->LocalTransform.SetTranslate(mCamera->GetPosition());
     }
 
     if (MoveObject())
@@ -91,7 +92,7 @@ void BumpMaps::OnIdle ()
 		mRenderer->PostDraw();
         mRenderer->DisplayColorBuffer();
     }
-
+	mScene->Update();
     UpdateFrameCount();
 }
 
@@ -286,12 +287,16 @@ void BumpMaps::CreateScene ()
 	mesh[1] = CreateCylinder();
 	mesh[2] = CreateSphere();
 	mesh[3] = CreateCube();
+
+	playerCharacter = CreateTorus();
 	
 	//printf("Have the meshes...\n");
 	
 	for (int i = 0; i < 4; i++) {
 		mesh[i]->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	}
+
+	playerCharacter->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	
 	//printf("Did the rotations...\n");
 	
@@ -299,13 +304,16 @@ void BumpMaps::CreateScene ()
 	mesh[1]->LocalTransform.SetTranslate(APoint(-2.0f, 0.0f, 0.0f));
 	mesh[2]->LocalTransform.SetTranslate(APoint(2.0f, 0.0f, 0.0f));
 	mesh[3]->LocalTransform.SetTranslate(APoint(6.0f, 0.0f, 0.0f));
+
+	playerCharacter->LocalTransform.SetTranslate(mCamera->GetPosition());
 	
 	//printf("Did the translation...\n");
 	
 	for(int i = 0; i < 4; i++) {
 		mScene->AttachChild(mesh[i]);
 	}
-	
+
+	mScene->AttachChild(playerCharacter);
 	//printf("Attached children to scene...\n");
 	
 	/*
