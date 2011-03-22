@@ -273,8 +273,8 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	x_loc[num_proj] = playerLocation[0];
 	z_loc[num_proj] = playerLocation[2];
 	
-	x_dir[num_proj] = -(float)((x - (GetWidth() / 2)) / 100);
-	z_dir[num_proj] = -(float)((y - (GetHeight() / 2)) / 100);
+	x_dir[num_proj] = -(float)((x - ((float)GetWidth() / 2)) / 100);
+	z_dir[num_proj] = -(float)((y - ((float)GetHeight() / 2)) / 100);
 
 	if(++num_proj > 4)
 	{
