@@ -96,10 +96,12 @@ void BumpMaps::OnIdle ()
 //----------------------------------------------------------------------------
 bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 {
-    if (WindowApplication3::OnKeyDown(key, x, y))
+	/*
+	if (WindowApplication3::OnKeyDown(key, x, y))
     {
         return true;
     }
+	*/
 
     switch (key)
     {
@@ -140,6 +142,32 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 		mCuller.ComputeVisibleSet(mScene);
 		return true;
 	}
+	case 'a':
+	case 'A':
+	{
+			 mDeletePressed = true;
+			 return true;
+	}
+	case 'w':
+	case 'W':
+		{
+			mUArrowPressed = true;
+			return true;
+		}
+	case 's':
+	case 'S':
+		{
+			mDArrowPressed = true;
+			return true;
+		}
+	case 'd':
+	case 'D':
+		{
+			mInsertPressed = true;
+			return true;
+		}
+			
+			
 		/*
 		mUseBumpMap = !mUseBumpMap;
         TriMesh* mesh = StaticCast<TriMesh>(mScene->GetChild(0));
@@ -163,6 +191,36 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 	}
 
     return false;
+}
+
+bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
+	//do the business
+	switch(key) {
+		case 'w':
+		case 'W':
+		{
+			mUArrowPressed = false;
+			return true;
+		}
+		case 'a':
+		case 'A':
+		{
+			mDeletePressed = false;
+			return true;
+		}
+		case 'd':
+		case 'D':
+		{
+			mInsertPressed = false;
+			return true;
+		}
+		case 's':
+		case 'S':
+		{
+			mDArrowPressed = false;
+			return true;
+		}
+	}
 }
 
 bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)

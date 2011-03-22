@@ -25,6 +25,7 @@ public:
     virtual void OnTerminate ();
     virtual void OnIdle ();
     virtual bool OnKeyDown (unsigned char key, int x, int y);
+	virtual bool OnKeyUp (unsigned char key, int x, int y);
 	virtual bool OnMouseClick (int button, int state, int x, int y, unsigned int modifiers);
 
 protected:
