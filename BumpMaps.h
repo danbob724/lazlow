@@ -46,6 +46,8 @@ protected:
     bool mUseBumpMap;
     Float4 mTextColor;
 
+	TriMesh* playerCharacter;
+	
 	Picker mPicker;
 	char mPickMessage[1024];
 };
