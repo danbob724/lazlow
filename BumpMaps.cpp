@@ -11,9 +11,9 @@
 WM5_WINDOW_APPLICATION(BumpMaps);
 
 TriMesh* mesh[4];
-TriMesh* projectiles[20];
-float x_loc[20], z_loc[20]; //save current position for collision detection
-float x_dir[20], z_dir[20]; //save direction for movement on tick
+TriMesh* projectiles[5];
+float x_loc[20], z_loc[5]; //save current position for collision detection
+float x_dir[20], z_dir[5]; //save direction for movement on tick
 int num_proj = 0;
 
 //----------------------------------------------------------------------------
@@ -72,7 +72,6 @@ void BumpMaps::OnTerminate ()
 void BumpMaps::OnIdle ()
 {
     MeasureTime();
-
 	for(int i = 0; i <= num_proj; i++)
 	{
 		projectiles[i] = CreateCube(); 
@@ -80,7 +79,7 @@ void BumpMaps::OnIdle ()
 		x_loc[i] += x_dir[i];
 		z_loc[i] += z_dir[i];
 		projectiles[i]->LocalTransform.SetTranslate(APoint(x_loc[i], 0.0f, z_loc[i]));
-		mScene->SetChild(i+4, projectiles[i]);
+		mScene->SetChild(i+5, projectiles[i]);
 	}
 	mScene->Update();
 	mCuller.ComputeVisibleSet(mScene);
@@ -271,15 +270,15 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	projectiles[num_proj] = CreateCube(); 
 	projectiles[num_proj]->LocalTransform.SetScale(APoint(0.5f, 0.5f, 0.5f));
 
-	x_loc[num_proj] = 0;
-	z_loc[num_proj] = 0;
+	x_loc[num_proj] = playerLocation[0];
+	z_loc[num_proj] = playerLocation[2];
 	
 	x_dir[num_proj] = -(float)((x - (GetWidth() / 2)) / 100);
 	z_dir[num_proj] = -(float)((y - (GetHeight() / 2)) / 100);
 
-	if(num_proj < 19)
+	if(++num_proj > 4)
 	{
-		num_proj++; 
+		num_proj = 0; 
 	}
 
 	if (state != MOUSE_DOWN && state != MOUSE_LEFT_BUTTON)
