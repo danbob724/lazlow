@@ -69,8 +69,10 @@ void BumpMaps::OnIdle ()
 
     if (MoveCamera())
     {
-        mCuller.ComputeVisibleSet(mScene);
-		playerCharacter->LocalTransform.SetTranslate(mCamera->GetPosition());
+		playerLocation = mCamera->GetPosition();
+		playerLocation += AVector(0.0f, -7.5f, 7.5f);
+		playerCharacter->LocalTransform.SetTranslate(playerLocation);
+		mCuller.ComputeVisibleSet(mScene);
     }
 
     if (MoveObject())
@@ -297,7 +299,6 @@ void BumpMaps::CreateScene ()
 	}
 
 	playerCharacter->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
-	
 	//printf("Did the rotations...\n");
 	
 	mesh[0]->LocalTransform.SetTranslate(APoint(-6.0f, 0.0f, 0.0f));
@@ -305,7 +306,9 @@ void BumpMaps::CreateScene ()
 	mesh[2]->LocalTransform.SetTranslate(APoint(2.0f, 0.0f, 0.0f));
 	mesh[3]->LocalTransform.SetTranslate(APoint(6.0f, 0.0f, 0.0f));
 
-	playerCharacter->LocalTransform.SetTranslate(mCamera->GetPosition());
+	playerLocation = mCamera->GetPosition();
+	playerLocation += AVector(0.0f, 0.0f, 6.0f);
+	playerCharacter->LocalTransform.SetTranslate(playerLocation);
 	
 	//printf("Did the translation...\n");
 	

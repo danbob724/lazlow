@@ -47,6 +47,7 @@ protected:
     Float4 mTextColor;
 
 	TriMesh* playerCharacter;
+	APoint playerLocation;
 	
 	Picker mPicker;
 	char mPickMessage[1024];
