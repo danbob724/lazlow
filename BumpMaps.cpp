@@ -10,6 +10,12 @@
 
 WM5_WINDOW_APPLICATION(BumpMaps);
 
+TriMesh* mesh[4];
+TriMesh* projectiles[20];
+float x_loc[20], z_loc[20]; //save current position for collision detection
+float x_dir[20], z_dir[20]; //save direction for movement on tick
+int num_proj = 0;
+
 //----------------------------------------------------------------------------
 BumpMaps::BumpMaps ()
     :
@@ -66,6 +72,18 @@ void BumpMaps::OnTerminate ()
 void BumpMaps::OnIdle ()
 {
     MeasureTime();
+
+	for(int i = 0; i <= num_proj; i++)
+	{
+		projectiles[i] = CreateCube(); 
+		//projectiles[i]->LocalTransform.SetScale(APoint(0.5f, 0.5f, 0.5f));
+		x_loc[i] += x_dir[i];
+		z_loc[i] += z_dir[i];
+		projectiles[i]->LocalTransform.SetTranslate(APoint(x_loc[i], 0.0f, z_loc[i]));
+		mScene->SetChild(i+4, projectiles[i]);
+	}
+	mScene->Update();
+	mCuller.ComputeVisibleSet(mScene);
 
     if (MoveCamera())
     {
@@ -136,7 +154,7 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
     {
 		mUseBumpMap = !mUseBumpMap;
 
-		TriMesh* mesh[4];
+		///TriMesh* mesh[4];
 		mesh[0] = StaticCast<TriMesh>(mScene->GetChild(0));
 		mesh[1] = StaticCast<TriMesh>(mScene->GetChild(1));
 		mesh[2] = StaticCast<TriMesh>(mScene->GetChild(2));
@@ -250,7 +268,20 @@ bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
 
 bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 {
+	projectiles[num_proj] = CreateCube(); 
+	projectiles[num_proj]->LocalTransform.SetScale(APoint(0.5f, 0.5f, 0.5f));
+
+	x_loc[num_proj] = 0;
+	z_loc[num_proj] = 0;
 	
+	x_dir[num_proj] = -(float)((x - (GetWidth() / 2)) / 100);
+	z_dir[num_proj] = -(float)((y - (GetHeight() / 2)) / 100);
+
+	if(num_proj < 19)
+	{
+		num_proj++; 
+	}
+
 	if (state != MOUSE_DOWN && state != MOUSE_LEFT_BUTTON)
 	{
 		return false;
@@ -284,7 +315,7 @@ void BumpMaps::CreateScene ()
 	
 	//printf("New node...\n");
 	
-	TriMesh* mesh[4];
+	//TriMesh* mesh[4];
 	mesh[0] = CreateTorus();
 	mesh[1] = CreateCylinder();
 	mesh[2] = CreateSphere();
