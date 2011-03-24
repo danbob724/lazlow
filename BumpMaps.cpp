@@ -74,14 +74,14 @@ void BumpMaps::OnTerminate ()
 void BumpMaps::OnIdle ()
 {
     MeasureTime();
-	for(int i = 0; i <= num_proj; i++)
+	for(int i = 0; i < num_proj; i++)
 	{
-		projectiles[i] = CreateCube(); 
+		//projectiles[i] = CreateSphere(); 
 		//projectiles[i]->LocalTransform.SetScale(APoint(0.5f, 0.5f, 0.5f));
 		x_loc[i] += x_dir[i];
 		z_loc[i] += z_dir[i];
 		projectiles[i]->LocalTransform.SetTranslate(APoint(x_loc[i], 0.0f, z_loc[i]));
-		mScene->SetChild(i+5, projectiles[i]);
+		mScene->SetChild(i+6, projectiles[i]);
 	}
 	mScene->Update();
 	mCuller.ComputeVisibleSet(mScene);
@@ -210,8 +210,7 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 			mDeletePressed = true;
 			return true;
 		}
-			
-			
+					
 		/*
 		mUseBumpMap = !mUseBumpMap;
         TriMesh* mesh = StaticCast<TriMesh>(mScene->GetChild(0));
@@ -271,12 +270,16 @@ bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
 
 bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 {
-	projectiles[num_proj] = CreateCube(); 
-	projectiles[num_proj]->LocalTransform.SetScale(APoint(0.5f, 0.5f, 0.5f));
+	projectiles[num_proj] = CreateSphere(); 
+	projectiles[num_proj]->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
 
 	x_loc[num_proj] = playerLocation[0];
 	z_loc[num_proj] = playerLocation[2];
-	
+
+	projectiles[num_proj]->LocalTransform.SetTranslate(APoint(x_loc[num_proj], 0.5f, z_loc[num_proj]));
+
+	mScene->AttachChild(projectiles[num_proj]);
+
 	x_dir[num_proj] = -(float)((x - ((float)GetWidth() / 2)));
 	z_dir[num_proj] = -(float)((y - ((float)GetHeight() / 2)));
 	
