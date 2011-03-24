@@ -10,7 +10,7 @@
 
 WM5_WINDOW_APPLICATION(BumpMaps);
 
-TriMesh* mesh[4];
+//TriMesh* mesh[4];
 TriMesh* projectiles[5];
 float x_loc[20], z_loc[5]; //save current position for collision detection
 float x_dir[20], z_dir[5]; //save direction for movement on tick
@@ -20,8 +20,8 @@ int num_proj = 0;
 BumpMaps::BumpMaps ()
     :
     //WindowApplication3("SampleGraphics/BumpMaps", 0, 0, 640, 480,
-	//WindowApplication3("MyApplications/lazlow", 0, 0, 640, 480,
-	WindowApplication3("Programs/Lazlow/GCodeBase", 0, 0, 640, 480,
+	WindowApplication3("MyApplications/lazlow", 0, 0, 640, 480,
+	//WindowApplication3("Programs/Lazlow/GCodeBase", 0, 0, 640, 480,
         Float4(0.8f, 0.8f, 0.8f, 0.8f)),
         mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
@@ -81,9 +81,10 @@ void BumpMaps::OnIdle ()
 		x_loc[i] += x_dir[i];
 		z_loc[i] += z_dir[i];
 		projectiles[i]->LocalTransform.SetTranslate(APoint(x_loc[i], 0.0f, z_loc[i]));
-		mScene->SetChild(i+5, projectiles[i]);
+		mScene->SetChild(i+1, projectiles[i]);
 	}
 	mScene->Update();
+	UpdateBumpMap();
 	mCuller.ComputeVisibleSet(mScene);
 
     if (MoveCamera())
@@ -156,11 +157,12 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 		mUseBumpMap = !mUseBumpMap;
 
 		///TriMesh* mesh[4];
-		mesh[0] = StaticCast<TriMesh>(mScene->GetChild(0));
-		mesh[1] = StaticCast<TriMesh>(mScene->GetChild(1));
-		mesh[2] = StaticCast<TriMesh>(mScene->GetChild(2));
-		mesh[3] = StaticCast<TriMesh>(mScene->GetChild(3));
-		
+		//mesh[0] = StaticCast<TriMesh>(mScene->GetChild(0));
+		//mesh[1] = StaticCast<TriMesh>(mScene->GetChild(1));
+		//mesh[2] = StaticCast<TriMesh>(mScene->GetChild(2));
+		//mesh[3] = StaticCast<TriMesh>(mScene->GetChild(3));
+
+		/*
 		for (int i = 0; i < 4; i++) {
 			Transform save = mesh[i]->LocalTransform;
 
@@ -181,8 +183,10 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 
 			mScene->SetChild(i, mesh[i]);
 		}
-		mScene->Update();
-		UpdateBumpMap();
+		*/
+			
+		//mScene->Update();
+		//UpdateBumpMap();
 		mCuller.ComputeVisibleSet(mScene);
 		return true;
 	}
@@ -324,37 +328,43 @@ void BumpMaps::CreateScene ()
 	//printf("New node...\n");
 	
 	//TriMesh* mesh[4];
-	mesh[0] = CreateTorus();
-	mesh[1] = CreateCylinder();
-	mesh[2] = CreateSphere();
-	mesh[3] = CreateCube();
+	//mesh[0] = CreateTorus();
+	//mesh[1] = CreateCylinder();
+	//mesh[2] = CreateSphere();
+	//mesh[3] = CreateCube();
 
 	playerCharacter = CreateTorus();
 	
 	//printf("Have the meshes...\n");
-	
+
+	/*
 	for (int i = 0; i < 4; i++) {
 		mesh[i]->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	}
-
+	*/
+	
 	playerCharacter->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	//printf("Did the rotations...\n");
-	
+
+	/*
 	mesh[0]->LocalTransform.SetTranslate(APoint(-6.0f, 100.0f, 0.0f));
 	mesh[1]->LocalTransform.SetTranslate(APoint(0.0f, 0.0f, 0.0f));
 	mesh[2]->LocalTransform.SetTranslate(APoint(2.0f, 100.0f, 0.0f));
 	mesh[3]->LocalTransform.SetTranslate(APoint(6.0f, 100.0f, 0.0f));
+	*/
 
 	playerLocation = mCamera->GetPosition();
 	playerLocation += AVector(0.0f, -7.5f, 7.5f);
 	playerCharacter->LocalTransform.SetTranslate(playerLocation);
 	
 	//printf("Did the translation...\n");
-	
+
+	/*
 	for(int i = 0; i < 4; i++) {
 		mScene->AttachChild(mesh[i]);
 	}
-
+	*/
+	
 	mScene->AttachChild(playerCharacter);
 	//printf("Attached children to scene...\n");
 	
@@ -729,12 +739,16 @@ void BumpMaps::UpdateBumpMap ()
     {
         // The scene graph transformations have been updated, which means the
         // tangent-space light vectors need updating.
+		/*
 		TriMesh* mesh[4];
 		for (int i = 0; i < 4; i++) {
 			mesh[i] = StaticCast<TriMesh>(mScene->GetChild(i));
         	SimpleBumpMapEffect::ComputeLightVectors(mesh[i], mLightDirection);
         	mRenderer->Update(mesh[i]->GetVertexBuffer());
 		}
+		*/
+
+		//TODO: Re-implement this in a sane way.
     }
 }
 //----------------------------------------------------------------------------
