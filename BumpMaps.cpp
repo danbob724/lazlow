@@ -8,6 +8,16 @@
 
 #include "BumpMaps.h"
 
+//this nonsense is to get the current working directory
+#include <stdio.h>
+#ifdef WINDOWS
+    #include <direct.h>
+    #define GetCurrentDir _getcwd
+#else
+    #include <unistd.h>
+    #define GetCurrentDir getcwd
+#endif
+
 WM5_WINDOW_APPLICATION(BumpMaps);
 
 //TriMesh* mesh[4];
@@ -20,14 +30,14 @@ int cur_proj = 0;
 //----------------------------------------------------------------------------
 BumpMaps::BumpMaps ()
     :
-    //WindowApplication3("SampleGraphics/BumpMaps", 0, 0, 640, 480,
-	//WindowApplication3("MyApplications/lazlow", 0, 0, 640, 480,
-	WindowApplication3("Programs/Lazlow/GCodeBase", 0, 0, 640, 480,
+	WindowApplication3("Lazlow!!!", 0, 0, 640, 480,
         Float4(0.8f, 0.8f, 0.8f, 0.8f)),
         mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
-    Environment::InsertDirectory(ThePath + "Shaders/");
-
+	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
+	Application::ThePath = getRealPath() + "/";
+	Environment::InsertDirectory(ThePath + "Shaders/");
+	
     mUseTorus = true;
     mUseBumpMap = true;
 }
@@ -64,6 +74,21 @@ bool BumpMaps::OnInitialize ()
     InitializeObjectMotion(mScene);
     return true;
 }
+
+std::string BumpMaps::getRealPath() {
+	//stuff
+	char cCurrentPath[FILENAME_MAX];
+
+	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath))) {
+		//we're fucked!
+	}
+	cCurrentPath[sizeof(cCurrentPath) - 1] = '/0';
+
+	return std::string(cCurrentPath);
+
+}
+
+
 //----------------------------------------------------------------------------
 void BumpMaps::OnTerminate ()
 {
