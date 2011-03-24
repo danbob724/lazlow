@@ -20,7 +20,8 @@ int num_proj = 0;
 BumpMaps::BumpMaps ()
     :
     //WindowApplication3("SampleGraphics/BumpMaps", 0, 0, 640, 480,
-	WindowApplication3("MyApplications/lazlow", 0, 0, 640, 480,
+	//WindowApplication3("MyApplications/lazlow", 0, 0, 640, 480,
+	WindowApplication3("Programs/Lazlow/GCodeBase", 0, 0, 640, 480,
         Float4(0.8f, 0.8f, 0.8f, 0.8f)),
         mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
@@ -276,8 +277,13 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	x_loc[num_proj] = playerLocation[0];
 	z_loc[num_proj] = playerLocation[2];
 	
-	x_dir[num_proj] = -(float)((x - ((float)GetWidth() / 2)) / 100);
-	z_dir[num_proj] = -(float)((y - ((float)GetHeight() / 2)) / 100);
+	x_dir[num_proj] = -(float)((x - ((float)GetWidth() / 2)));
+	z_dir[num_proj] = -(float)((y - ((float)GetHeight() / 2)));
+	
+	float dir_magnitude = sqrt((x_dir[num_proj] * x_dir[num_proj]) + (z_dir[num_proj] * z_dir[num_proj]));
+	x_dir[num_proj] /= dir_magnitude;
+	z_dir[num_proj] /= dir_magnitude;
+
 
 	if(++num_proj > 4)
 	{
