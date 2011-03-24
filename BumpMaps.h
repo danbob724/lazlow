@@ -38,6 +38,7 @@ protected:
 	TriMesh* CreateCube ();
     void UpdateBumpMap ();
 
+	std::string getRealPath();
     NodePtr mScene;
     Culler mCuller;
     AVector mLightDirection;
