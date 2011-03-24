@@ -263,6 +263,8 @@ bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
 			return true;
 		}
 	}
+
+	return false;
 }
 
 bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
