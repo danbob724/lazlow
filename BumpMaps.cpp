@@ -10,7 +10,8 @@
 
 //this nonsense is to get the current working directory
 #include <stdio.h>
-#ifdef WINDOWS
+
+#ifdef WIN32
     #include <direct.h>
     #define GetCurrentDir _getcwd
 #else
@@ -35,7 +36,7 @@ BumpMaps::BumpMaps ()
         mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
-	Application::ThePath = getRealPath() + "/";
+	Application::ThePath = getRealPath() + "/GCodeBase/";
 	Environment::InsertDirectory(ThePath + "Shaders/");
 	
     mUseTorus = true;
@@ -370,7 +371,7 @@ void BumpMaps::CreateScene ()
 	//mesh[3] = CreateCube();
 
 	playerCharacter = CreateTorus();
-	terrain = CreateSquare();
+	terrain = CreateCube();
 	for(int i = 0; i < 5; i++)
 	{
 		x_loc[i] = 0; 
@@ -395,7 +396,8 @@ void BumpMaps::CreateScene ()
 	*/
 	
 	playerCharacter->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
-	terrain->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
+	//terrain->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
+	terrain->LocalTransform.SetScale(APoint(20.0f, 0.05f, 20.0f));
 	
 	//printf("Did the rotations...\n");
 
@@ -409,6 +411,7 @@ void BumpMaps::CreateScene ()
 	playerLocation = mCamera->GetPosition();
 	playerLocation += AVector(0.0f, -7.5f, 7.5f);
 	playerCharacter->LocalTransform.SetTranslate(playerLocation);
+
 	terrain->LocalTransform.SetTranslate(APoint(0.0f, -0.5f, 0.0f));
 	
 	//printf("Did the translation...\n");
@@ -667,10 +670,10 @@ TriMesh* BumpMaps::CreateCube ()
         }
     }
 
-    std::string baseName = Environment::GetPathR("Bricks.wmtf");
+    std::string baseName = Environment::GetPathR("Grass.wmtf");
     Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
     baseTexture->GenerateMipmaps();
-
+/*
     if (mUseBumpMap)
     {
         std::string effectFile = Environment::GetPathR("SimpleBumpMap.wmfx");
@@ -690,10 +693,11 @@ TriMesh* BumpMaps::CreateCube ()
     }
     else
     {
+	*/
         mesh->SetEffectInstance(Texture2DEffect::CreateUniqueInstance(
             baseTexture, Shader::SF_LINEAR_LINEAR, Shader::SC_REPEAT,
             Shader::SC_REPEAT));
-    }
+ //   }
 	mesh->SetName("Cube");
     return mesh;
 }
@@ -803,6 +807,9 @@ void BumpMaps::UpdateBumpMap ()
         	mRenderer->Update(mesh[i]->GetVertexBuffer());
 		}
 		*/
+
+		//SimpleBumpMapEffect::ComputeLightVectors(terrain, mLightDirection);
+        //mRenderer->Update(terrain->GetVertexBuffer());
 
 		//TODO: Re-implement this in a sane way.
     }
