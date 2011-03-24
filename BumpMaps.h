@@ -47,6 +47,7 @@ protected:
     Float4 mTextColor;
 
 	TriMesh* playerCharacter;
+	TriMesh* terrain;
 	APoint playerLocation;
 	
 	Picker mPicker;
