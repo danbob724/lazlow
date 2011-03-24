@@ -1,0 +1,37 @@
+!!ARBvp1.0
+# cgc version 2.2.0006, build date Mar 31 2009
+# command line args: -profile arbvp1
+# source file: SimpleBumpMap.fx
+#vendor NVIDIA Corporation
+#version 2.2.0.6
+#profile arbvp1
+#program v_SimpleBumpMap
+#semantic v_SimpleBumpMap.PVWMatrix
+#semantic BaseSampler
+#semantic NormalSampler
+#var float3 modelPosition : $vin.POSITION : POSITION : 0 : 1
+#var float3 modelLightDirection : $vin.COLOR0 : COLOR0 : 1 : 1
+#var float2 modelBaseTCoord : $vin.TEXCOORD0 : TEXCOORD0 : 2 : 1
+#var float2 modelNormalTCoord : $vin.TEXCOORD1 : TEXCOORD1 : 3 : 1
+#var float4 clipPosition : $vout.POSITION : HPOS : 4 : 1
+#var float3 vertexLightDirection : $vout.COLOR0 : COL0 : 5 : 1
+#var float2 vertexBaseTCoord : $vout.TEXCOORD0 : TEX0 : 6 : 1
+#var float2 vertexNormalTCoord : $vout.TEXCOORD1 : TEX1 : 7 : 1
+#var float4x4 PVWMatrix :  : c[1], 4 : 8 : 1
+#var sampler2D BaseSampler :  :  : -1 : 0
+#var sampler2D NormalSampler :  :  : -1 : 0
+#const c[0] = 1
+PARAM c[5] = { { 1 },
+		program.local[1..4] };
+TEMP R0;
+MOV R0.w, c[0].x;
+MOV R0.xyz, vertex.position;
+DP4 result.position.w, R0, c[4];
+DP4 result.position.z, R0, c[3];
+DP4 result.position.y, R0, c[2];
+DP4 result.position.x, R0, c[1];
+MOV result.color.xyz, vertex.color;
+MOV result.texcoord[0].xy, vertex.texcoord[0];
+MOV result.texcoord[1].xy, vertex.texcoord[1];
+END
+# 9 instructions, 1 R-regs
