@@ -19,7 +19,8 @@ int num_proj = 0;
 //----------------------------------------------------------------------------
 BumpMaps::BumpMaps ()
     :
-    WindowApplication3("SampleGraphics/BumpMaps", 0, 0, 640, 480,
+    //WindowApplication3("SampleGraphics/BumpMaps", 0, 0, 640, 480,
+	WindowApplication3("MyApplications/lazlow", 0, 0, 640, 480,
         Float4(0.8f, 0.8f, 0.8f, 0.8f)),
         mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
