@@ -13,6 +13,14 @@
 #include "SimpleBumpMapEffect.h"
 using namespace Wm5;
 
+struct Projectile
+{
+	Wm5::TriMesh * mesh;
+	float x_loc, z_loc, x_dir, z_dir;
+} ;
+#define NUM_PROJECTILES 5
+
+
 class BumpMaps : public WindowApplication3
 {
     WM5_DECLARE_INITIALIZE;
@@ -46,11 +54,13 @@ protected:
     bool mUseTorus;
     bool mUseBumpMap;
     Float4 mTextColor;
-
+//////////////////////
 	TriMesh* playerCharacter;
 	TriMesh* terrain;
 	APoint playerLocation;
-	
+	Projectile projectiles[NUM_PROJECTILES];
+
+//////////////////////////
 	Picker mPicker;
 	char mPickMessage[1024];
 };
