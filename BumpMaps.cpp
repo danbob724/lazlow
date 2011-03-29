@@ -21,12 +21,8 @@
 
 WM5_WINDOW_APPLICATION(BumpMaps);
 
-//TriMesh* mesh[4];
-TriMesh* projectiles[5];
-float x_loc[5], z_loc[5]; //save current position for collision detection
-float x_dir[5], z_dir[5]; //save direction for movement on tick
-int num_proj = 0;
-int cur_proj = 0;
+	int num_proj = 0;
+	int cur_proj = 0;
 
 //----------------------------------------------------------------------------
 BumpMaps::BumpMaps ()
@@ -104,9 +100,9 @@ void BumpMaps::OnIdle ()
 	for(int i = 0; i < num_proj; i++)
 	{
 		//projectiles[i] = CreateSphere(); 
-		x_loc[i] += x_dir[i];
-		z_loc[i] += z_dir[i];
-		projectiles[i]->LocalTransform.SetTranslate(APoint(x_loc[i], 0.0f, z_loc[i]));
+		projectiles[i].x_loc += projectiles[i].x_dir;
+		projectiles[i].z_loc += projectiles[i].z_dir;
+		projectiles[i].mesh->LocalTransform.SetTranslate(APoint(projectiles[i].x_loc, 0.0f, projectiles[i].z_loc));
 		//mScene->AttachChild(projectiles[i]);
 	}
 	mScene->Update();
@@ -309,29 +305,29 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	//projectiles[cur_proj] = CreateSphere(); 
 	//projectiles[cur_proj]->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
 
-	x_loc[cur_proj] = playerLocation[0];
-	z_loc[cur_proj] = playerLocation[2];
+	projectiles[cur_proj].x_loc = playerLocation[0];
+	projectiles[cur_proj].z_loc = playerLocation[2];
 
-	projectiles[cur_proj]->LocalTransform.SetTranslate(APoint(x_loc[cur_proj], 0.0f, z_loc[cur_proj]));
+	projectiles[cur_proj].mesh->LocalTransform.SetTranslate(APoint(projectiles[cur_proj].x_loc, 0.0f, projectiles[cur_proj].z_loc));
 
 	//mScene->AttachChild(projectiles[cur_proj]);
 
-	x_dir[cur_proj] = -(float)((x - ((float)GetWidth() / 2)));
-	z_dir[cur_proj] = -(float)((y - ((float)GetHeight() / 2)));
+	projectiles[cur_proj].x_dir = -(float)((x - ((float)GetWidth() / 2)));
+	projectiles[cur_proj].z_dir = -(float)((y - ((float)GetHeight() / 2)));
 	
-	float dir_magnitude = sqrt((x_dir[cur_proj] * x_dir[cur_proj]) + (z_dir[cur_proj] * z_dir[cur_proj]));
-	x_dir[cur_proj] /= dir_magnitude;
-	z_dir[cur_proj] /= dir_magnitude;
+	float dir_magnitude = sqrt((projectiles[cur_proj].x_dir * projectiles[cur_proj].x_dir) + (projectiles[cur_proj].z_dir * projectiles[cur_proj].z_dir));
+	projectiles[cur_proj].x_dir /= dir_magnitude;
+	projectiles[cur_proj].z_dir /= dir_magnitude;
 
-	x_dir[cur_proj] /= 5;
-	z_dir[cur_proj] /= 5;
+	projectiles[cur_proj].x_dir /= 5;
+	projectiles[cur_proj].z_dir /= 5;
 
-	if(++cur_proj > 4)
+	if(++cur_proj >= NUM_PROJECTILES)
 	{
 		cur_proj = 0; 
 	}
 
-	if(num_proj <= 4)
+	if(num_proj < NUM_PROJECTILES)
 	{
 		num_proj++;
 	}
@@ -372,19 +368,19 @@ void BumpMaps::CreateScene ()
 
 	playerCharacter = CreateTorus();
 	terrain = CreateCube();
-	for(int i = 0; i < 5; i++)
+	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
-		x_loc[i] = 0; 
-		z_loc[i] = 0;
-		x_dir[i] = 0;
-		z_dir[i] = 0;
+		projectiles[i].x_loc = 0; 
+		projectiles[i].z_loc = 0;
+		projectiles[i].x_dir = 0;
+		projectiles[i].z_dir = 0;
 
-		projectiles[i] = CreateSphere(); 
-		projectiles[i]->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
+		projectiles[i].mesh = CreateSphere(); 
+		projectiles[i].mesh->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
 
-		projectiles[i]->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+		projectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 
-		mScene->AttachChild(projectiles[i]);
+		mScene->AttachChild(projectiles[i].mesh);
 	}
 	
 	//printf("Have the meshes...\n");
