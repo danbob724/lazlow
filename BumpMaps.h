@@ -12,6 +12,7 @@
 #include "Wm5WindowApplication3.h"
 #include "SimpleBumpMapEffect.h"
 #include "shapeMaker.h"
+#include "playerCharacter.h"
 using namespace Wm5;
 
 struct Projectile
@@ -52,9 +53,9 @@ protected:
     bool mUseBumpMap;
     Float4 mTextColor;
 //////////////////////
-	TriMesh* playerCharacter;
+	PlayerCharacter thePlayer;
 	TriMesh* terrain;
-	APoint playerLocation;
+	//APoint playerLocation;
 	Projectile projectiles[NUM_PROJECTILES];
 
 //////////////////////////
