@@ -34,10 +34,13 @@ BumpMaps::BumpMaps ()
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
 	Application::ThePath = getRealPath() + "/";
 	Environment::InsertDirectory(ThePath + "Shaders/");
+	Environment::InsertDirectory(WM5Path + "Data/Wmtf/");
 	
     mUseTorus = true;
     mUseBumpMap = true;
 	mShapeMaker = ShapeMaker(mUseBumpMap);
+
+	thePlayer = PlayerCharacter(&mShapeMaker);
 }
 //----------------------------------------------------------------------------
 bool BumpMaps::OnInitialize ()
@@ -112,9 +115,10 @@ void BumpMaps::OnIdle ()
 
     if (MoveCamera())
     {
-		playerLocation = mCamera->GetPosition();
-		playerLocation += AVector(0.0f, -7.5f, 7.5f);
-		playerCharacter->LocalTransform.SetTranslate(playerLocation);
+		//playerLocation = mCamera->GetPosition();
+		//playerLocation += AVector(0.0f, -7.5f, 7.5f);
+		//playerCharacter->LocalTransform.SetTranslate(playerLocation);
+		thePlayer.mMesh->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -7.5f, 7.5f));
 		mCuller.ComputeVisibleSet(mScene);
     }
 
@@ -306,8 +310,10 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	//projectiles[cur_proj] = CreateSphere(); 
 	//projectiles[cur_proj]->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
 
-	projectiles[cur_proj].x_loc = playerLocation[0];
-	projectiles[cur_proj].z_loc = playerLocation[2];
+	//projectiles[cur_proj].x_loc = playerLocation[0];
+	//projectiles[cur_proj].z_loc = playerLocation[2];
+	projectiles[cur_proj].x_loc = thePlayer.getLocation()[0];
+	projectiles[cur_proj].z_loc = thePlayer.getLocation()[2];
 
 	projectiles[cur_proj].mesh->LocalTransform.SetTranslate(APoint(projectiles[cur_proj].x_loc, 0.0f, projectiles[cur_proj].z_loc));
 
@@ -367,7 +373,6 @@ void BumpMaps::CreateScene ()
 	//mesh[2] = CreateSphere();
 	//mesh[3] = CreateCube();
 
-	playerCharacter = mShapeMaker.CreateTorus();
 	terrain = mShapeMaker.CreateCube();
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
@@ -392,7 +397,7 @@ void BumpMaps::CreateScene ()
 	}
 	*/
 	
-	playerCharacter->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
+	thePlayer.mMesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	//terrain->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	terrain->LocalTransform.SetScale(APoint(20.0f, 0.05f, 20.0f));
 	
@@ -405,10 +410,11 @@ void BumpMaps::CreateScene ()
 	mesh[3]->LocalTransform.SetTranslate(APoint(6.0f, 100.0f, 0.0f));
 	*/
 
-	playerLocation = mCamera->GetPosition();
-	playerLocation += AVector(0.0f, -7.5f, 7.5f);
-	playerCharacter->LocalTransform.SetTranslate(playerLocation);
-
+	//playerLocation = mCamera->GetPosition();
+	//playerLocation += AVector(0.0f, -7.5f, 7.5f);
+	//playerCharacter->LocalTransform.SetTranslate(playerLocation);
+	thePlayer.mMesh->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -7.5f, 7.5f));
+	
 	terrain->LocalTransform.SetTranslate(APoint(0.0f, -0.5f, 0.0f));
 	
 	//printf("Did the translation...\n");
@@ -419,7 +425,7 @@ void BumpMaps::CreateScene ()
 	}
 	*/
 	
-	mScene->AttachChild(playerCharacter);
+	mScene->AttachChild(thePlayer.mMesh);
 	mScene->AttachChild(terrain);
 
 	//printf("Attached children to scene...\n");
