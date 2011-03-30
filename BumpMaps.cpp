@@ -32,6 +32,7 @@ BumpMaps::BumpMaps ()
         mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
+	//Application::ThePath = getRealPath() + "/GCodeBase/";
 	Application::ThePath = getRealPath() + "/";
 	Environment::InsertDirectory(ThePath + "Shaders/");
 	Environment::InsertDirectory(WM5Path + "Data/Wmtf/");
@@ -104,9 +105,8 @@ void BumpMaps::OnIdle ()
 	for(int i = 0; i < num_proj; i++)
 	{
 		//projectiles[i] = CreateSphere(); 
-		projectiles[i].x_loc += projectiles[i].x_dir;
-		projectiles[i].z_loc += projectiles[i].z_dir;
-		projectiles[i].mesh->LocalTransform.SetTranslate(APoint(projectiles[i].x_loc, 0.0f, projectiles[i].z_loc));
+		projectiles[i].loc = projectiles[i].loc + AVector(projectiles[i].x_dir, 0.0, projectiles[i].z_dir);
+		projectiles[i].mesh->LocalTransform.SetTranslate(APoint(projectiles[i].loc));
 		//mScene->AttachChild(projectiles[i]);
 	}
 	mScene->Update();
@@ -118,7 +118,9 @@ void BumpMaps::OnIdle ()
 		//playerLocation = mCamera->GetPosition();
 		//playerLocation += AVector(0.0f, -7.5f, 7.5f);
 		//playerCharacter->LocalTransform.SetTranslate(playerLocation);
-		thePlayer.mMesh->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -7.5f, 7.5f));
+		thePlayer.setLocation(mCamera->GetPosition() + AVector(0.0f, -7.5f, 7.5f));
+		thePlayer.mMesh->LocalTransform.SetTranslate(thePlayer.getLocation());
+		
 		mCuller.ComputeVisibleSet(mScene);
     }
 
@@ -312,10 +314,9 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 
 	//projectiles[cur_proj].x_loc = playerLocation[0];
 	//projectiles[cur_proj].z_loc = playerLocation[2];
-	projectiles[cur_proj].x_loc = thePlayer.getLocation()[0];
-	projectiles[cur_proj].z_loc = thePlayer.getLocation()[2];
+	projectiles[cur_proj].loc = thePlayer.getLocation();
 
-	projectiles[cur_proj].mesh->LocalTransform.SetTranslate(APoint(projectiles[cur_proj].x_loc, 0.0f, projectiles[cur_proj].z_loc));
+	projectiles[cur_proj].mesh->LocalTransform.SetTranslate(APoint(projectiles[cur_proj].loc));
 
 	//mScene->AttachChild(projectiles[cur_proj]);
 
@@ -376,8 +377,7 @@ void BumpMaps::CreateScene ()
 	terrain = mShapeMaker.CreateCube();
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
-		projectiles[i].x_loc = 0; 
-		projectiles[i].z_loc = 0;
+		projectiles[i].loc = APoint::ORIGIN; 
 		projectiles[i].x_dir = 0;
 		projectiles[i].z_dir = 0;
 
