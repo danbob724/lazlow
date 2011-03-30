@@ -18,7 +18,8 @@ using namespace Wm5;
 struct Projectile
 {
 	Wm5::TriMesh * mesh;
-	float x_loc, z_loc, x_dir, z_dir;
+	APoint loc;
+	float x_dir, z_dir;
 } ;
 #define NUM_PROJECTILES 5
 
