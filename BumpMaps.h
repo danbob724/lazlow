@@ -11,6 +11,7 @@
 
 #include "Wm5WindowApplication3.h"
 #include "SimpleBumpMapEffect.h"
+#include "shapeMaker.h"
 using namespace Wm5;
 
 struct Projectile
@@ -39,13 +40,9 @@ public:
 
 protected:
     void CreateScene ();
-    TriMesh* CreateTorus ();
-    TriMesh* CreateSquare ();
-	TriMesh* CreateCylinder ();
-	TriMesh* CreateSphere ();
-	TriMesh* CreateCube ();
     void UpdateBumpMap ();
 
+	ShapeMaker mShapeMaker;
 	std::string getRealPath();
     NodePtr mScene;
     Culler mCuller;
