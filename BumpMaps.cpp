@@ -351,7 +351,7 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 			//Display the selected object's name
 			const PickRecord& record = mPicker.GetClosestNonnegative();
 			const Spatial* object = record.Intersected;
-			sprintf(mPickMessage, "%s", object->GetName().c_str());
+			//sprintf(mPickMessage, "%s", object->GetName().c_str());
 		}
 		else
 		{
@@ -365,16 +365,7 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 void BumpMaps::CreateScene ()
 {
     mScene = new0 Node();
-	
-	//printf("New node...\n");
-	
-	//TriMesh* mesh[4];
-	//mesh[0] = CreateTorus();
-	//mesh[1] = CreateCylinder();
-	//mesh[2] = CreateSphere();
-	//mesh[3] = CreateCube();
 
-	terrain = mShapeMaker.CreateCube();
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
 		projectiles[i].loc = APoint::ORIGIN; 
@@ -389,17 +380,32 @@ void BumpMaps::CreateScene ()
 		mScene->AttachChild(projectiles[i].mesh);
 	}
 	
-	//printf("Have the meshes...\n");
+	thePlayer.mMesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
+	thePlayer.mMesh->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -7.5f, 7.5f));
+	mScene->AttachChild(thePlayer.mMesh);
 
+	terrain = mShapeMaker.CreateCube();
+	terrain->LocalTransform.SetScale(APoint(20.0f, 0.05f, 20.0f));
+	terrain->LocalTransform.SetTranslate(APoint(0.0f, -0.5f, 0.0f));
+	mScene->AttachChild(terrain);
+
+	//printf("New node...\n");
+	
+	//TriMesh* mesh[4];
+	//mesh[0] = CreateTorus();
+	//mesh[1] = CreateCylinder();
+	//mesh[2] = CreateSphere();
+	//mesh[3] = CreateCube();
+
+	//printf("Have the meshes...\n");
 	/*
 	for (int i = 0; i < 4; i++) {
 		mesh[i]->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	}
 	*/
 	
-	thePlayer.mMesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	//terrain->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
-	terrain->LocalTransform.SetScale(APoint(20.0f, 0.05f, 20.0f));
+	
 	
 	//printf("Did the rotations...\n");
 
@@ -413,9 +419,7 @@ void BumpMaps::CreateScene ()
 	//playerLocation = mCamera->GetPosition();
 	//playerLocation += AVector(0.0f, -7.5f, 7.5f);
 	//playerCharacter->LocalTransform.SetTranslate(playerLocation);
-	thePlayer.mMesh->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -7.5f, 7.5f));
 	
-	terrain->LocalTransform.SetTranslate(APoint(0.0f, -0.5f, 0.0f));
 	
 	//printf("Did the translation...\n");
 
@@ -424,9 +428,6 @@ void BumpMaps::CreateScene ()
 		mScene->AttachChild(mesh[i]);
 	}
 	*/
-	
-	mScene->AttachChild(thePlayer.mMesh);
-	mScene->AttachChild(terrain);
 
 	//printf("Attached children to scene...\n");
 	
