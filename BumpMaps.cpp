@@ -105,10 +105,27 @@ void BumpMaps::OnIdle ()
 	for(int i = 0; i < num_proj; i++)
 	{
 		//projectiles[i] = CreateSphere(); 
-		projectiles[i].loc = projectiles[i].loc + AVector(projectiles[i].x_dir, 0.0, projectiles[i].z_dir);
-		projectiles[i].mesh->LocalTransform.SetTranslate(APoint(projectiles[i].loc));
+		//projectiles[i].loc = projectiles[i].loc + AVector(projectiles[i].x_dir, 0.0, projectiles[i].z_dir);
+		//projectiles[i].mesh->LocalTransform.SetTranslate(APoint(projectiles[i].loc));
 		//mScene->AttachChild(projectiles[i]);
+		projectiles[i].Update();
+
+		for(int j = 0; j < NUM_ENEMIES; j++)
+		{
+			if(enemies[j].active()) //if enemy is active
+			{
+				//for now radii are hard coded in, will make more dynamic
+				if(((projectiles[i].loc - enemies[j].loc).Length() - 0.5 - .35) <= 0)
+				{
+					enemies[j].state = 0;
+					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+				}
+			}
+		}
 	}
+
+	
+
 	mScene->Update();
 	UpdateBumpMap();
 	mCuller.ComputeVisibleSet(mScene);
@@ -224,11 +241,12 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 	{
 		for(int i = 0; i < NUM_ENEMIES; i++)
 		{
+			//find an inactive enemy and create it
 			if(!enemies[i].active())
 			{
 				enemies[i].state = 1;
-				//enemies[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 0.0f, 3.0f));
-				enemies[i].mesh->LocalTransform.SetTranslate(APoint((float)i, 0.0f, 0.0f));
+				enemies[i].loc = APoint((i - 2.0f) * 2.5f, 0.0f, 3.0f);
+				enemies[i].Update();
 				break;
 			}
 		}
