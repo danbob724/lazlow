@@ -114,11 +114,27 @@ void BumpMaps::OnIdle ()
 		{
 			if(enemies[j].active()) //if enemy is active
 			{
+				AVector projectileToEnemy = projectiles[i].loc - enemies[j].loc;
+				
 				//for now radii are hard coded in, will make more dynamic
-				if(((projectiles[i].loc - enemies[j].loc).Length() - 0.5 - .35) <= 0)
+				if((projectileToEnemy.Length() - 0.5 - .35) <= 0)
 				{
 					enemies[j].state = 0;
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+				}
+
+				if(enemies[j].active()) //if enemy is still active
+				{
+					AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
+
+					playerToEnemy.Normalize();
+					enemies[j].x_dir = playerToEnemy.X();
+					enemies[j].z_dir = playerToEnemy.Z();
+
+					enemies[j].x_dir /= 250;
+					enemies[j].z_dir /= 250;
+
+					enemies[j].Update();
 				}
 			}
 		}
