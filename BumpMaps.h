@@ -14,6 +14,7 @@
 #include "shapeMaker.h"
 #include "playerCharacter.h"
 #include "lazProjectile.h"
+#include "lazEnemy.h"
 
 using namespace Wm5;
 /*
@@ -60,6 +61,7 @@ protected:
 	TriMesh* terrain;
 	//APoint playerLocation;
 	lazProjectile projectiles[NUM_PROJECTILES];
+	lazEnemy enemies[NUM_ENEMIES];
 
 //////////////////////////
 	Picker mPicker;

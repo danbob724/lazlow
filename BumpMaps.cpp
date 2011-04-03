@@ -219,6 +219,21 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 		mCuller.ComputeVisibleSet(mScene);
 		return true;
 	}
+	case 'q':
+	case 'Q':
+	{
+		for(int i = 0; i < NUM_ENEMIES; i++)
+		{
+			if(!enemies[i].active())
+			{
+				enemies[i].state = 1;
+				//enemies[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 0.0f, 3.0f));
+				enemies[i].mesh->LocalTransform.SetTranslate(APoint((float)i, 0.0f, 0.0f));
+				break;
+			}
+		}
+		return true;
+	}
 	case 'a':
 	case 'A':
 	{
@@ -378,6 +393,21 @@ void BumpMaps::CreateScene ()
 		projectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 
 		mScene->AttachChild(projectiles[i].mesh);
+	}
+
+	for(int i = 0; i < NUM_ENEMIES; i++)
+	{
+		enemies[i].loc = APoint::ORIGIN; 
+		enemies[i].x_dir = 0;
+		enemies[i].z_dir = 0;
+		enemies[i].state = 0;
+
+		enemies[i].mesh = mShapeMaker.CreateCylinder(); 
+		//enemies[i].mesh->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
+		enemies[i].mesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
+		enemies[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+
+		mScene->AttachChild(enemies[i].mesh);
 	}
 	
 	thePlayer.mMesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
