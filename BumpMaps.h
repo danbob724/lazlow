@@ -13,14 +13,16 @@
 #include "SimpleBumpMapEffect.h"
 #include "shapeMaker.h"
 #include "playerCharacter.h"
-using namespace Wm5;
+#include "lazProjectile.h"
 
+using namespace Wm5;
+/*
 struct Projectile
 {
 	Wm5::TriMesh * mesh;
 	APoint loc;
 	float x_dir, z_dir;
-} ;
+} ;*/
 #define NUM_PROJECTILES 5
 
 
@@ -57,7 +59,7 @@ protected:
 	PlayerCharacter thePlayer;
 	TriMesh* terrain;
 	//APoint playerLocation;
-	Projectile projectiles[NUM_PROJECTILES];
+	lazProjectile projectiles[NUM_PROJECTILES];
 
 //////////////////////////
 	Picker mPicker;
