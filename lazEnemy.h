@@ -17,11 +17,14 @@ using namespace Wm5;
 class lazEnemy
 {
 	public:
-		lazEnemy();
+		lazEnemy();		
 		lazEnemy(ShapeMaker* someShapeMaker);
+		int active();
+
 		TriMesh* mesh;
 		APoint loc;
 		float x_dir, z_dir;
+		int state; //0 = inactive, 1 = active
 		void Update();
 		
 	protected:
