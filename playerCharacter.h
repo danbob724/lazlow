@@ -22,6 +22,8 @@ class PlayerCharacter
 		TriMesh* mMesh;
 		APoint getLocation();
 
+		float radius;
+
 	protected:
 		ShapeMaker* mShapeMaker;
 		unsigned char curSummon;
