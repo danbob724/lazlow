@@ -46,8 +46,8 @@ BumpMaps::BumpMaps ()
 //----------------------------------------------------------------------------
 bool BumpMaps::OnInitialize ()
 {
-	time(&time0);
-	time(&time1);
+	clock0 = clock();
+	clock1 = clock();
 	if (!WindowApplication3::OnInitialize())
     {
         return false;
@@ -57,7 +57,7 @@ bool BumpMaps::OnInitialize ()
 	
     // Set up the camera.
     mCamera->SetFrustum(60.0f, GetAspectRatio(), 0.1f, 100.0f);
-    APoint camPosition(0.0f, 7.5f, -7.5f);
+    APoint camPosition(0.0f, 15.f, -15.f);
     AVector camDVector(0.0f, -normalized_length, normalized_length); 
     AVector camUVector(0.0f, normalized_length, normalized_length);
     AVector camRVector = camDVector.Cross(camUVector);
@@ -101,6 +101,7 @@ void BumpMaps::OnTerminate ()
 //----------------------------------------------------------------------------
 
 void BumpMaps::TimeBasedMove() {
+	clock0 = clock();
 	//do the movment-stuff here
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
@@ -184,7 +185,7 @@ void BumpMaps::TimeBasedMove() {
 		//playerLocation = mCamera->GetPosition();
 		//playerLocation += AVector(0.0f, -7.5f, 7.5f);
 		//playerCharacter->LocalTransform.SetTranslate(playerLocation);
-		thePlayer.setLocation(mCamera->GetPosition() + AVector(0.0f, -7.5f, 7.5f));
+		thePlayer.setLocation(mCamera->GetPosition() + AVector(0.0f, -15.f, 15.f));
 		thePlayer.mMesh->LocalTransform.SetTranslate(thePlayer.getLocation());
 		
 		mCuller.ComputeVisibleSet(mScene);
@@ -201,8 +202,8 @@ void BumpMaps::TimeBasedMove() {
 void BumpMaps::OnIdle ()
 {
     MeasureTime();
-	time(&time1);
-	if (difftime(time1, time0) > 0.01) {
+	clock1 = clock();
+	if (((clock1 - clock0) * CLOCKS_PER_SEC) > 0.01) {
 		//call TimeBasedMove()
 		TimeBasedMove();
 	}
@@ -493,7 +494,7 @@ void BumpMaps::CreateScene ()
 	}
 	
 	thePlayer.mMesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
-	thePlayer.mMesh->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -7.5f, 7.5f));
+	thePlayer.mMesh->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -15.f, 15.f));
 	mScene->AttachChild(thePlayer.mMesh);
 
 	terrain = mShapeMaker.CreateCube();

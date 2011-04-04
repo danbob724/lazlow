@@ -65,7 +65,7 @@ protected:
 	lazProjectile projectiles[NUM_PROJECTILES];
 	lazEnemy enemies[NUM_ENEMIES];
 
-	time_t time0, time1;
+	clock_t clock0, clock1;
 
 //////////////////////////
 	Picker mPicker;
