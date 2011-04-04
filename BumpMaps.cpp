@@ -125,14 +125,34 @@ void BumpMaps::OnIdle ()
 				if(enemies[j].active()) //if enemy is still active
 				{
 					AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
-
 					playerToEnemy.Normalize();
+
+					switch(enemies[j].behavior)
+					{
+						case 2:
+						{
+							playerToEnemy = -(playerToEnemy.Cross(AVector::UNIT_Y));
+							break;
+						}
+						case 1:
+						{
+							playerToEnemy = playerToEnemy.Cross(AVector::UNIT_Y);
+							break;
+						}
+						case 0:
+						default:
+						{
+							//by default, don't mess with the vector and the enemy will hea straight for the player
+							break;
+						}
+
+					}
 					enemies[j].x_dir = playerToEnemy.X();
 					enemies[j].z_dir = playerToEnemy.Z();
 
+					//scaling enemy speed
 					enemies[j].x_dir /= 250;
 					enemies[j].z_dir /= 250;
-
 					enemies[j].Update();
 				}
 			}
@@ -417,7 +437,7 @@ void BumpMaps::CreateScene ()
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
 		projectiles[i].loc = APoint::ORIGIN; 
-		projectiles[i].radius = 0.35;
+		projectiles[i].radius = 0.35f;
 		projectiles[i].x_dir = 0;
 		projectiles[i].z_dir = 0;
 
@@ -436,6 +456,7 @@ void BumpMaps::CreateScene ()
 		enemies[i].x_dir = 0;
 		enemies[i].z_dir = 0;
 		enemies[i].state = 0;
+		enemies[i].behavior = i % 3;
 
 		enemies[i].mesh = mShapeMaker.CreateCylinder(); 
 		//enemies[i].mesh->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
