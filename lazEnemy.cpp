@@ -13,6 +13,7 @@ lazEnemy::lazEnemy(ShapeMaker* someShapeMaker) {
 	mesh = myShapeMaker->CreateSphere();
 
 	loc = APoint::ORIGIN; 
+	radius = 0.5;
 	x_dir = 0;
 	z_dir = 0;
 	
