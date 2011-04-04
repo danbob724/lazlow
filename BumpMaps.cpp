@@ -41,7 +41,12 @@ BumpMaps::BumpMaps ()
     mUseBumpMap = true;
 	mShapeMaker = ShapeMaker(mUseBumpMap);
 
-	thePlayer = PlayerCharacter(&mShapeMaker);
+	thePlayer = PlayerCharacter(&mShapeMaker, mCamera);
+	currentPlayerMotion = AVector(0.0f, 0.0f, 0.0f);
+	wPressed = false;
+	aPressed = false;
+	sPressed = false;
+	dPressed = false;
 }
 //----------------------------------------------------------------------------
 bool BumpMaps::OnInitialize ()
@@ -103,6 +108,9 @@ void BumpMaps::OnTerminate ()
 void BumpMaps::TimeBasedMove() {
 	clock0 = clock();
 	//do the movment-stuff here
+
+	setMotionFromKeyboard();
+	
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
 		//projectiles[i] = CreateSphere(); 
@@ -176,6 +184,7 @@ void BumpMaps::TimeBasedMove() {
 		}
 	}
 
+	mCamera->SetPosition(thePlayer.movePlayer(currentPlayerMotion));
 	mScene->Update();
 	UpdateBumpMap();
 	mCuller.ComputeVisibleSet(mScene);
@@ -185,8 +194,8 @@ void BumpMaps::TimeBasedMove() {
 		//playerLocation = mCamera->GetPosition();
 		//playerLocation += AVector(0.0f, -7.5f, 7.5f);
 		//playerCharacter->LocalTransform.SetTranslate(playerLocation);
-		thePlayer.setLocation(mCamera->GetPosition() + AVector(0.0f, -15.f, 15.f));
-		thePlayer.mMesh->LocalTransform.SetTranslate(thePlayer.getLocation());
+		//thePlayer.setLocation(mCamera->GetPosition() + AVector(0.0f, -15.f, 15.f));
+		//thePlayer.mMesh->LocalTransform.SetTranslate(thePlayer.getLocation());
 		
 		mCuller.ComputeVisibleSet(mScene);
     }
@@ -203,7 +212,7 @@ void BumpMaps::OnIdle ()
 {
     MeasureTime();
 	clock1 = clock();
-	if (((clock1 - clock0) * CLOCKS_PER_SEC) > 0.01) {
+	if (((clock1 - clock0) * CLOCKS_PER_SEC) > 0.005) {
 		//call TimeBasedMove()
 		TimeBasedMove();
 	}
@@ -245,6 +254,23 @@ void BumpMaps::InitializeCameraMotion (float trnSpeed, float rotSpeed, float trn
 }
 
 //---------------------------------------------------------------------------
+
+void BumpMaps::setMotionFromKeyboard() {
+	currentPlayerMotion = AVector(0.0f, 0.0f, 0.0f);
+	if (aPressed) {
+		currentPlayerMotion += AVector(0.1f, 0.0f, 0.0f);
+	}
+	if (dPressed) {
+		currentPlayerMotion += AVector(-0.1f, 0.0f, 0.0f);
+	}
+	if (wPressed) {
+		currentPlayerMotion += AVector(0.0f, 0.0f, 0.1f);
+	}
+	if (sPressed) {
+		currentPlayerMotion += AVector(0.0f, 0.0f, -0.1f);
+	}
+}
+
 bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 {
 	/*
@@ -315,25 +341,29 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 	case 'a':
 	case 'A':
 	{
-			 mInsertPressed = true;
-			 return true;
+			//mInsertPressed = true;
+			aPressed = true;
+			return true;
 	}
 	case 'w':
 	case 'W':
 		{
-			mUArrowPressed = true;
+			//mUArrowPressed = true;
+			wPressed = true;
 			return true;
 		}
 	case 's':
 	case 'S':
 		{
-			mDArrowPressed = true;
+			//mDArrowPressed = true;
+			sPressed = true;
 			return true;
 		}
 	case 'd':
 	case 'D':
 		{
-			mDeletePressed = true;
+			//mDeletePressed = true;
+			dPressed = true;
 			return true;
 		}
 					
@@ -368,25 +398,29 @@ bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
 		case 'w':
 		case 'W':
 		{
-			mUArrowPressed = false;
+			//mUArrowPressed = false;
+			wPressed = false;
 			return true;
 		}
 		case 'a':
 		case 'A':
 		{
-			mInsertPressed = false;
+			//mInsertPressed = false;
+			aPressed = false;
 			return true;
 		}
 		case 'd':
 		case 'D':
 		{
-			mDeletePressed = false;
+			//mDeletePressed = false;
+			dPressed = false;
 			return true;
 		}
 		case 's':
 		case 'S':
 		{
-			mDArrowPressed = false;
+			//mDArrowPressed = false;
+			sPressed = false;
 			return true;
 		}
 	}
