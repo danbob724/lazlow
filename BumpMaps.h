@@ -70,6 +70,10 @@ protected:
 	lazEnemy enemies[NUM_ENEMIES];
 	lazEnemy spawners[NUM_SPAWNERS];
 
+	void setMotionFromKeyboard();
+	AVector currentPlayerMotion;
+	bool wPressed, aPressed, sPressed, dPressed;
+
 	clock_t clock0, clock1;
 
 //////////////////////////

@@ -11,6 +11,7 @@
 #include "Wm5TriMesh.h"
 #include "Wm5APoint.h"
 #include "Wm5AVector.h"
+#include "Wm5Camera.h"
 
 using namespace Wm5;
 
@@ -18,16 +19,17 @@ class PlayerCharacter
 {
 	public:
 		PlayerCharacter();
-		PlayerCharacter(ShapeMaker* someShapeMaker);
+		PlayerCharacter(ShapeMaker* someShapeMaker, CameraPtr someCamera);
 		void setLocation(APoint desiredLocation);
 		TriMesh* mMesh;
 		APoint getLocation();
-		void movePlayer(AVector moveVector);
+		APoint movePlayer(AVector moveVector);
 
 		float radius;
 
 	protected:
 		ShapeMaker* mShapeMaker;
+		CameraPtr mCamera;
 		unsigned char curSummon;
 		APoint curLocation;
 		Environment* playerCharEnv;
