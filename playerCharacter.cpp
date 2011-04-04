@@ -9,7 +9,8 @@
 
 PlayerCharacter::PlayerCharacter() {};
 
-PlayerCharacter::PlayerCharacter(ShapeMaker* someShapeMaker) {
+PlayerCharacter::PlayerCharacter(ShapeMaker* someShapeMaker, CameraPtr someCamera) {
+	mCamera = someCamera;
 	curSummon = 0;
 	mShapeMaker = someShapeMaker;
 	curLocation = APoint(0.0f, 0.0f, 0.0f);
@@ -21,9 +22,11 @@ void PlayerCharacter::setLocation(APoint desiredLocation) {
 	mMesh->LocalTransform.SetTranslate(curLocation);
 }
 
-void PlayerCharacter::movePlayer(AVector moveVector) {
+APoint PlayerCharacter::movePlayer(AVector moveVector) {
 	curLocation = curLocation + moveVector;
 	mMesh->LocalTransform.SetTranslate(curLocation);
+	//mCamera->SetPosition(curLocation + AVector(0.0f, 15.f, -15.f));
+	return (curLocation + AVector(0.0f, 15.f, -15.f));
 }
 
 APoint PlayerCharacter::getLocation() {
