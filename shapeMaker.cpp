@@ -185,7 +185,7 @@ Wm5::TriMesh* ShapeMaker::CreateSphere ()
         }
     }
 
-    std::string baseName = Environment::GetPathR("Bricks.wmtf");
+    std::string baseName = Environment::GetPathR("SunFire.wmtf");
     Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
     baseTexture->GenerateMipmaps();
 

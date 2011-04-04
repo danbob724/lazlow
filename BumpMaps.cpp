@@ -128,6 +128,8 @@ void BumpMaps::TimeBasedMove() {
 				{
 					enemies[j].state = 0;
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+					projectiles[i].state = 0;
+					projectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				}
 			}
 
