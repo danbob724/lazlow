@@ -46,7 +46,9 @@ BumpMaps::BumpMaps ()
 //----------------------------------------------------------------------------
 bool BumpMaps::OnInitialize ()
 {
-    if (!WindowApplication3::OnInitialize())
+	time(&time0);
+	time(&time1);
+	if (!WindowApplication3::OnInitialize())
     {
         return false;
     }
@@ -99,9 +101,19 @@ void BumpMaps::OnTerminate ()
     WindowApplication3::OnTerminate();
 }
 //----------------------------------------------------------------------------
+
+void BumpMaps::TimeBasedMove() {
+	//do the movment-stuff here
+}
+
 void BumpMaps::OnIdle ()
 {
     MeasureTime();
+	time(&time1);
+	if (difftime(time1, time0) > 0.005) {
+		//call TimeBasedMove()
+		TimeBasedMove();
+	}
 	for(int i = 0; i < num_proj; i++)
 	{
 		//projectiles[i] = CreateSphere(); 
