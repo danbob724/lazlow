@@ -46,7 +46,9 @@ BumpMaps::BumpMaps ()
 //----------------------------------------------------------------------------
 bool BumpMaps::OnInitialize ()
 {
-    if (!WindowApplication3::OnInitialize())
+	time(&time0);
+	time(&time1);
+	if (!WindowApplication3::OnInitialize())
     {
         return false;
     }
@@ -99,9 +101,9 @@ void BumpMaps::OnTerminate ()
     WindowApplication3::OnTerminate();
 }
 //----------------------------------------------------------------------------
-void BumpMaps::OnIdle ()
-{
-    MeasureTime();
+
+void BumpMaps::TimeBasedMove() {
+	//do the movment-stuff here
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
 		//projectiles[i] = CreateSphere(); 
@@ -196,8 +198,18 @@ void BumpMaps::OnIdle ()
         mScene->Update();
         mCuller.ComputeVisibleSet(mScene);
     }
+}
 
-    if (mRenderer->PreDraw())
+void BumpMaps::OnIdle ()
+{
+    MeasureTime();
+	time(&time1);
+	if (difftime(time1, time0) > 0.01) {
+		//call TimeBasedMove()
+		TimeBasedMove();
+	}
+
+	if (mRenderer->PreDraw())
     {
         mRenderer->ClearBuffers();
         mRenderer->Draw(mCuller.GetVisibleSet());
