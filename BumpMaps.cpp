@@ -91,8 +91,6 @@ std::string BumpMaps::getRealPath() {
 	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath))) {
 		//we're fucked!
 	}
-	cCurrentPath[sizeof(cCurrentPath) - 1] = '/0';
-
 	return std::string(cCurrentPath);
 }
 
