@@ -102,13 +102,16 @@ void BumpMaps::OnTerminate ()
 void BumpMaps::OnIdle ()
 {
     MeasureTime();
-	for(int i = 0; i < num_proj; i++)
+	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
 		//projectiles[i] = CreateSphere(); 
 		//projectiles[i].loc = projectiles[i].loc + AVector(projectiles[i].x_dir, 0.0, projectiles[i].z_dir);
 		//projectiles[i].mesh->LocalTransform.SetTranslate(APoint(projectiles[i].loc));
 		//mScene->AttachChild(projectiles[i]);
-		projectiles[i].Update();
+		if(projectiles[i].active())
+		{
+			projectiles[i].Update();
+		}
 
 		for(int j = 0; j < NUM_ENEMIES; j++)
 		{
@@ -125,30 +128,41 @@ void BumpMaps::OnIdle ()
 				if(enemies[j].active()) //if enemy is still active
 				{
 					AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
+					AVector projectilePath;
+
 					playerToEnemy.Normalize();
 
 					switch(enemies[j].behavior)
 					{
 						case 2:
 						{
-							playerToEnemy = -(playerToEnemy.Cross(AVector::UNIT_Y));
+							projectilePath = -(playerToEnemy.Cross(AVector::UNIT_Y));
 							break;
 						}
 						case 1:
 						{
-							playerToEnemy = playerToEnemy.Cross(AVector::UNIT_Y);
+							projectilePath = playerToEnemy.Cross(AVector::UNIT_Y);
 							break;
 						}
 						case 0:
 						default:
 						{
-							//by default, don't mess with the vector and the enemy will hea straight for the player
+							projectilePath = playerToEnemy;
 							break;
 						}
 
 					}
-					enemies[j].x_dir = playerToEnemy.X();
-					enemies[j].z_dir = playerToEnemy.Z();
+
+					if(enemies[j].x_dir == 0 && enemies[j].x_dir == 0)
+					{
+						enemies[j].x_dir = projectilePath.X();
+						enemies[j].z_dir = projectilePath.Z();
+					}
+					else
+					{
+						enemies[j].x_dir = (enemies[j].x_dir + projectilePath.X()) / 2;
+						enemies[j].z_dir = (enemies[j].z_dir + projectilePath.Z()) / 2;
+					}
 
 					//scaling enemy speed
 					enemies[j].x_dir /= 250;
@@ -383,6 +397,7 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	//projectiles[cur_proj].x_loc = playerLocation[0];
 	//projectiles[cur_proj].z_loc = playerLocation[2];
 	projectiles[cur_proj].loc = thePlayer.getLocation();
+	projectiles[cur_proj].state = 1;
 
 	projectiles[cur_proj].mesh->LocalTransform.SetTranslate(APoint(projectiles[cur_proj].loc));
 
@@ -402,11 +417,11 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	{
 		cur_proj = 0; 
 	}
-
+/*
 	if(num_proj < NUM_PROJECTILES)
 	{
 		num_proj++;
-	}
+	}*/
 
 	//do a picking operation
 	APoint pos;
@@ -438,6 +453,7 @@ void BumpMaps::CreateScene ()
 	{
 		projectiles[i].loc = APoint::ORIGIN; 
 		projectiles[i].radius = 0.35f;
+		projectiles[i].state = 0;
 		projectiles[i].x_dir = 0;
 		projectiles[i].z_dir = 0;
 
