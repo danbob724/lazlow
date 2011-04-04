@@ -32,8 +32,8 @@ BumpMaps::BumpMaps ()
         mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
-	//Application::ThePath = getRealPath() + "/GCodeBase/";
-	Application::ThePath = getRealPath() + "/";
+	Application::ThePath = getRealPath() + "/GCodeBase/";
+	//Application::ThePath = getRealPath() + "/";
 	Environment::InsertDirectory(ThePath + "Shaders/");
 	Environment::InsertDirectory(WM5Path + "Data/Wmtf/");
 	
@@ -166,7 +166,7 @@ void BumpMaps::TimeBasedMove() {
 	//do the movment-stuff here
 
 	setMotionFromKeyboard();
-	
+//Projectiles
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
 		//projectiles[i].loc = projectiles[i].loc + AVector(projectiles[i].x_dir, 0.0, projectiles[i].z_dir);
@@ -175,8 +175,10 @@ void BumpMaps::TimeBasedMove() {
 		{
 			projectiles[i].Update();
 		}
+	}
 
-		for(int j = 0; j < NUM_ENEMIES; j++)
+//Enemies
+	for(int j = 0; j < NUM_ENEMIES; j++)
 	{	
 		EnemyProjectileCollisionTest(enemies, projectiles, j, NUM_ENEMIES, NUM_PROJECTILES);
 		AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
@@ -197,7 +199,6 @@ void BumpMaps::TimeBasedMove() {
 
 		if(enemies[j].active()) //if enemy is still active, then move it
 		{		
-					AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
 			playerToEnemy.Normalize();
 
 			playerToEnemy = EnemyMove(enemies, j, playerToEnemy);
@@ -220,6 +221,31 @@ void BumpMaps::TimeBasedMove() {
 			enemies[j].Update();
 		}
 	}
+
+//Spawners
+	for(int j = 0; j < NUM_SPAWNERS; j++)
+	{	
+		EnemyProjectileCollisionTest(spawners, projectiles, j, NUM_SPAWNERS, NUM_PROJECTILES);
+		AVector playerToEnemy = thePlayer.getLocation() - spawners[j].loc;
+		
+		if(spawners[j].active()) //if enemy is still active, check for player death
+		{
+			if(playerToEnemy.Length() - thePlayer.radius - spawners[j].radius <= 0)
+			{
+				sprintf(mPickMessage, "Dead by spawner.");
+				
+				for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
+				{
+					enemies[j].state = 0;
+					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+				}
+			}
+		}
+
+		if(spawners[j].active()) //if spawner is still active, spawn someone
+		{		
+			//spawn code goes here
+		}
 	}
 
 	mCamera->SetPosition(thePlayer.movePlayer(currentPlayerMotion));
@@ -564,6 +590,32 @@ void BumpMaps::CreateScene ()
 
 		mScene->AttachChild(enemies[i].mesh);
 	}
+
+	for(int i = 0; i < NUM_SPAWNERS; i++)
+	{
+		spawners[i].loc = APoint::ORIGIN; 
+		spawners[i].radius = 1;
+		spawners[i].x_dir = 0;
+		spawners[i].z_dir = 0;
+		spawners[i].state = 1;
+		spawners[i].behavior = 3;
+
+		spawners[i].mesh = mShapeMaker.CreateCylinder(); 
+		spawners[i].mesh->LocalTransform.SetScale(APoint(2.0f, 2.0f, 0.5f)); //cylinder is intially along the z axis
+		spawners[i].mesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
+
+		mScene->AttachChild(spawners[i].mesh);
+	}
+
+	spawners[0].loc = APoint(10.0f, 0.0f, 10.0f);
+	spawners[1].loc = APoint(10.0f, 0.0f, -10.0f);
+	spawners[2].loc = APoint(-10.0f, 0.0f, 10.0f);
+	spawners[3].loc = APoint(-10.0f, 0.0f, -10.0f);
+
+	spawners[0].Update();
+	spawners[1].Update();
+	spawners[2].Update();
+	spawners[3].Update();
 	
 	thePlayer.mMesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	thePlayer.mMesh->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -15.f, 15.f));
