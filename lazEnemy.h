@@ -23,7 +23,7 @@ class lazEnemy
 
 		TriMesh* mesh;
 		APoint loc;
-		float x_dir, z_dir;
+		float x_dir, z_dir, radius;
 		int state; //0 = inactive, 1 = active
 		void Update();
 		

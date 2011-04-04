@@ -21,7 +21,7 @@ class lazProjectile
 		lazProjectile(ShapeMaker* someShapeMaker);
 		TriMesh* mesh;
 		APoint loc;
-		float x_dir, z_dir;
+		float x_dir, z_dir, radius;
 		void Update();
 		
 	protected:

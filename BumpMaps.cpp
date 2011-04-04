@@ -116,8 +116,7 @@ void BumpMaps::OnIdle ()
 			{
 				AVector projectileToEnemy = projectiles[i].loc - enemies[j].loc;
 				
-				//for now radii are hard coded in, will make more dynamic
-				if((projectileToEnemy.Length() - 0.5 - .35) <= 0)
+				if((projectileToEnemy.Length() - enemies[j].radius - projectiles[i].radius) <= 0)
 				{
 					enemies[j].state = 0;
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
@@ -418,11 +417,12 @@ void BumpMaps::CreateScene ()
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
 		projectiles[i].loc = APoint::ORIGIN; 
+		projectiles[i].radius = 0.35;
 		projectiles[i].x_dir = 0;
 		projectiles[i].z_dir = 0;
 
 		projectiles[i].mesh = mShapeMaker.CreateSphere(); 
-		projectiles[i].mesh->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
+		projectiles[i].mesh->LocalTransform.SetScale(APoint(projectiles[i].radius, projectiles[i].radius, projectiles[i].radius));
 
 		projectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 
@@ -432,6 +432,7 @@ void BumpMaps::CreateScene ()
 	for(int i = 0; i < NUM_ENEMIES; i++)
 	{
 		enemies[i].loc = APoint::ORIGIN; 
+		enemies[i].radius = 0.5;
 		enemies[i].x_dir = 0;
 		enemies[i].z_dir = 0;
 		enemies[i].state = 0;
