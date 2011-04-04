@@ -19,8 +19,11 @@ class lazProjectile
 	public:
 		lazProjectile();
 		lazProjectile(ShapeMaker* someShapeMaker);
+		int active();
+
 		TriMesh* mesh;
 		APoint loc;
+		int state; //0 = inactive, 1 = active
 		float x_dir, z_dir, radius;
 		void Update();
 		
