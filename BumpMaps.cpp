@@ -100,15 +100,71 @@ void BumpMaps::OnTerminate ()
 }
 //----------------------------------------------------------------------------
 
+void BumpMaps::EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjectile testingProjectiles[], int testTarget, int numEnemies, int numProjectiles)
+{	
+	if(testingEnemy[testTarget].active() )
+	{
+		for(int i = 0; i < numProjectiles; i++)
+		{
+			if(testingProjectiles[i].active())
+			{
+				AVector projectileToEnemy = testingProjectiles[i].loc - testingEnemy[testTarget].loc;
+				
+				//check if projectile hit enemy
+				if((projectileToEnemy.Length() - testingEnemy[testTarget].radius - testingProjectiles[i].radius) <= 0)
+				{
+					testingEnemy[testTarget].state = 0;
+					testingEnemy[testTarget].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+					testingProjectiles[i].state = 0;
+					testingProjectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+				}
+			}
+		}
+	}
+}
+
+AVector BumpMaps::EnemyMove(lazEnemy movingEnemy[], int moveTarget, AVector playerEnemyVector)
+{	
+	AVector projectilePath;
+
+	switch(movingEnemy[moveTarget].behavior)
+	{
+		case 3:
+		{	
+			projectilePath = AVector::ZERO;
+			break;
+		}
+		case 2:
+		{
+			projectilePath = -(playerEnemyVector.Cross(AVector::UNIT_Y));
+			projectilePath = (playerEnemyVector * 0.75 + projectilePath) / 2;
+
+			break;
+		}
+		case 1:
+		{
+			projectilePath = playerEnemyVector.Cross(AVector::UNIT_Y);
+			projectilePath = (playerEnemyVector * 0.75 + projectilePath) / 2;
+			break;
+		}
+		case 0:
+		default:
+		{
+			projectilePath = playerEnemyVector;
+			break;
+		}
+	}
+
+	return projectilePath;
+}
+
 void BumpMaps::TimeBasedMove() {
 	clock0 = clock();
 	//do the movment-stuff here
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
-		//projectiles[i] = CreateSphere(); 
 		//projectiles[i].loc = projectiles[i].loc + AVector(projectiles[i].x_dir, 0.0, projectiles[i].z_dir);
 		//projectiles[i].mesh->LocalTransform.SetTranslate(APoint(projectiles[i].loc));
-		//mScene->AttachChild(projectiles[i]);
 		if(projectiles[i].active())
 		{
 			projectiles[i].Update();
@@ -116,84 +172,47 @@ void BumpMaps::TimeBasedMove() {
 	}
 
 	for(int j = 0; j < NUM_ENEMIES; j++)
-	{
-		if(enemies[j].active()) //if enemy is active
+	{	
+		EnemyProjectileCollisionTest(enemies, projectiles, j, NUM_ENEMIES, NUM_PROJECTILES);
+
+		AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
+		
+		if(enemies[j].active()) //if enemy is still active, check for player death
 		{
-			for(int i = 0; i < NUM_PROJECTILES; i++)
+			if(playerToEnemy.Length() - thePlayer.radius - enemies[j].radius <= 0)
 			{
-				AVector projectileToEnemy = projectiles[i].loc - enemies[j].loc;
+				sprintf(mPickMessage, "Dead.");
 				
-				//check if projectile hit enemy
-				if(projectiles[i].active() && (projectileToEnemy.Length() - enemies[j].radius - projectiles[i].radius) <= 0)
+				for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
 				{
 					enemies[j].state = 0;
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
-					projectiles[i].state = 0;
-					projectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				}
 			}
+		}
 
-			AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
+		if(enemies[j].active()) //if enemy is still active, then move it
+		{		
+			playerToEnemy.Normalize();
 
-			if(enemies[j].active()) //if enemy is still active, check for player death
+			playerToEnemy = EnemyMove(enemies, j, playerToEnemy);
+			//playerToEnemy.Normalize();
+			
+			if(enemies[j].x_dir == 0 && enemies[j].x_dir == 0)
 			{
-				if(playerToEnemy.Length() - thePlayer.radius - enemies[j].radius <= 0)
-				{
-					sprintf(mPickMessage, "Dead.");
-					
-					for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
-					{
-						enemies[j].state = 0;
-						enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
-					}
-				}
+				enemies[j].x_dir = playerToEnemy.X();
+				enemies[j].z_dir = playerToEnemy.Z();
 			}
-
-			if(enemies[j].active()) //if enemy is still active, then move it
+			else
 			{
-				AVector projectilePath;
-
-				playerToEnemy.Normalize();
-
-				switch(enemies[j].behavior)
-				{
-					case 2:
-					{
-						projectilePath = -(playerToEnemy.Cross(AVector::UNIT_Y));
-						projectilePath = (playerToEnemy * 0.75 + projectilePath) / 2;
-
-						break;
-					}
-					case 1:
-					{
-						projectilePath = playerToEnemy.Cross(AVector::UNIT_Y);
-						projectilePath = (playerToEnemy * 0.75 + projectilePath) / 2;
-						break;
-					}
-					case 0:
-					default:
-					{
-						projectilePath = playerToEnemy;
-						break;
-					}
-				}
-
-				if(enemies[j].x_dir == 0 && enemies[j].x_dir == 0)
-				{
-					enemies[j].x_dir = projectilePath.X();
-					enemies[j].z_dir = projectilePath.Z();
-				}
-				else
-				{
-					enemies[j].x_dir = (enemies[j].x_dir + projectilePath.X()) / 2;
-					enemies[j].z_dir = (enemies[j].z_dir + projectilePath.Z()) / 2;
-				}
-
-				//scaling enemy speed
-				enemies[j].x_dir /= 250;
-				enemies[j].z_dir /= 250;
-				enemies[j].Update();
+				enemies[j].x_dir = (enemies[j].x_dir + playerToEnemy.X()) / 2;
+				enemies[j].z_dir = (enemies[j].z_dir + playerToEnemy.Z()) / 2;
 			}
+
+			//scaling enemy speed
+			enemies[j].x_dir /= 150;
+			enemies[j].z_dir /= 150;
+			enemies[j].Update();
 		}
 	}
 	

@@ -17,6 +17,10 @@
 #include "lazProjectile.h"
 #include "lazEnemy.h"
 
+#define NUM_PROJECTILES 5
+#define NUM_ENEMIES 5
+#define NUM_SPAWNERS 4
+
 using namespace Wm5;
 /*
 struct Projectile
@@ -46,6 +50,8 @@ protected:
     void CreateScene ();
     void UpdateBumpMap ();
 
+	void EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjectile testingProjectiles[], int testTarget, int numEnemies, int numProjectiles);
+	AVector EnemyMove(lazEnemy movingEnemy[], int moveTarget, AVector playerEnemyVector);
 	void TimeBasedMove();
 	ShapeMaker mShapeMaker;
 	std::string getRealPath();
@@ -62,6 +68,7 @@ protected:
 	//APoint playerLocation;
 	lazProjectile projectiles[NUM_PROJECTILES];
 	lazEnemy enemies[NUM_ENEMIES];
+	lazEnemy spawners[NUM_SPAWNERS];
 
 	clock_t clock0, clock1;
 

@@ -10,8 +10,6 @@
 #include "Wm5TriMesh.h"
 #include "shapeMaker.h"
 
-#define NUM_ENEMIES 5
-
 using namespace Wm5;
 
 class lazEnemy
@@ -25,7 +23,7 @@ class lazEnemy
 		APoint loc;
 		float x_dir, z_dir, radius;
 		int state; //0 = inactive, 1 = active
-		int behavior; //0 = chase, 1 = circle, 2 = circle the other way
+		int behavior; //0 = chase, 1 = circle, 2 = circle the other way, 3 = stationary (spawner)
 		void Update();
 		
 	protected:
