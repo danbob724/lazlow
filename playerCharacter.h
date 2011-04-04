@@ -10,6 +10,7 @@
 #include "shapeMaker.h"
 #include "Wm5TriMesh.h"
 #include "Wm5APoint.h"
+#include "Wm5AVector.h"
 
 using namespace Wm5;
 
@@ -21,6 +22,7 @@ class PlayerCharacter
 		void setLocation(APoint desiredLocation);
 		TriMesh* mMesh;
 		APoint getLocation();
+		void movePlayer(AVector moveVector);
 
 		float radius;
 
