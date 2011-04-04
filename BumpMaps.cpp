@@ -133,16 +133,24 @@ void BumpMaps::TimeBasedMove() {
 				}
 			}
 
-			if(enemies[j].active()) //if enemy is still active, check for player death, then move it
-			{
-				AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
+			AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
 
+			if(enemies[j].active()) //if enemy is still active, check for player death
+			{
 				if(playerToEnemy.Length() - thePlayer.radius - enemies[j].radius <= 0)
 				{
 					sprintf(mPickMessage, "Dead.");
+					
+					for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
+					{
+						enemies[j].state = 0;
+						enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+					}
 				}
+			}
 
-
+			if(enemies[j].active()) //if enemy is still active, then move it
+			{
 				AVector projectilePath;
 
 				playerToEnemy.Normalize();
