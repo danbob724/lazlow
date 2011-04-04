@@ -21,6 +21,11 @@ void PlayerCharacter::setLocation(APoint desiredLocation) {
 	mMesh->LocalTransform.SetTranslate(curLocation);
 }
 
+void PlayerCharacter::movePlayer(AVector moveVector) {
+	curLocation = curLocation + moveVector;
+	mMesh->LocalTransform.SetTranslate(curLocation);
+}
+
 APoint PlayerCharacter::getLocation() {
 	return curLocation;
 }

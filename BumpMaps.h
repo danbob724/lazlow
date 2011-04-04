@@ -25,8 +25,6 @@ struct Projectile
 	APoint loc;
 	float x_dir, z_dir;
 } ;*/
-#define NUM_PROJECTILES 5
-
 
 class BumpMaps : public WindowApplication3
 {
