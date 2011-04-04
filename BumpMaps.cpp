@@ -104,17 +104,7 @@ void BumpMaps::OnTerminate ()
 
 void BumpMaps::TimeBasedMove() {
 	//do the movment-stuff here
-}
-
-void BumpMaps::OnIdle ()
-{
-    MeasureTime();
-	time(&time1);
-	if (difftime(time1, time0) > 0.005) {
-		//call TimeBasedMove()
-		TimeBasedMove();
-	}
-	for(int i = 0; i < num_proj; i++)
+		for(int i = 0; i < num_proj; i++)
 	{
 		//projectiles[i] = CreateSphere(); 
 		//projectiles[i].loc = projectiles[i].loc + AVector(projectiles[i].x_dir, 0.0, projectiles[i].z_dir);
@@ -208,6 +198,16 @@ void BumpMaps::OnIdle ()
         mRenderer->DisplayColorBuffer();
     }
 	mScene->Update();
+}
+
+void BumpMaps::OnIdle ()
+{
+    MeasureTime();
+	time(&time1);
+	if (difftime(time1, time0) > 0.01) {
+		//call TimeBasedMove()
+		TimeBasedMove();
+	}
     UpdateFrameCount();
 }
 
