@@ -10,7 +10,7 @@
 #include "Wm5TriMesh.h"
 #include "shapeMaker.h"
 
-#define NUM_PROJECTILES 5
+#define NUM_PROJECTILES 50
 
 using namespace Wm5;
 
