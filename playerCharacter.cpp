@@ -12,6 +12,7 @@ PlayerCharacter::PlayerCharacter() {};
 PlayerCharacter::PlayerCharacter(ShapeMaker* someShapeMaker, CameraPtr someCamera) {
 	mCamera = someCamera;
 	curSummon = 0;
+	radius = 1.4f;
 	mShapeMaker = someShapeMaker;
 	curLocation = APoint(0.0f, 0.0f, 0.0f);
 	mMesh = someShapeMaker->CreateTorus();
