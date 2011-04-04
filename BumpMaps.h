@@ -9,6 +9,7 @@
 #ifndef BUMPMAPS_H
 #define BUMPMAPS_H
 
+#include <time.h>
 #include "Wm5WindowApplication3.h"
 #include "SimpleBumpMapEffect.h"
 #include "shapeMaker.h"
@@ -47,6 +48,7 @@ protected:
     void CreateScene ();
     void UpdateBumpMap ();
 
+	void TimeBasedMove();
 	ShapeMaker mShapeMaker;
 	std::string getRealPath();
     NodePtr mScene;
@@ -62,6 +64,8 @@ protected:
 	//APoint playerLocation;
 	lazProjectile projectiles[NUM_PROJECTILES];
 	lazEnemy enemies[NUM_ENEMIES];
+
+	time_t time0, time1;
 
 //////////////////////////
 	Picker mPicker;
