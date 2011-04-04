@@ -570,7 +570,8 @@ void BumpMaps::CreateScene ()
 	mScene->AttachChild(thePlayer.mMesh);
 
 	terrain = mShapeMaker.CreateCube();
-	terrain->LocalTransform.SetScale(APoint(20.0f, 0.05f, 20.0f));
+	terrain->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, -0.5f*Mathf::PI));
+	terrain->LocalTransform.SetScale(APoint(10.0f, 10.0f, 0.1f));
 	terrain->LocalTransform.SetTranslate(APoint(0.0f, -0.5f, 0.0f));
 	mScene->AttachChild(terrain);
 

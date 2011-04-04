@@ -27,7 +27,7 @@ class ShapeMaker
 		TriMesh* CreateCylinder();
 		TriMesh* CreateSphere();
 		TriMesh* CreateCube();
-		TriMesh* CreateSquare();
+		TriMesh* CreateRectangle();
 
 	protected:
 		Environment* shapeMakerEnv;

@@ -283,6 +283,7 @@ Wm5::TriMesh* ShapeMaker::CreateCube ()
 }
 
 //----------------------------------------------------------------------------
+/*
 Wm5::TriMesh* ShapeMaker::CreateSquare ()
 {
     VertexFormat* vformat;
@@ -303,6 +304,7 @@ Wm5::TriMesh* ShapeMaker::CreateSquare ()
     }
     int vstride = vformat->GetStride();
 
+	TriMesh* mesh = StandardMesh(vformat).Rectangle(50, 50, 1.0f, 1.0f);
     VertexBuffer* vbuffer = new0 VertexBuffer(4, vstride);
     VertexBufferAccessor vba(vformat, vbuffer);
     vba.Position<Vector3f>(0) = Vector3f(-1.0f, -1.0f, 0.0f);
@@ -341,7 +343,7 @@ Wm5::TriMesh* ShapeMaker::CreateSquare ()
     indices[0] = 0;  indices[1] = 1;  indices[2] = 2;
     indices[3] = 0;  indices[4] = 2;  indices[5] = 3;
 
-    TriMesh* mesh = new0 TriMesh(vformat, vbuffer, ibuffer);
+    //TriMesh* mesh = new0 TriMesh(vformat, vbuffer, ibuffer);
 
     std::string baseName = Environment::GetPathR("Bricks.wmtf");
     Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
@@ -370,5 +372,72 @@ Wm5::TriMesh* ShapeMaker::CreateSquare ()
             Shader::SC_REPEAT));
     }
 
+    return mesh;
+}
+*/
+
+Wm5::TriMesh* ShapeMaker::CreateRectangle ()
+{
+    VertexFormat* vformat;
+    if (mUseBumpMap)
+    {
+        vformat = VertexFormat::Create(5,
+            VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_NORMAL, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_COLOR, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 1);
+    }
+    else
+    {
+        vformat = VertexFormat::Create(2,
+            VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0);
+    }
+
+    TriMesh* mesh = StandardMesh(vformat).Rectangle(10, 10, 50.0f, 50.0f);
+    VertexBufferAccessor vba(mesh);
+    for (int i = 0; i < vba.GetNumVertices(); ++i)
+    {
+        Float2& tcoord0 = vba.TCoord<Float2>(0, i);
+        tcoord0[0] *= 4.0f;
+        tcoord0[1] *= 4.0f;
+        if (mUseBumpMap)
+        {
+            Float2& tcoord1 = vba.TCoord<Float2>(1, i);
+            tcoord1[0] *= 4.0f;
+            tcoord1[1] *= 4.0f;
+        }
+    }
+
+    std::string baseName = Environment::GetPathR("Bricks.wmtf");
+    Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
+    baseTexture->GenerateMipmaps();
+
+    if (mUseBumpMap)
+    {
+        std::string effectFile = Environment::GetPathR("SimpleBumpMap.wmfx");
+        SimpleBumpMapEffect* effect = new0 SimpleBumpMapEffect(effectFile);
+
+        std::string normalName = Environment::GetPathR("BricksNormal.wmtf");
+        Texture2D* normalTexture = Texture2D::LoadWMTF(normalName);
+        normalTexture->GenerateMipmaps();
+
+        mesh->SetEffectInstance(effect->CreateInstance(baseTexture,
+            normalTexture));
+
+        mLightDirection = AVector::UNIT_Z;
+		//mLightDirection = camDvector;
+		//mLightPosition = camPosition;
+        SimpleBumpMapEffect::ComputeLightVectors(mesh, mLightDirection);
+    }
+    else
+    {
+	
+        mesh->SetEffectInstance(Texture2DEffect::CreateUniqueInstance(
+            baseTexture, Shader::SF_LINEAR_LINEAR, Shader::SC_REPEAT,
+            Shader::SC_REPEAT));
+    }
+	mesh->SetName("Rectangle");
     return mesh;
 }
