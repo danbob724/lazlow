@@ -41,7 +41,12 @@ BumpMaps::BumpMaps ()
     mUseBumpMap = true;
 	mShapeMaker = ShapeMaker(mUseBumpMap);
 
-	thePlayer = PlayerCharacter(&mShapeMaker);
+	thePlayer = PlayerCharacter(&mShapeMaker, mCamera);
+	currentPlayerMotion = AVector(0.0f, 0.0f, 0.0f);
+	wPressed = false;
+	aPressed = false;
+	sPressed = false;
+	dPressed = false;
 }
 //----------------------------------------------------------------------------
 bool BumpMaps::OnInitialize ()
@@ -103,6 +108,9 @@ void BumpMaps::OnTerminate ()
 void BumpMaps::TimeBasedMove() {
 	clock0 = clock();
 	//do the movment-stuff here
+
+	setMotionFromKeyboard();
+	
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
 		//projectiles[i] = CreateSphere(); 
@@ -113,91 +121,70 @@ void BumpMaps::TimeBasedMove() {
 		{
 			projectiles[i].Update();
 		}
-	}
 
-	for(int j = 0; j < NUM_ENEMIES; j++)
-	{
-		if(enemies[j].active()) //if enemy is active
+		for(int j = 0; j < NUM_ENEMIES; j++)
 		{
-			for(int i = 0; i < NUM_PROJECTILES; i++)
+			if(enemies[j].active()) //if enemy is active
 			{
 				AVector projectileToEnemy = projectiles[i].loc - enemies[j].loc;
 				
-				//check if projectile hit enemy
-				if(projectiles[i].active() && (projectileToEnemy.Length() - enemies[j].radius - projectiles[i].radius) <= 0)
+				if((projectileToEnemy.Length() - enemies[j].radius - projectiles[i].radius) <= 0)
 				{
 					enemies[j].state = 0;
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
-					projectiles[i].state = 0;
-					projectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				}
-			}
 
-			AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
-
-			if(enemies[j].active()) //if enemy is still active, check for player death
-			{
-				if(playerToEnemy.Length() - thePlayer.radius - enemies[j].radius <= 0)
+				if(enemies[j].active()) //if enemy is still active
 				{
-					sprintf(mPickMessage, "Dead.");
-					
-					for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
+					AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
+					AVector projectilePath;
+
+					playerToEnemy.Normalize();
+
+					switch(enemies[j].behavior)
 					{
-						enemies[j].state = 0;
-						enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+						case 2:
+						{
+							projectilePath = -(playerToEnemy.Cross(AVector::UNIT_Y));
+							projectilePath = (playerToEnemy * 0.75 + projectilePath) / 2;
+
+							break;
+						}
+						case 1:
+						{
+							projectilePath = playerToEnemy.Cross(AVector::UNIT_Y);
+							projectilePath = (playerToEnemy * 0.75 + projectilePath) / 2;
+							break;
+						}
+						case 0:
+						default:
+						{
+							projectilePath = playerToEnemy;
+							break;
+						}
 					}
-				}
-			}
 
-			if(enemies[j].active()) //if enemy is still active, then move it
-			{
-				AVector projectilePath;
-
-				playerToEnemy.Normalize();
-
-				switch(enemies[j].behavior)
-				{
-					case 2:
+					if(enemies[j].x_dir == 0 && enemies[j].x_dir == 0)
 					{
-						projectilePath = -(playerToEnemy.Cross(AVector::UNIT_Y));
-						projectilePath = (playerToEnemy * 0.75 + projectilePath) / 2;
-
-						break;
+						enemies[j].x_dir = projectilePath.X();
+						enemies[j].z_dir = projectilePath.Z();
 					}
-					case 1:
+					else
 					{
-						projectilePath = playerToEnemy.Cross(AVector::UNIT_Y);
-						projectilePath = (playerToEnemy * 0.75 + projectilePath) / 2;
-						break;
+						enemies[j].x_dir = (enemies[j].x_dir + projectilePath.X()) / 2;
+						enemies[j].z_dir = (enemies[j].z_dir + projectilePath.Z()) / 2;
 					}
-					case 0:
-					default:
-					{
-						projectilePath = playerToEnemy;
-						break;
-					}
-				}
 
-				if(enemies[j].x_dir == 0 && enemies[j].x_dir == 0)
-				{
-					enemies[j].x_dir = projectilePath.X();
-					enemies[j].z_dir = projectilePath.Z();
+					//scaling enemy speed
+					enemies[j].x_dir /= 250;
+					enemies[j].z_dir /= 250;
+					enemies[j].Update();
 				}
-				else
-				{
-					enemies[j].x_dir = (enemies[j].x_dir + projectilePath.X()) / 2;
-					enemies[j].z_dir = (enemies[j].z_dir + projectilePath.Z()) / 2;
-				}
-
-				//scaling enemy speed
-				enemies[j].x_dir /= 250;
-				enemies[j].z_dir /= 250;
-				enemies[j].Update();
 			}
 		}
 	}
-	
 
+	mCamera->SetPosition(thePlayer.movePlayer(currentPlayerMotion));
 	mScene->Update();
 	UpdateBumpMap();
 	mCuller.ComputeVisibleSet(mScene);
@@ -207,8 +194,8 @@ void BumpMaps::TimeBasedMove() {
 		//playerLocation = mCamera->GetPosition();
 		//playerLocation += AVector(0.0f, -7.5f, 7.5f);
 		//playerCharacter->LocalTransform.SetTranslate(playerLocation);
-		thePlayer.setLocation(mCamera->GetPosition() + AVector(0.0f, -15.f, 15.f));
-		thePlayer.mMesh->LocalTransform.SetTranslate(thePlayer.getLocation());
+		//thePlayer.setLocation(mCamera->GetPosition() + AVector(0.0f, -15.f, 15.f));
+		//thePlayer.mMesh->LocalTransform.SetTranslate(thePlayer.getLocation());
 		
 		mCuller.ComputeVisibleSet(mScene);
     }
@@ -225,7 +212,7 @@ void BumpMaps::OnIdle ()
 {
     MeasureTime();
 	clock1 = clock();
-	if (((clock1 - clock0) * CLOCKS_PER_SEC) > 0.01) {
+	if (((clock1 - clock0) * CLOCKS_PER_SEC) > 0.005) {
 		//call TimeBasedMove()
 		TimeBasedMove();
 	}
@@ -267,6 +254,23 @@ void BumpMaps::InitializeCameraMotion (float trnSpeed, float rotSpeed, float trn
 }
 
 //---------------------------------------------------------------------------
+
+void BumpMaps::setMotionFromKeyboard() {
+	currentPlayerMotion = AVector(0.0f, 0.0f, 0.0f);
+	if (aPressed) {
+		currentPlayerMotion += AVector(0.1f, 0.0f, 0.0f);
+	}
+	if (dPressed) {
+		currentPlayerMotion += AVector(-0.1f, 0.0f, 0.0f);
+	}
+	if (wPressed) {
+		currentPlayerMotion += AVector(0.0f, 0.0f, 0.1f);
+	}
+	if (sPressed) {
+		currentPlayerMotion += AVector(0.0f, 0.0f, -0.1f);
+	}
+}
+
 bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 {
 	/*
@@ -337,25 +341,29 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 	case 'a':
 	case 'A':
 	{
-			 mInsertPressed = true;
-			 return true;
+			//mInsertPressed = true;
+			aPressed = true;
+			return true;
 	}
 	case 'w':
 	case 'W':
 		{
-			mUArrowPressed = true;
+			//mUArrowPressed = true;
+			wPressed = true;
 			return true;
 		}
 	case 's':
 	case 'S':
 		{
-			mDArrowPressed = true;
+			//mDArrowPressed = true;
+			sPressed = true;
 			return true;
 		}
 	case 'd':
 	case 'D':
 		{
-			mDeletePressed = true;
+			//mDeletePressed = true;
+			dPressed = true;
 			return true;
 		}
 					
@@ -390,25 +398,29 @@ bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
 		case 'w':
 		case 'W':
 		{
-			mUArrowPressed = false;
+			//mUArrowPressed = false;
+			wPressed = false;
 			return true;
 		}
 		case 'a':
 		case 'A':
 		{
-			mInsertPressed = false;
+			//mInsertPressed = false;
+			aPressed = false;
 			return true;
 		}
 		case 'd':
 		case 'D':
 		{
-			mDeletePressed = false;
+			//mDeletePressed = false;
+			dPressed = false;
 			return true;
 		}
 		case 's':
 		case 'S':
 		{
-			mDArrowPressed = false;
+			//mDArrowPressed = false;
+			sPressed = false;
 			return true;
 		}
 	}
@@ -515,7 +527,6 @@ void BumpMaps::CreateScene ()
 		mScene->AttachChild(enemies[i].mesh);
 	}
 	
-	thePlayer.radius = 1.4f; //should be 1.4
 	thePlayer.mMesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	thePlayer.mMesh->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -15.f, 15.f));
 	mScene->AttachChild(thePlayer.mMesh);

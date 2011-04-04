@@ -63,6 +63,10 @@ protected:
 	lazProjectile projectiles[NUM_PROJECTILES];
 	lazEnemy enemies[NUM_ENEMIES];
 
+	void setMotionFromKeyboard();
+	AVector currentPlayerMotion;
+	bool wPressed, aPressed, sPressed, dPressed;
+
 	clock_t clock0, clock1;
 
 //////////////////////////
