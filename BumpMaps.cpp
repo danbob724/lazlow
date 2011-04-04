@@ -32,8 +32,8 @@ BumpMaps::BumpMaps ()
         mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
-	Application::ThePath = getRealPath() + "/GCodeBase/";
-	//Application::ThePath = getRealPath() + "/";
+	//Application::ThePath = getRealPath() + "/GCodeBase/";
+	Application::ThePath = getRealPath() + "/";
 	Environment::InsertDirectory(ThePath + "Shaders/");
 	Environment::InsertDirectory(WM5Path + "Data/Wmtf/");
 	
@@ -243,7 +243,18 @@ void BumpMaps::TimeBasedMove() {
 		}
 
 		if(spawners[j].active()) //if spawner is still active, spawn someone
-		{		
+		{	
+			for(int i = 0; i < NUM_ENEMIES; i++)
+			{
+				//find an inactive enemy and create it
+				if(!enemies[i].active())
+				{
+					enemies[i].state = 1;
+					enemies[i].loc = spawners[j].loc;
+					enemies[i].Update();
+					break;
+				}
+			}
 			//spawn code goes here
 		}
 	}
