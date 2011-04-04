@@ -89,9 +89,7 @@ std::string BumpMaps::getRealPath() {
 	cCurrentPath[sizeof(cCurrentPath) - 1] = '/0';
 
 	return std::string(cCurrentPath);
-
 }
-
 
 //----------------------------------------------------------------------------
 void BumpMaps::OnTerminate ()
@@ -139,11 +137,14 @@ void BumpMaps::TimeBasedMove() {
 						case 2:
 						{
 							projectilePath = -(playerToEnemy.Cross(AVector::UNIT_Y));
+							projectilePath = (playerToEnemy * 0.75 + projectilePath) / 2;
+
 							break;
 						}
 						case 1:
 						{
 							projectilePath = playerToEnemy.Cross(AVector::UNIT_Y);
+							projectilePath = (playerToEnemy * 0.75 + projectilePath) / 2;
 							break;
 						}
 						case 0:
@@ -152,7 +153,6 @@ void BumpMaps::TimeBasedMove() {
 							projectilePath = playerToEnemy;
 							break;
 						}
-
 					}
 
 					if(enemies[j].x_dir == 0 && enemies[j].x_dir == 0)
@@ -174,8 +174,6 @@ void BumpMaps::TimeBasedMove() {
 			}
 		}
 	}
-
-	
 
 	mScene->Update();
 	UpdateBumpMap();
