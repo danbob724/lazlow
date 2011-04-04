@@ -184,8 +184,18 @@ void BumpMaps::TimeBasedMove() {
         mScene->Update();
         mCuller.ComputeVisibleSet(mScene);
     }
+}
 
-    if (mRenderer->PreDraw())
+void BumpMaps::OnIdle ()
+{
+    MeasureTime();
+	time(&time1);
+	if (difftime(time1, time0) > 0.01) {
+		//call TimeBasedMove()
+		TimeBasedMove();
+	}
+
+	if (mRenderer->PreDraw())
     {
         mRenderer->ClearBuffers();
         mRenderer->Draw(mCuller.GetVisibleSet());
@@ -198,16 +208,6 @@ void BumpMaps::TimeBasedMove() {
         mRenderer->DisplayColorBuffer();
     }
 	mScene->Update();
-}
-
-void BumpMaps::OnIdle ()
-{
-    MeasureTime();
-	time(&time1);
-	if (difftime(time1, time0) > 0.01) {
-		//call TimeBasedMove()
-		TimeBasedMove();
-	}
     UpdateFrameCount();
 }
 
