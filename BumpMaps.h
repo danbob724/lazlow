@@ -28,7 +28,7 @@
     #define GetCurrentDir getcwd
 #endif
 
-#define NUM_PROJECTILES 5
+#define NUM_PROJECTILES 15
 #define NUM_ENEMIES 5
 #define NUM_SPAWNERS 4
 
