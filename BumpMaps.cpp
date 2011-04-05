@@ -21,8 +21,8 @@ BumpMaps::BumpMaps ()
         mTextColor(1.0f, 0.0f, 1.0f, 1.0f)
 {
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
-	Application::ThePath = getRealPath() + "/GCodeBase/";
-	//Application::ThePath = getRealPath() + "/";
+	//Application::ThePath = getRealPath() + "/GCodeBase/";
+	Application::ThePath = getRealPath() + "/";
 	Environment::InsertDirectory(ThePath + "Shaders/");
 	Environment::InsertDirectory(WM5Path + "Data/Wmtf/");
 	
@@ -199,6 +199,10 @@ void BumpMaps::TimeBasedMove() {
 				
 				for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
 				{
+					if(enemies[j].active())
+					{
+						liveEnemies--;
+					}
 					enemies[j].setState(0);
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				}
@@ -246,9 +250,14 @@ void BumpMaps::TimeBasedMove() {
 				
 				for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
 				{
+					if(enemies[j].active())
+					{
+						liveEnemies--;
+					}
 					enemies[j].setState(0);
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				}
+
 			}
 		}
 
@@ -377,16 +386,16 @@ void BumpMaps::InitializeCameraMotion (float trnSpeed, float rotSpeed, float trn
 void BumpMaps::setMotionFromKeyboard() {
 	currentPlayerMotion = AVector(0.0f, 0.0f, 0.0f);
 	if (aPressed) {
-		currentPlayerMotion += AVector(0.1f, 0.0f, 0.0f);
+		currentPlayerMotion += AVector(0.05f, 0.0f, 0.0f);
 	}
 	if (dPressed) {
-		currentPlayerMotion += AVector(-0.1f, 0.0f, 0.0f);
+		currentPlayerMotion += AVector(-0.05f, 0.0f, 0.0f);
 	}
 	if (wPressed) {
-		currentPlayerMotion += AVector(0.0f, 0.0f, 0.1f);
+		currentPlayerMotion += AVector(0.0f, 0.0f, 0.05f);
 	}
 	if (sPressed) {
-		currentPlayerMotion += AVector(0.0f, 0.0f, -0.1f);
+		currentPlayerMotion += AVector(0.0f, 0.0f, -0.05f);
 	}
 }
 void BumpMaps::setMotionFromGamepad() {
