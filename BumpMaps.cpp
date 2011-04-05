@@ -112,12 +112,9 @@ void BumpMaps::EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjecti
 				if((projectileToEnemy.Length() - testingEnemy[testTarget].radius - testingProjectiles[i].radius) <= 0)
 				{
 					testingEnemy[testTarget].hit(1);
-
-					
+			
 					testingProjectiles[i].state = 0;
-					sprintf(mPickMessage, "%d", testingEnemy[testTarget].getCurrentHealth());
 					testingProjectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
-
 
 					if(testingEnemy[testTarget].getCurrentHealth() <= 0)
 					{
