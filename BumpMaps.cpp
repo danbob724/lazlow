@@ -32,8 +32,8 @@ BumpMaps::BumpMaps ()
         mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
-	Application::ThePath = getRealPath() + "/GCodeBase/";
-	//Application::ThePath = getRealPath() + "/";
+	//Application::ThePath = getRealPath() + "/GCodeBase/";
+	Application::ThePath = getRealPath() + "/";
 	Environment::InsertDirectory(ThePath + "Shaders/");
 	Environment::InsertDirectory(WM5Path + "Data/Wmtf/");
 	
@@ -77,6 +77,9 @@ bool BumpMaps::OnInitialize ()
     // Initial culling of scene.
     mCuller.SetCamera(mCamera);
     mCuller.ComputeVisibleSet(mScene);
+
+	//GamePad stuff
+	controller.initialize();
 
     //InitializeCameraMotion(0.01f, 0.001f);
 	InitializeCameraMotion(0.01f, 0.001f, 0.01f, 0.001f);
@@ -165,7 +168,9 @@ void BumpMaps::TimeBasedMove() {
 	clock0 = clock();
 	//do the movment-stuff here
 
-	setMotionFromKeyboard();
+	//setMotionFromKeyboard();
+	setMotionFromGamepad();
+
 //Projectiles
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
@@ -344,6 +349,10 @@ void BumpMaps::setMotionFromKeyboard() {
 	if (sPressed) {
 		currentPlayerMotion += AVector(0.0f, 0.0f, -0.1f);
 	}
+}
+void BumpMaps::setMotionFromGamepad() {
+	controller.poll();
+	currentPlayerMotion = controller.leftStick;
 }
 
 bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)

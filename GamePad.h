@@ -27,7 +27,6 @@ public:
 
 	AVector leftStick;
 	AVector rightStick;
-
 };
 
 #endif

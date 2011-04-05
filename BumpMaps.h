@@ -70,8 +70,10 @@ protected:
 	lazProjectile projectiles[NUM_PROJECTILES];
 	lazEnemy enemies[NUM_ENEMIES];
 	lazEnemy spawners[NUM_SPAWNERS];
+	GamePad controller;
 
 	void setMotionFromKeyboard();
+	void setMotionFromGamepad();
 	AVector currentPlayerMotion;
 	bool wPressed, aPressed, sPressed, dPressed;
 
