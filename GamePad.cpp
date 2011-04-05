@@ -8,9 +8,8 @@ int maxStickValue = 32760;
 
 GamePad::GamePad(void)
 {
-
-	leftStick = new AVector();
-	rightStick = new AVector();	
+	//leftStick = new AVector();
+	//rightStick = new AVector();	
 
 }//constructor
 
@@ -44,11 +43,9 @@ bool GamePad::isEnabled()
 
 }//isEnabled	
 //--------------------------------------------------
-bool GamePad::closeStick()
+void GamePad::closeStick()
 {
-
 	SDL_JoystickClose(stick);
-
 	SDL_Quit();
 
 }//closeStick
