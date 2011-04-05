@@ -65,12 +65,25 @@ void GamePad::poll()
                 if( thing.type == SDL_JOYAXISMOTION )
                 {
 
-                        leftX = -(float)(SDL_JoystickGetAxis(stick,0))/(float)maxStickValue;
-                        leftY = -(float)(SDL_JoystickGetAxis(stick,1))/(float)maxStickValue;
-                        rightX = -(float)(SDL_JoystickGetAxis(stick,4))/(float)maxStickValue;
-                        rightY = -(float)(SDL_JoystickGetAxis(stick,3))/(float)maxStickValue;
+						leftX = SDL_JoystickGetAxis(stick,0);
+						leftY = SDL_JoystickGetAxis(stick,1);
+						if ((abs(leftX) < minStickValue) && (abs(leftY) < minStickValue)) {
+							leftX = 0.0f;
+							leftY = 0.0f;
+						} else {
+							leftX = -(float)(SDL_JoystickGetAxis(stick,0))/(float)maxStickValue;
+							leftY = -(float)(SDL_JoystickGetAxis(stick,1))/(float)maxStickValue;
+						}
+						if ((abs(rightX) < minStickValue) && ((rightY) < minStickValue)) {
+							rightX = 0.0f;
+							rightY = 0.0f;
+						} else {
+							rightX = -(float)(SDL_JoystickGetAxis(stick,4))/(float)maxStickValue;
+                        	rightY = -(float)(SDL_JoystickGetAxis(stick,3))/(float)maxStickValue;
+						}
 
-                        if( leftX < ((float)minStickValue/maxStickValue) && leftX > 0-((float)minStickValue/maxStickValue) )
+						/*
+						if( leftX < ((float)minStickValue/maxStickValue) && leftX > 0-((float)minStickValue/maxStickValue) )
                                 leftX = 0.0;
 
                         if( leftY < ((float)minStickValue/maxStickValue) && leftY > 0-((float)minStickValue/maxStickValue) )
@@ -81,7 +94,10 @@ void GamePad::poll()
 
                         if( rightY < ((float)minStickValue/maxStickValue) && rightY > 0-((float)minStickValue/maxStickValue) )
                                 rightY = 0.0;
+						
 
+						*/
+						
                         leftStick = AVector( leftX , 0.0f , leftY );
                         rightStick = AVector( rightX , 0.0f , rightY );
 
@@ -94,7 +110,7 @@ void GamePad::poll()
                         if( SDL_JoystickGetButton(stick,5) )
                         {
 
-                                //DO SHOOTIN' STERFF HERE...!
+                          leftY = -(float)(SDL_JoystickGetAxis(stick,1))/(float)maxStickValue;      //DO SHOOTIN' STERFF HERE...!
 
                         }//if
 
