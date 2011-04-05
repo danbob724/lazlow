@@ -68,6 +68,7 @@ bool BumpMaps::OnInitialize ()
     mCuller.ComputeVisibleSet(mScene);
 
 	liveEnemies = NUM_SPAWNERS;
+	curSpawner = 0;
 
 	//GamePad stuff
 	controller.initialize();
@@ -254,7 +255,7 @@ void BumpMaps::TimeBasedMove() {
 			}
 		}
 
-		if(spawners[j].active()) //if spawner is still active, spawn someone
+		if(spawners[j].active() && j == curSpawner) //if spawner is still active, spawn someone
 		{	
 			for(int i = 0; i < NUM_ENEMIES; i++)
 			{
@@ -269,8 +270,12 @@ void BumpMaps::TimeBasedMove() {
 					break;
 				}
 			}
-			//spawn code goes here
 		}
+	}
+
+	if(++curSpawner >= NUM_SPAWNERS)
+	{
+		curSpawner = 0; 
 	}
 
 //Victory check
