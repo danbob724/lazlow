@@ -21,8 +21,8 @@ BumpMaps::BumpMaps ()
         mTextColor(1.0f, 0.0f, 1.0f, 1.0f)
 {
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
-	//Application::ThePath = getRealPath() + "/GCodeBase/";
-	Application::ThePath = getRealPath() + "/";
+	Application::ThePath = getRealPath() + "/GCodeBase/";
+	//Application::ThePath = getRealPath() + "/";
 	Environment::InsertDirectory(ThePath + "Shaders/");
 	Environment::InsertDirectory(WM5Path + "Data/Wmtf/");
 	
@@ -226,8 +226,8 @@ void BumpMaps::TimeBasedMove() {
 			}
 
 			//scaling enemy speed
-			enemies[j].x_dir /= 150;
-			enemies[j].z_dir /= 150;
+			enemies[j].x_dir /= 50;
+			enemies[j].z_dir /= 50;
 			enemies[j].Update();
 		}
 	}
@@ -585,6 +585,12 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 
 	projectiles[cur_proj].x_dir /= 5;
 	projectiles[cur_proj].z_dir /= 5;
+
+	if(button == 2)
+	{
+		projectiles[cur_proj].x_dir = 0;
+		projectiles[cur_proj].z_dir = 0;		
+	}
 
 	if(++cur_proj >= NUM_PROJECTILES)
 	{
