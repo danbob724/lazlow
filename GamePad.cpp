@@ -3,7 +3,7 @@
 SDL_Joystick *stick;
 SDL_Event thing;
 
-int minStickValue = 3000;
+int minStickValue = 9000;
 int maxStickValue = 32760;
 
 GamePad::GamePad(void)
@@ -58,6 +58,7 @@ void GamePad::poll()
                 return;
 
         float leftX, leftY, rightX, rightY;
+		bumperDown = false;
 
         if( SDL_PollEvent( &thing ) )
         {
@@ -112,7 +113,8 @@ void GamePad::poll()
                         if( SDL_JoystickGetButton(stick,5) )
                         {
 
-                          leftY = -(float)(SDL_JoystickGetAxis(stick,1))/(float)maxStickValue;      //DO SHOOTIN' STERFF HERE...!
+                          //leftY = -(float)(SDL_JoystickGetAxis(stick,1))/(float)maxStickValue;      //DO SHOOTIN' STERFF HERE...!
+						  bumperDown = true;
 
                         }//if
 

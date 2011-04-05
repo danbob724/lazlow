@@ -18,7 +18,7 @@ BumpMaps::BumpMaps ()
     :
 	WindowApplication3("Lazlow!!!", 0, 0, 640, 480,
         Float4(0.8f, 0.8f, 0.8f, 0.8f)),
-        mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
+        mTextColor(1.0f, 0.0f, 1.0f, 1.0f)
 {
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
 	//Application::ThePath = getRealPath() + "/GCodeBase/";
@@ -312,6 +312,27 @@ void BumpMaps::TimeBasedMove() {
 void BumpMaps::OnIdle ()
 {
     MeasureTime();
+	controller.poll();
+	//AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, -(y - ((float)GetHeight() / 2.0f)) );
+	if(controller.bumperDown) {
+		AVector shotDir = controller.rightStick;
+		shotDir.Normalize();
+	
+		projectiles[cur_proj].loc = thePlayer.getLocation();
+		projectiles[cur_proj].state = 1;
+	
+		projectiles[cur_proj].x_dir = shotDir.Z();
+		projectiles[cur_proj].z_dir = shotDir.X();
+	
+		projectiles[cur_proj].x_dir /= 5;
+		projectiles[cur_proj].z_dir /= 5;
+
+		if(++cur_proj >= NUM_PROJECTILES)
+		{
+			cur_proj = 0; 
+		}
+	}
+	
 	clock1 = clock();
 	if (((clock1 - clock0) * CLOCKS_PER_SEC) > 0.005) {
 		//call TimeBasedMove()
@@ -372,9 +393,10 @@ void BumpMaps::setMotionFromKeyboard() {
 	}
 }
 void BumpMaps::setMotionFromGamepad() {
-	controller.poll();
 	currentPlayerMotion = controller.leftStick;
 	currentPlayerMotion /= 10;
+
+	//reasonable code above this line
 }
 
 bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
