@@ -32,8 +32,8 @@ BumpMaps::BumpMaps ()
         mTextColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
-	//Application::ThePath = getRealPath() + "/GCodeBase/";
-	Application::ThePath = getRealPath() + "/";
+	Application::ThePath = getRealPath() + "/GCodeBase/";
+	//Application::ThePath = getRealPath() + "/";
 	Environment::InsertDirectory(ThePath + "Shaders/");
 	Environment::InsertDirectory(WM5Path + "Data/Wmtf/");
 	

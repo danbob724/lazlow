@@ -3,6 +3,7 @@
 
 #include "SDL.h"
 #include "Wm5AVector.h"
+using namespace Wm5;
 
 class GamePad
 {
@@ -18,7 +19,7 @@ public:
 	bool isEnabled();
 	
 	//Closes the joystick and quits SDL.
-	bool closeStick();
+	void closeStick();
 
 	//Polls the joystick, updating leftStick and rightStick,
 	//then shooting/moving as necessary.
