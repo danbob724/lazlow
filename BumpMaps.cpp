@@ -114,14 +114,21 @@ void BumpMaps::EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjecti
 				if((projectileToEnemy.Length() - testingEnemy[testTarget].radius - testingProjectiles[i].radius) <= 0)
 				{
 					testingEnemy[testTarget].hit(1);
+
+					
 					testingProjectiles[i].state = 0;
 					sprintf(mPickMessage, "%d", testingEnemy[testTarget].getCurrentHealth());
 					testingProjectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+
 
 					if(testingEnemy[testTarget].getCurrentHealth() <= 0)
 					{
 						testingEnemy[testTarget].setState(0);
 						testingEnemy[testTarget].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+					}
+					else
+					{
+						testingEnemy[testTarget].mesh->LocalTransform.SetScale(APoint(testingEnemy[testTarget].getCurrentHealth() * 0.7f, testingEnemy[testTarget].getCurrentHealth() * 0.7f, 0.5f)); //cylinder is intially along the z axis
 					}
 				}
 			}
@@ -168,8 +175,8 @@ void BumpMaps::TimeBasedMove() {
 	clock0 = clock();
 	//do the movment-stuff here
 
-	setMotionFromKeyboard();
-	//setMotionFromGamepad();
+	//setMotionFromKeyboard();
+	setMotionFromGamepad();
 
 //Projectiles
 	for(int i = 0; i < NUM_PROJECTILES; i++)
@@ -199,6 +206,8 @@ void BumpMaps::TimeBasedMove() {
 					enemies[j].setState(0);
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				}
+
+				currentPlayerMotion = APoint::ORIGIN - thePlayer.getLocation();
 			}
 		}
 
@@ -411,6 +420,7 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 	case 'q':
 	case 'Q':
 	{
+		/*
 		for(int i = 0; i < NUM_ENEMIES; i++)
 		{
 			//find an inactive enemy and create it
@@ -423,6 +433,7 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 			}
 		}
 		return true;
+		*/
 	}
 	case 'a':
 	case 'A':
@@ -605,7 +616,7 @@ void BumpMaps::CreateScene ()
 		spawners[i].behavior = 3;
 		
 
-		spawners[i].mesh->LocalTransform.SetScale(APoint(2.0f, 2.0f, 0.5f)); //cylinder is intially along the z axis
+		spawners[i].mesh->LocalTransform.SetScale(APoint(3.5f, 3.5f, 0.5f)); //cylinder is intially along the z axis
 
 		mScene->AttachChild(spawners[i].mesh);
 	}
