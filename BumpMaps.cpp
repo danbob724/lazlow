@@ -250,7 +250,7 @@ void BumpMaps::TimeBasedMove() {
 				if(!enemies[i].active())
 				{
 					enemies[i].state = 1;
-					enemies[i].loc = spawners[j].loc;
+					enemies[i].loc = spawners[j].loc + AVector(0.0f, 0.5f, 0.0f);
 					enemies[i].Update();
 					break;
 				}
@@ -618,10 +618,10 @@ void BumpMaps::CreateScene ()
 		mScene->AttachChild(spawners[i].mesh);
 	}
 
-	spawners[0].loc = APoint(10.0f, 0.0f, 10.0f);
-	spawners[1].loc = APoint(10.0f, 0.0f, -10.0f);
-	spawners[2].loc = APoint(-10.0f, 0.0f, 10.0f);
-	spawners[3].loc = APoint(-10.0f, 0.0f, -10.0f);
+	spawners[0].loc = APoint(15.0f, 0.0f, 15.0f);
+	spawners[1].loc = APoint(15.0f, 0.0f, -15.0f);
+	spawners[2].loc = APoint(-15.0f, 0.0f, 15.0f);
+	spawners[3].loc = APoint(-15.0f, 0.0f, -15.0f);
 
 	spawners[0].Update();
 	spawners[1].Update();
@@ -634,7 +634,7 @@ void BumpMaps::CreateScene ()
 
 	terrain = mShapeMaker.CreateCube();
 	terrain->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, -0.5f*Mathf::PI));
-	terrain->LocalTransform.SetScale(APoint(10.0f, 10.0f, 0.1f));
+	terrain->LocalTransform.SetScale(APoint(100.0f, 100.0f, 0.1f));
 	terrain->LocalTransform.SetTranslate(APoint(0.0f, -0.5f, 0.0f));
 	mScene->AttachChild(terrain);
 
