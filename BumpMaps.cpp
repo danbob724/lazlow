@@ -230,8 +230,8 @@ void BumpMaps::TimeBasedMove() {
 			}
 
 			//scaling enemy speed
-			enemies[j].x_dir /= 50;
-			enemies[j].z_dir /= 50;
+			enemies[j].x_dir /= 15;
+			enemies[j].z_dir /= 15;
 			enemies[j].Update();
 		}
 	}
