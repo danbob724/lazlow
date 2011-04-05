@@ -16,6 +16,7 @@
 #include "playerCharacter.h"
 #include "lazProjectile.h"
 #include "lazEnemy.h"
+#include "GamePad.h"
 
 #define NUM_PROJECTILES 5
 #define NUM_ENEMIES 5
