@@ -1,0 +1,31 @@
+ps_2_0
+// cgc version 2.2.0006, build date Mar 31 2009
+// command line args: -profile ps_2_0
+// source file: SimpleBumpMap.fx
+//vendor NVIDIA Corporation
+//version 2.2.0.6
+//profile ps_2_0
+//program p_SimpleBumpMap
+//semantic BaseSampler
+//semantic NormalSampler
+//var float3 vertexLightDirection : $vin.COLOR0 : COL0 : 0 : 1
+//var float2 vertexBaseTCoord : $vin.TEXCOORD0 : TEX0 : 1 : 1
+//var float2 vertexNormalTCoord : $vin.TEXCOORD1 : TEX1 : 2 : 1
+//var float4 pixelColor : $vout.COLOR : COL : 3 : 1
+//var sampler2D BaseSampler :  : texunit 0 : -1 : 1
+//var sampler2D NormalSampler :  : texunit 1 : -1 : 1
+//const c[0] = 2 -1 1
+dcl_2d s0
+dcl_2d s1
+def c0, 2.00000000, -1.00000000, 1.00000000, 0
+dcl t0.xy
+dcl t1.xy
+dcl v0.xyz
+texld r0, t0, s0
+texld r1, t1, s1
+mad r2.xyz, r1, c0.x, c0.y
+mad r1.xyz, v0, c0.x, c0.y
+dp3_sat r1.x, r1, r2
+mul r0.xyz, r1.x, r0
+mov r0.w, c0.z
+mov oC0, r0
