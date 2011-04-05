@@ -347,6 +347,7 @@ void BumpMaps::setMotionFromKeyboard() {
 void BumpMaps::setMotionFromGamepad() {
 	controller.poll();
 	currentPlayerMotion = controller.leftStick;
+	currentPlayerMotion /= 10;
 }
 
 bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
