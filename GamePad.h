@@ -1,7 +1,16 @@
 #ifndef GAMEPAD_H
 #define GAMEPAD_H
 
-#include <SDL/SDL.h>
+#ifdef WIN32
+    #include <direct.h>
+	#include <SDL.h>
+    #define GetCurrentDir _getcwd
+#else
+    #include <unistd.h>
+	#include <SDL/SDL.h>
+    #define GetCurrentDir getcwd
+#endif
+
 #include "Wm5AVector.h"
 using namespace Wm5;
 
