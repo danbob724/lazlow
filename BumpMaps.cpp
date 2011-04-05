@@ -119,7 +119,7 @@ void BumpMaps::EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjecti
 				//check if projectile hit enemy
 				if((projectileToEnemy.Length() - testingEnemy[testTarget].radius - testingProjectiles[i].radius) <= 0)
 				{
-					testingEnemy[testTarget].state = 0;
+					testingEnemy[testTarget].setState(0);
 					testingEnemy[testTarget].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 					testingProjectiles[i].state = 0;
 					testingProjectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
@@ -196,7 +196,7 @@ void BumpMaps::TimeBasedMove() {
 				
 				for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
 				{
-					enemies[j].state = 0;
+					enemies[j].setState(0);
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				}
 			}
@@ -241,7 +241,7 @@ void BumpMaps::TimeBasedMove() {
 				
 				for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
 				{
-					enemies[j].state = 0;
+					enemies[j].setState(0);
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				}
 			}
@@ -254,7 +254,7 @@ void BumpMaps::TimeBasedMove() {
 				//find an inactive enemy and create it
 				if(!enemies[i].active())
 				{
-					enemies[i].state = 1;
+					enemies[i].setState(1);
 					enemies[i].loc = spawners[j].loc + AVector(0.0f, 0.5f, 0.0f);
 					enemies[i].Update();
 					break;
@@ -414,7 +414,7 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 			//find an inactive enemy and create it
 			if(!enemies[i].active())
 			{
-				enemies[i].state = 1;
+				enemies[i].setState(1);
 				enemies[i].loc = APoint((i - 2.0f) * 2.5f, 0.0f, 3.0f);
 				enemies[i].Update();
 				break;
@@ -600,7 +600,7 @@ void BumpMaps::CreateScene ()
 		enemies[i].radius = 0.5;
 		enemies[i].x_dir = 0;
 		enemies[i].z_dir = 0;
-		enemies[i].state = 0;
+		enemies[i].setState(0);
 		enemies[i].behavior = i % 3;
 
 		enemies[i].mesh = mShapeMaker.CreateCylinder(); 
@@ -617,7 +617,7 @@ void BumpMaps::CreateScene ()
 		spawners[i].radius = 1;
 		spawners[i].x_dir = 0;
 		spawners[i].z_dir = 0;
-		spawners[i].state = 1;
+		spawners[i].setState(1);
 		spawners[i].behavior = 3;
 
 		spawners[i].mesh = mShapeMaker.CreateCylinder(); 
