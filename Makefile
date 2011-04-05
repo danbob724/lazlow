@@ -17,7 +17,7 @@ GCC := /usr/bin/gcc
 INCPATH += -I /usr/include
 LIBPATH += -L /usr/lib
 XLIBS := -lX11 -lXext
-GLIBS := -lGL -lGLU
+GLIBS := -lGL -lGLU -lSDL
 LIBS := $(CORELIBS) $(XLIBS) $(GLIBS) -lpthread -lm 
 endif
 
