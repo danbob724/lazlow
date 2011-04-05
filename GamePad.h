@@ -1,7 +1,7 @@
 #ifndef GAMEPAD_H
 #define GAMEPAD_H
 
-#include "SDL.h"
+#include <SDL/SDL.h>
 #include "Wm5AVector.h"
 using namespace Wm5;
 
