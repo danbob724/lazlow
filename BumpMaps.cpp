@@ -72,6 +72,8 @@ bool BumpMaps::OnInitialize ()
     mCuller.SetCamera(mCamera);
     mCuller.ComputeVisibleSet(mScene);
 
+	liveEnemies = NUM_SPAWNERS;
+
 	//GamePad stuff
 	controller.initialize();
 
@@ -123,6 +125,7 @@ void BumpMaps::EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjecti
 
 					if(testingEnemy[testTarget].getCurrentHealth() <= 0)
 					{
+						liveEnemies--;
 						testingEnemy[testTarget].setState(0);
 						testingEnemy[testTarget].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 					}
@@ -263,6 +266,7 @@ void BumpMaps::TimeBasedMove() {
 				//find an inactive enemy and create it
 				if(!enemies[i].active())
 				{
+					liveEnemies++;
 					enemies[i].setState(1);
 					enemies[i].setHealth(1);
 					enemies[i].loc = spawners[j].loc + AVector(0.0f, 0.5f, 0.0f);
@@ -273,6 +277,13 @@ void BumpMaps::TimeBasedMove() {
 			//spawn code goes here
 		}
 	}
+
+//Victory check
+	if(liveEnemies <= 0)
+	{
+		sprintf(mPickMessage, "Win!");
+	}
+
 
 	mCamera->SetPosition(thePlayer.movePlayer(currentPlayerMotion));
 	mScene->Update();

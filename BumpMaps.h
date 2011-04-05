@@ -78,6 +78,7 @@ protected:
 	lazProjectile projectiles[NUM_PROJECTILES];
 	lazEnemy enemies[NUM_ENEMIES];
 	lazEnemy spawners[NUM_SPAWNERS];
+	int liveEnemies;
 	GamePad controller;
 
 	void setMotionFromKeyboard();
