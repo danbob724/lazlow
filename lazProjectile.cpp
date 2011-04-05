@@ -14,6 +14,7 @@ lazProjectile::lazProjectile(ShapeMaker* someShapeMaker) {
 
 	loc = APoint::ORIGIN; 
 	radius = 0.35f;
+	state = 0;
 	x_dir = 0;
 	z_dir = 0;
 	

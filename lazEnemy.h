@@ -26,6 +26,7 @@ class lazEnemy
 		void Update();
 		void hit(int hitvalue);
 		int getCurrentHealth();
+		void setHealth(int healthIn);
 		
 	protected:
 		ShapeMaker* myShapeMaker;
