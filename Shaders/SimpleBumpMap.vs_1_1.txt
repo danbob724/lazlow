@@ -1,0 +1,37 @@
+vs_1_1
+// cgc version 2.2.0006, build date Mar 31 2009
+// command line args: -profile vs_1_1 -profileopts dcls
+// source file: SimpleBumpMap.fx
+//vendor NVIDIA Corporation
+//version 2.2.0.6
+//profile vs_1_1
+//program v_SimpleBumpMap
+//semantic v_SimpleBumpMap.PVWMatrix
+//semantic BaseSampler
+//semantic NormalSampler
+//var float3 modelPosition : $vin.POSITION0 : ATTR0 : 0 : 1
+//var float3 modelLightDirection : $vin.COLOR0 : ATTR1 : 1 : 1
+//var float2 modelBaseTCoord : $vin.TEXCOORD0 : ATTR2 : 2 : 1
+//var float2 modelNormalTCoord : $vin.TEXCOORD1 : ATTR3 : 3 : 1
+//var float4 clipPosition : $vout.POSITION : HPOS : 4 : 1
+//var float3 vertexLightDirection : $vout.COLOR0 : COL0 : 5 : 1
+//var float2 vertexBaseTCoord : $vout.TEXCOORD0 : TEX0 : 6 : 1
+//var float2 vertexNormalTCoord : $vout.TEXCOORD1 : TEX1 : 7 : 1
+//var float4x4 PVWMatrix :  : c[0], 4 : 8 : 1
+//var sampler2D BaseSampler :  :  : -1 : 0
+//var sampler2D NormalSampler :  :  : -1 : 0
+//const c[4] = 1
+def c4, 1.00000000, 0, 0, 0
+dcl_position0 v0
+dcl_texcoord0 v2
+dcl_texcoord1 v3
+dcl_color0 v1
+mov r0.w, c4.x
+mov r0.xyz, v0
+dp4 oPos.w, r0, c3
+dp4 oPos.z, r0, c2
+dp4 oPos.y, r0, c1
+dp4 oPos.x, r0, c0
+mov oD0.xyz, v1
+mov oT0.xy, v2
+mov oT1.xy, v3
