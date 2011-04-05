@@ -18,6 +18,14 @@
 #include "lazEnemy.h"
 #include "GamePad.h"
 
+#ifdef WIN32
+    #include <direct.h>
+    #define GetCurrentDir _getcwd
+#else
+    #include <unistd.h>
+    #define GetCurrentDir getcwd
+#endif
+
 #define NUM_PROJECTILES 5
 #define NUM_ENEMIES 5
 #define NUM_SPAWNERS 4

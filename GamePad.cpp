@@ -20,7 +20,7 @@ bool GamePad::initialize()
         if( !SDL_Init(SDL_INIT_EVERYTHING) )
                 return false;
 
-        stick = SDL_JoystickOpen(0);
+        stick = SDL_JoystickOpen(1);
 
         if( stick == NULL )
                 return false;
@@ -65,10 +65,10 @@ void GamePad::poll()
                 if( thing.type == SDL_JOYAXISMOTION )
                 {
 
-                        leftX = (float)(SDL_JoystickGetAxis(stick,0))/maxStickValue;
-                        leftY = (float)(SDL_JoystickGetAxis(stick,1))/maxStickValue;
-                        rightX = (float)(SDL_JoystickGetAxis(stick,4))/maxStickValue;
-                        rightY = (float)(SDL_JoystickGetAxis(stick,3))/maxStickValue;
+                        leftX = (float)(SDL_JoystickGetAxis(stick,0))/(float)maxStickValue;
+                        leftY = (float)(SDL_JoystickGetAxis(stick,1))/(float)maxStickValue;
+                        rightX = (float)(SDL_JoystickGetAxis(stick,4))/(float)maxStickValue;
+                        rightY = (float)(SDL_JoystickGetAxis(stick,3))/(float)maxStickValue;
 
                         if( leftX < ((float)minStickValue/maxStickValue) && leftX > 0-((float)minStickValue/maxStickValue) )
                                 leftX = 0.0;
