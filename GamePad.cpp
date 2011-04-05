@@ -74,6 +74,8 @@ void GamePad::poll()
 							leftX = -(float)(SDL_JoystickGetAxis(stick,0))/(float)maxStickValue;
 							leftY = -(float)(SDL_JoystickGetAxis(stick,1))/(float)maxStickValue;
 						}
+						rightX = SDL_JoystickGetAxis(stick, 4);
+						rightY = SDL_JoystickGetAxis(stick, 3);
 						if ((abs(rightX) < minStickValue) && ((rightY) < minStickValue)) {
 							rightX = 0.0f;
 							rightY = 0.0f;
