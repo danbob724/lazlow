@@ -18,6 +18,8 @@
 #include "lazEnemy.h"
 #include "GamePad.h"
 
+//this nonsense is to get the current working directory
+#include <stdio.h>
 #ifdef WIN32
     #include <direct.h>
     #define GetCurrentDir _getcwd

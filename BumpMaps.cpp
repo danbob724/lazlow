@@ -8,11 +8,6 @@
 
 #include "BumpMaps.h"
 
-//this nonsense is to get the current working directory
-#include <stdio.h>
-
-
-
 WM5_WINDOW_APPLICATION(BumpMaps);
 
 	int num_proj = 0;
