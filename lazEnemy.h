@@ -18,17 +18,20 @@ class lazEnemy
 		lazEnemy();		
 		lazEnemy(ShapeMaker* someShapeMaker);
 		int active();
-
+		void setState(int newState);
 		TriMesh* mesh;
 		APoint loc;
 		float x_dir, z_dir, radius;
-		int state; //0 = inactive, 1 = active
 		int behavior; //0 = chase, 1 = circle, 2 = circle the other way, 3 = stationary (spawner)
 		void Update();
+		void hit(int hitvalue);
+		int getCurrentHealth();
 		
 	protected:
 		ShapeMaker* myShapeMaker;
 		Environment* enemyEnv;
+		int health;
+		int state; //0 = inactive, 1 = active
 
 	private:
 

@@ -8,24 +8,24 @@ int maxStickValue = 32760;
 
 GamePad::GamePad(void)
 {
-	//leftStick = new AVector();
-	//rightStick = new AVector();	
+        //leftStick = new AVector();
+        //rightStick = new AVector();   
 
 }//constructor
 
-//--------------------------------------------------	
+//--------------------------------------------------    
 bool GamePad::initialize()
 {
 
-	if( !SDL_Init(SDL_INIT_EVERYTHING) )
-		return false;
+        if( !SDL_Init(SDL_INIT_EVERYTHING) )
+                return false;
 
-	stick = SDL_JoystickOpen(0);
+        stick = SDL_JoystickOpen(0);
 
-	if( stick == NULL )
-		return false;
+        if( stick == NULL )
+                return false;
 
-	return true;
+        return true;
 
 }//initialize
 
@@ -33,20 +33,20 @@ bool GamePad::initialize()
 bool GamePad::isEnabled()
 {
 
-	if( stick == NULL )
-		return false;
+        if( stick == NULL )
+                return false;
 
-	if( !SDL_NumJoysticks() )
-		return false;
+        if( !SDL_NumJoysticks() )
+                return false;
 
-	return true;
+        return true;
 
-}//isEnabled	
+}//isEnabled    
 //--------------------------------------------------
 void GamePad::closeStick()
 {
-	SDL_JoystickClose(stick);
-	SDL_Quit();
+        SDL_JoystickClose(stick);
+        SDL_Quit();
 
 }//closeStick
 
@@ -54,54 +54,53 @@ void GamePad::closeStick()
 void GamePad::poll()
 {
 
-	if( !isEnabled() )
-		return;
+        if( !isEnabled() )
+                return;
 
-	float leftX, leftY, rightX, rightY;
+        float leftX, leftY, rightX, rightY;
 
-	if( SDL_PollEvent( &thing ) )
-	{
+        if( SDL_PollEvent( &thing ) )
+        {
 
-		if( thing.type == SDL_JOYAXISMOTION )
-		{
+                if( thing.type == SDL_JOYAXISMOTION )
+                {
 
-			leftX = (float)(SDL_JoystickGetAxis(stick,0))/maxStickValue;
-			leftY = (float)(SDL_JoystickGetAxis(stick,1))/maxStickValue;
-			rightX = (float)(SDL_JoystickGetAxis(stick,4))/maxStickValue;
-			rightY = (float)(SDL_JoystickGetAxis(stick,3))/maxStickValue;
+                        leftX = (float)(SDL_JoystickGetAxis(stick,0))/maxStickValue;
+                        leftY = (float)(SDL_JoystickGetAxis(stick,1))/maxStickValue;
+                        rightX = (float)(SDL_JoystickGetAxis(stick,4))/maxStickValue;
+                        rightY = (float)(SDL_JoystickGetAxis(stick,3))/maxStickValue;
 
-			if( leftX < ((float)minStickValue/maxStickValue) && leftX > 0-((float)minStickValue/maxStickValue) )
-				leftX = 0.0;
+                        if( leftX < ((float)minStickValue/maxStickValue) && leftX > 0-((float)minStickValue/maxStickValue) )
+                                leftX = 0.0;
 
-			if( leftY < ((float)minStickValue/maxStickValue) && leftY > 0-((float)minStickValue/maxStickValue) )
-				leftY = 0.0;
+                        if( leftY < ((float)minStickValue/maxStickValue) && leftY > 0-((float)minStickValue/maxStickValue) )
+                                leftY = 0.0;
 
-			if( rightX < ((float)minStickValue/maxStickValue) && rightX > 0-((float)minStickValue/maxStickValue) )
-				rightX = 0.0;
+                        if( rightX < ((float)minStickValue/maxStickValue) && rightX > 0-((float)minStickValue/maxStickValue) )
+                                rightX = 0.0;
 
-			if( rightY < ((float)minStickValue/maxStickValue) && rightY > 0-((float)minStickValue/maxStickValue) )
-				rightY = 0.0;
+                        if( rightY < ((float)minStickValue/maxStickValue) && rightY > 0-((float)minStickValue/maxStickValue) )
+                                rightY = 0.0;
 
-			leftStick = AVector( leftX , 0.0f , leftY );
-			rightStick = AVector( rightX , 0.0f , rightY );
+                        leftStick = AVector( leftX , 0.0f , leftY );
+                        rightStick = AVector( rightX , 0.0f , rightY );
 
-			//DO MOVING STUFF HERE!!1!
+                        //DO MOVING STUFF HERE!!1!
 
-		}//if joyaxismotion
-		else if( thing.type == SDL_JOYBUTTONDOWN )
-		{
+                }//if joyaxismotion
+                else if( thing.type == SDL_JOYBUTTONDOWN )
+                {
 
-			if( SDL_JoystickGetButton(stick,5) )
-			{
+                        if( SDL_JoystickGetButton(stick,5) )
+                        {
 
-				//DO SHOOTIN' STERFF HERE...!
+                                //DO SHOOTIN' STERFF HERE...!
 
-			}//if
+                        }//if
 
-		}//if joybuttondown
+                }//if joybuttondown
 
-	}//if
+        }//if
 
 }//poll
-
 
