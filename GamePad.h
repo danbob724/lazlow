@@ -36,6 +36,7 @@ public:
 
         AVector leftStick;
         AVector rightStick;
+		bool bumperDown;
 };
 
 #endif
