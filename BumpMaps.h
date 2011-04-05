@@ -79,6 +79,7 @@ protected:
 	lazEnemy enemies[NUM_ENEMIES];
 	lazEnemy spawners[NUM_SPAWNERS];
 	int liveEnemies;
+	int curSpawner;
 	GamePad controller;
 
 	void setMotionFromKeyboard();
