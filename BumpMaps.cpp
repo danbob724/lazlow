@@ -162,8 +162,8 @@ void BumpMaps::TimeBasedMove() {
 	clock0 = clock();
 	//do the movment-stuff here
 
-	//setMotionFromKeyboard();
-	setMotionFromGamepad();
+	setMotionFromKeyboard();
+	//setMotionFromGamepad();
 
 //Projectiles
 	for(int i = 0; i < NUM_PROJECTILES; i++)
@@ -574,49 +574,27 @@ void BumpMaps::CreateScene ()
 
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
-		projectiles[i].loc = APoint::ORIGIN; 
-		projectiles[i].radius = 0.35f;
-		projectiles[i].state = 0;
-		projectiles[i].x_dir = 0;
-		projectiles[i].z_dir = 0;
-
-		projectiles[i].mesh = mShapeMaker.CreateSphere(); 
-		projectiles[i].mesh->LocalTransform.SetScale(APoint(projectiles[i].radius, projectiles[i].radius, projectiles[i].radius));
-
-		projectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
-
+		projectiles[i] = lazProjectile(&mShapeMaker);
 		mScene->AttachChild(projectiles[i].mesh);
 	}
 
 	for(int i = 0; i < NUM_ENEMIES; i++)
 	{
-		enemies[i].loc = APoint::ORIGIN; 
+		enemies[i] = lazEnemy(&mShapeMaker);
 		enemies[i].radius = 0.5;
-		enemies[i].x_dir = 0;
-		enemies[i].z_dir = 0;
-		enemies[i].setState(0);
 		enemies[i].behavior = i % 3;
-
-		enemies[i].mesh = mShapeMaker.CreateCylinder(); 
-		//enemies[i].mesh->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
-		enemies[i].mesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
-		enemies[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 
 		mScene->AttachChild(enemies[i].mesh);
 	}
 
 	for(int i = 0; i < NUM_SPAWNERS; i++)
 	{
-		spawners[i].loc = APoint::ORIGIN; 
+		spawners[i] = lazEnemy(&mShapeMaker); 
 		spawners[i].radius = 1;
-		spawners[i].x_dir = 0;
-		spawners[i].z_dir = 0;
 		spawners[i].setState(1);
 		spawners[i].behavior = 3;
 
-		spawners[i].mesh = mShapeMaker.CreateCylinder(); 
 		spawners[i].mesh->LocalTransform.SetScale(APoint(2.0f, 2.0f, 0.5f)); //cylinder is intially along the z axis
-		spawners[i].mesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 
 		mScene->AttachChild(spawners[i].mesh);
 	}
