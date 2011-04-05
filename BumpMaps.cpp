@@ -113,10 +113,16 @@ void BumpMaps::EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjecti
 				//check if projectile hit enemy
 				if((projectileToEnemy.Length() - testingEnemy[testTarget].radius - testingProjectiles[i].radius) <= 0)
 				{
-					testingEnemy[testTarget].setState(0);
-					testingEnemy[testTarget].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+					testingEnemy[testTarget].hit(1);
 					testingProjectiles[i].state = 0;
+					sprintf(mPickMessage, "%d", testingEnemy[testTarget].getCurrentHealth());
 					testingProjectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+
+					if(testingEnemy[testTarget].getCurrentHealth() <= 0)
+					{
+						testingEnemy[testTarget].setState(0);
+						testingEnemy[testTarget].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+					}
 				}
 			}
 		}
@@ -249,6 +255,7 @@ void BumpMaps::TimeBasedMove() {
 				if(!enemies[i].active())
 				{
 					enemies[i].setState(1);
+					enemies[i].setHealth(1);
 					enemies[i].loc = spawners[j].loc + AVector(0.0f, 0.5f, 0.0f);
 					enemies[i].Update();
 					break;
@@ -583,6 +590,7 @@ void BumpMaps::CreateScene ()
 		enemies[i] = lazEnemy(&mShapeMaker);
 		enemies[i].radius = 0.5;
 		enemies[i].behavior = i % 3;
+		enemies[i].setHealth(1);
 
 		mScene->AttachChild(enemies[i].mesh);
 	}
@@ -591,8 +599,10 @@ void BumpMaps::CreateScene ()
 	{
 		spawners[i] = lazEnemy(&mShapeMaker); 
 		spawners[i].radius = 1;
+		spawners[i].setHealth(5);
 		spawners[i].setState(1);
 		spawners[i].behavior = 3;
+		
 
 		spawners[i].mesh->LocalTransform.SetScale(APoint(2.0f, 2.0f, 0.5f)); //cylinder is intially along the z axis
 
