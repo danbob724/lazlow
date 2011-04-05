@@ -23,7 +23,7 @@ lazEnemy::lazEnemy(ShapeMaker* someShapeMaker) {
 
 void lazEnemy::Update() {
 	//do the movement updating
-	loc = loc + AVector(x_dir, 0.0, z_dir);
+	loc = loc + AVector(x_dir, 0.0f, z_dir);
 	mesh->LocalTransform.SetTranslate(APoint(loc));
 }
 
