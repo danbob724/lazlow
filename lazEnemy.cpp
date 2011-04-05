@@ -13,6 +13,7 @@ lazEnemy::lazEnemy(ShapeMaker* someShapeMaker) {
 	mesh = myShapeMaker->CreateCylinder();
 
 	loc = APoint::ORIGIN; 
+	health = 0;
 	radius = 0.5;
 	x_dir = 0;
 	z_dir = 0;
@@ -48,3 +49,8 @@ void lazEnemy::hit(int hitValue) {
 int lazEnemy::getCurrentHealth() {
 	return health;
 }
+
+void lazEnemy::setHealth(int healthIn){
+	health = healthIn;
+}
+
