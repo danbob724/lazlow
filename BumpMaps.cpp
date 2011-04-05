@@ -543,22 +543,36 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	{
 		return false;
 	}
+/*
+	APoint pos, newPos;
+	AVector dir, shotDir;
+	mRenderer->GetPickRay(x, GetHeight() - 1 - y, pos, dir);
+	
+	float temp = pos.Y() / dir.Y();
+	
+	newPos = APoint(pos.X() + dir.X() * temp, 0, pos.Z() + dir.Z() * temp);
+	
+	shotDir = APoint::ORIGIN - newPos;
+	shotDir.Normalize();
+*/
+	AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, -(y - ((float)GetHeight() / 2.0f)) );
+	shotDir.Normalize();
 
-	//projectiles[cur_proj] = CreateSphere(); 
-	//projectiles[cur_proj]->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
-
-	//projectiles[cur_proj].x_loc = playerLocation[0];
-	//projectiles[cur_proj].z_loc = playerLocation[2];
 	projectiles[cur_proj].loc = thePlayer.getLocation();
 	projectiles[cur_proj].state = 1;
 
-	projectiles[cur_proj].mesh->LocalTransform.SetTranslate(APoint(projectiles[cur_proj].loc));
+	projectiles[cur_proj].x_dir = shotDir.X();
+	projectiles[cur_proj].z_dir = shotDir.Z();
 
-	//mScene->AttachChild(projectiles[cur_proj]);
+	projectiles[cur_proj].x_dir /= 5;
+	projectiles[cur_proj].z_dir /= 5;
 
-	projectiles[cur_proj].x_dir = -(float)((x - ((float)GetWidth() / 2)));
-	projectiles[cur_proj].z_dir = -(float)((y - ((float)GetHeight() / 2)));
-	
+	if(++cur_proj >= NUM_PROJECTILES)
+	{
+		cur_proj = 0; 
+	}
+
+/*
 	float dir_magnitude = sqrt((projectiles[cur_proj].x_dir * projectiles[cur_proj].x_dir) + (projectiles[cur_proj].z_dir * projectiles[cur_proj].z_dir));
 	projectiles[cur_proj].x_dir /= dir_magnitude;
 	projectiles[cur_proj].z_dir /= dir_magnitude;
@@ -570,6 +584,9 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	{
 		cur_proj = 0; 
 	}
+	*/
+
+
 /*
 	if(num_proj < NUM_PROJECTILES)
 	{
@@ -577,6 +594,9 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	}*/
 
 	//do a picking operation
+	
+	
+	/*
 	APoint pos;
 	AVector dir;
 	if (mRenderer->GetPickRay(x, GetHeight() - 1 - y, pos, dir))
@@ -593,7 +613,7 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 		{
 			mPickMessage[0] = 0;
 		}
-	}
+	}*/
 	return true;
 }
 
