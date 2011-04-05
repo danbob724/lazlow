@@ -10,14 +10,18 @@ lazEnemy::lazEnemy() {};
 
 lazEnemy::lazEnemy(ShapeMaker* someShapeMaker) {
 	myShapeMaker = someShapeMaker;
-	mesh = myShapeMaker->CreateSphere();
+	mesh = myShapeMaker->CreateCylinder();
 
 	loc = APoint::ORIGIN; 
+	health = 0;
 	radius = 0.5;
 	x_dir = 0;
 	z_dir = 0;
+	state = 0;
+	behavior = 0;
 	
 	//mesh->LocalTransform.SetScale(APoint(0.35f, 0.35f, 0.35f));
+	mesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 }
 
@@ -45,3 +49,8 @@ void lazEnemy::hit(int hitValue) {
 int lazEnemy::getCurrentHealth() {
 	return health;
 }
+
+void lazEnemy::setHealth(int healthIn){
+	health = healthIn;
+}
+
