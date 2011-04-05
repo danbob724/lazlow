@@ -30,3 +30,18 @@ void lazEnemy::Update() {
 int lazEnemy::active() {
 	return state; //0 = inactive, 1 = active
 }
+
+void lazEnemy::setState(int newState) {
+	state = newState;
+}
+
+void lazEnemy::hit(int hitValue) {
+	health -= hitValue;
+	if (health <= 0) {
+		state = 0;
+	}
+}
+
+int lazEnemy::getCurrentHealth() {
+	return health;
+}
