@@ -1,5 +1,5 @@
 APP ?= warmup
-CFG ?= Release
+CFG ?= Debug
 SYS ?= Linux
 GRF ?= Glx
 

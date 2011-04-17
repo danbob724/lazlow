@@ -340,7 +340,7 @@ void BumpMaps::OnIdle ()
 	}
 	
 	clock1 = clock();
-	if (((clock1 - clock0) * CLOCKS_PER_SEC) > 0.005) {
+	if (((clock1 - clock0) * CLOCKS_PER_SEC) > 0.00005) {
 		//call TimeBasedMove()
 		TimeBasedMove();
 	}
