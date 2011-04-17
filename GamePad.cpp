@@ -6,6 +6,9 @@ SDL_Event thing;
 int minStickValue = 9000;
 int maxStickValue = 32760;
 
+int minTriggerValue = -32760;
+int maxTriggerValue =  32760;
+
 GamePad::GamePad(void)
 {
         //leftStick = new AVector();
@@ -59,6 +62,7 @@ void GamePad::poll()
 
         float leftX, leftY, rightX, rightY;
 		bumperDown = false;
+		leftX = leftY = rightX = rightY = rightTrigger = 0.0f;
 
         if( SDL_PollEvent( &thing ) )
         {
@@ -83,6 +87,16 @@ void GamePad::poll()
 						} else {
 							rightX = -(float)(SDL_JoystickGetAxis(stick,4))/(float)maxStickValue;
                         	rightY = -(float)(SDL_JoystickGetAxis(stick,3))/(float)maxStickValue;
+						}
+
+						rightTrigger = (float)(SDL_JoystickGetAxis(stick, 5));
+						rightTrigger -= minTriggerValue;
+						if (rightTrigger <= 30) {
+							rightTrigger = 0.0f;
+						}
+						rightTrigger /= (2*maxStickValue);
+						if (rightTrigger > 1) {
+							rightTrigger = 1.0f;
 						}
 
 						/*

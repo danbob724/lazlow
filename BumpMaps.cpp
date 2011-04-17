@@ -42,6 +42,7 @@ bool BumpMaps::OnInitialize ()
 {
 	clock0 = clock();
 	clock1 = clock();
+	shot_clock = clock();
 	if (!WindowApplication3::OnInitialize())
     {
         return false;
@@ -173,6 +174,7 @@ void BumpMaps::TimeBasedMove() {
 
 	//setMotionFromKeyboard();
 	setMotionFromGamepad();
+
 
 //Projectiles
 	for(int i = 0; i < NUM_PROJECTILES; i++)
@@ -319,28 +321,32 @@ void BumpMaps::OnIdle ()
 {
     MeasureTime();
 	controller.poll();
-	//AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, -(y - ((float)GetHeight() / 2.0f)) );
-	if(controller.bumperDown) {
-		AVector shotDir = controller.rightStick;
-		shotDir.Normalize();
+	if (((float)(clock() - shot_clock) / CLOCKS_PER_SEC) > 0.05) {
+		shot_clock = clock();
+		if(controller.rightTrigger > 0.25f) {
+			AVector shotDir = controller.rightStick;
+			shotDir.Normalize();
+		
+			projectiles[cur_proj].loc = thePlayer.getLocation();
+			projectiles[cur_proj].state = 1;
+		
+			projectiles[cur_proj].x_dir = shotDir.Z();
+			projectiles[cur_proj].z_dir = shotDir.X();
+		
+			projectiles[cur_proj].x_dir /= 5;
+			projectiles[cur_proj].z_dir /= 5;
 	
-		projectiles[cur_proj].loc = thePlayer.getLocation();
-		projectiles[cur_proj].state = 1;
-	
-		projectiles[cur_proj].x_dir = shotDir.Z();
-		projectiles[cur_proj].z_dir = shotDir.X();
-	
-		projectiles[cur_proj].x_dir /= 5;
-		projectiles[cur_proj].z_dir /= 5;
-
-		if(++cur_proj >= NUM_PROJECTILES)
-		{
-			cur_proj = 0; 
-		}
+			if(++cur_proj >= NUM_PROJECTILES)
+			{
+				cur_proj = 0; 
+			}
+		}	
 	}
+	//AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, -(y - ((float)GetHeight() / 2.0f)) );
+	
 	
 	clock1 = clock();
-	if (((clock1 - clock0) * CLOCKS_PER_SEC) > 0.00005) {
+	if (((float)(clock1 - clock0) / CLOCKS_PER_SEC) > 0.005) {
 		//call TimeBasedMove()
 		TimeBasedMove();
 	}

@@ -90,6 +90,7 @@ protected:
 	bool wPressed, aPressed, sPressed, dPressed;
 
 	clock_t clock0, clock1;
+	clock_t shot_clock;
 
 //////////////////////////
 	Picker mPicker;
