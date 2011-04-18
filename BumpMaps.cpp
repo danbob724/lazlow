@@ -32,6 +32,7 @@ BumpMaps::BumpMaps ()
 
 	thePlayer = PlayerCharacter(&mShapeMaker, mCamera);
 	currentPlayerMotion = AVector(0.0f, 0.0f, 0.0f);
+	gameState = 0;
 	wPressed = false;
 	aPressed = false;
 	sPressed = false;
@@ -319,52 +320,60 @@ void BumpMaps::TimeBasedMove() {
 
 void BumpMaps::OnIdle ()
 {
-    MeasureTime();
-	controller.poll();
-	if (((float)(clock() - shot_clock) / CLOCKS_PER_SEC) > 0.05) {
-		shot_clock = clock();
-		if(controller.rightTrigger > 0.25f) {
-			AVector shotDir = controller.rightStick;
-			shotDir.Normalize();
+	switch(gameState)
+	{
+	case 0:
+		//playing
+		MeasureTime();
+		controller.poll();
+		if (((float)(clock() - shot_clock) / CLOCKS_PER_SEC) > 0.05) {
+			shot_clock = clock();
+			if(controller.rightTrigger > 0.25f) {
+				AVector shotDir = controller.rightStick;
+				shotDir.Normalize();
+			
+				projectiles[cur_proj].loc = thePlayer.getLocation();
+				projectiles[cur_proj].state = 1;
+			
+				projectiles[cur_proj].x_dir = shotDir.Z();
+				projectiles[cur_proj].z_dir = shotDir.X();
+			
+				projectiles[cur_proj].x_dir /= 5;
+				projectiles[cur_proj].z_dir /= 5;
 		
-			projectiles[cur_proj].loc = thePlayer.getLocation();
-			projectiles[cur_proj].state = 1;
+				if(++cur_proj >= NUM_PROJECTILES)
+				{
+					cur_proj = 0; 
+				}
+			}	
+		}
+		//AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, -(y - ((float)GetHeight() / 2.0f)) );
 		
-			projectiles[cur_proj].x_dir = shotDir.Z();
-			projectiles[cur_proj].z_dir = shotDir.X();
-		
-			projectiles[cur_proj].x_dir /= 5;
-			projectiles[cur_proj].z_dir /= 5;
-	
-			if(++cur_proj >= NUM_PROJECTILES)
-			{
-				cur_proj = 0; 
-			}
-		}	
-	}
-	//AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, -(y - ((float)GetHeight() / 2.0f)) );
-	
-	
-	clock1 = clock();
-	if (((float)(clock1 - clock0) / CLOCKS_PER_SEC) > 0.005) {
-		//call TimeBasedMove()
-		TimeBasedMove();
-	}
+		clock1 = clock();
+		if (((float)(clock1 - clock0) / CLOCKS_PER_SEC) > 0.005) {
+			//call TimeBasedMove()
+			TimeBasedMove();
+		}
 
-	if (mRenderer->PreDraw())
-    {
-        mRenderer->ClearBuffers();
-        mRenderer->Draw(mCuller.GetVisibleSet());
-        DrawFrameRate(8, GetHeight()-8, mTextColor);
-		if (mPickMessage[0])
-        {
-            mRenderer->Draw(8, 16, mTextColor, mPickMessage);
-        }
-		mRenderer->PostDraw();
-        mRenderer->DisplayColorBuffer();
-    }
-	mScene->Update();
-    UpdateFrameCount();
+		if (mRenderer->PreDraw())
+		{
+			mRenderer->ClearBuffers();
+			mRenderer->Draw(mCuller.GetVisibleSet());
+			DrawFrameRate(8, GetHeight()-8, mTextColor);
+			if (mPickMessage[0])
+			{
+				mRenderer->Draw(8, 16, mTextColor, mPickMessage);
+			}
+			mRenderer->PostDraw();
+			mRenderer->DisplayColorBuffer();
+		}
+		mScene->Update();
+		UpdateFrameCount();
+		break;
+	case 1:
+		//paused
+		break;
+	}
 }
 
 void BumpMaps::InitializeCameraMotion (float trnSpeed, float rotSpeed, float trnSpeedFactor, float rotSpeedFactor)
@@ -422,7 +431,22 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 
     switch (key)
     {
-	
+	case 'p':
+    case 'P':
+    {
+		if(gameState == 0)
+		{
+			gameState = 1;
+			sprintf(mPickMessage, "Paused");
+		}
+		else if(gameState == 1)
+		{
+			gameState = 0;
+			sprintf(mPickMessage, "Unpaused");
+		}
+
+		return true;
+	}
 	case 'b':
     case 'B':
     {

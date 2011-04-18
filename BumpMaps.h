@@ -82,6 +82,7 @@ protected:
 	lazEnemy spawners[NUM_SPAWNERS];
 	int liveEnemies;
 	int curSpawner;
+	int gameState; //0 = playing, 1 = paused
 	GamePad controller;
 
 	void setMotionFromKeyboard();
