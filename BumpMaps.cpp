@@ -172,8 +172,8 @@ void BumpMaps::TimeBasedMove() {
 	clock0 = clock();
 	//do the movment-stuff here
 
-	//setMotionFromKeyboard();
-	setMotionFromGamepad();
+	setMotionFromKeyboard();
+	//setMotionFromGamepad();
 
 
 //Projectiles
@@ -589,7 +589,7 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	shotDir = APoint::ORIGIN - newPos;
 	shotDir.Normalize();
 */
-	AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, -(y - ((float)GetHeight() / 2.0f)) );
+	AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, (-(y - ((float)GetHeight() / 2.0f)) * sqrt(2.0f)) );
 	shotDir.Normalize();
 
 	projectiles[cur_proj].loc = thePlayer.getLocation();
