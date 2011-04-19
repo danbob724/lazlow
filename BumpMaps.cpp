@@ -16,7 +16,7 @@ WM5_WINDOW_APPLICATION(BumpMaps);
 //----------------------------------------------------------------------------
 BumpMaps::BumpMaps ()
     :
-	WindowApplication3("Lazlow!!!", 0, 0, 640, 480,
+	WindowApplication3("Lazlow!!!", 0, 0, 1024, 768,
         Float4(0.8f, 0.8f, 0.8f, 0.8f)),
         mTextColor(1.0f, 0.0f, 1.0f, 1.0f)
 {
