@@ -273,7 +273,8 @@ void BumpMaps::TimeBasedMove() {
 				{
 					liveEnemies++;
 					enemies[i].setState(1);
-					enemies[i].setHealth(1);
+					enemies[i].setHealth(2);
+					enemies[i].mesh->LocalTransform.SetScale(APoint(1.0f, 1.0f, 1.0f));
 					enemies[i].loc = spawners[j].loc + AVector(0.0f, 0.5f, 0.0f);
 					enemies[i].Update();
 					break;
@@ -596,89 +597,93 @@ bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
 
 bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 {
-	
-	if (state != MOUSE_DOWN)
+	switch(gameState)
 	{
-		return false;
-	}
-/*
-	APoint pos, newPos;
-	AVector dir, shotDir;
-	mRenderer->GetPickRay(x, GetHeight() - 1 - y, pos, dir);
+	case 0:
 	
-	float temp = pos.Y() / dir.Y();
-	
-	newPos = APoint(pos.X() + dir.X() * temp, 0, pos.Z() + dir.Z() * temp);
-	
-	shotDir = APoint::ORIGIN - newPos;
-	shotDir.Normalize();
-*/
-	AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, (-(y - ((float)GetHeight() / 2.0f)) * sqrt(2.0f)) );
-	shotDir.Normalize();
-
-	projectiles[cur_proj].loc = thePlayer.getLocation();
-	projectiles[cur_proj].state = 1;
-
-	projectiles[cur_proj].x_dir = shotDir.X();
-	projectiles[cur_proj].z_dir = shotDir.Z();
-
-	projectiles[cur_proj].x_dir /= 5;
-	projectiles[cur_proj].z_dir /= 5;
-
-	if(button == 2)
-	{
-		projectiles[cur_proj].x_dir = 0;
-		projectiles[cur_proj].z_dir = 0;		
-	}
-
-	if(++cur_proj >= NUM_PROJECTILES)
-	{
-		cur_proj = 0; 
-	}
-
-/*
-	float dir_magnitude = sqrt((projectiles[cur_proj].x_dir * projectiles[cur_proj].x_dir) + (projectiles[cur_proj].z_dir * projectiles[cur_proj].z_dir));
-	projectiles[cur_proj].x_dir /= dir_magnitude;
-	projectiles[cur_proj].z_dir /= dir_magnitude;
-
-	projectiles[cur_proj].x_dir /= 5;
-	projectiles[cur_proj].z_dir /= 5;
-
-	if(++cur_proj >= NUM_PROJECTILES)
-	{
-		cur_proj = 0; 
-	}
-	*/
-
-
-/*
-	if(num_proj < NUM_PROJECTILES)
-	{
-		num_proj++;
-	}*/
-
-	//do a picking operation
-	
-	
-	/*
-	APoint pos;
-	AVector dir;
-	if (mRenderer->GetPickRay(x, GetHeight() - 1 - y, pos, dir))
-	{
-		mPicker.Execute(mScene, pos, dir, 0.0f, Mathf::MAX_REAL);
-		if (mPicker.Records.size() > 0)
+		if (state != MOUSE_DOWN)
 		{
-			//Display the selected object's name
-			const PickRecord& record = mPicker.GetClosestNonnegative();
-			const Spatial* object = record.Intersected;
-			//sprintf(mPickMessage, "%s", object->GetName().c_str());
+			return false;
 		}
-		else
+		/*
+			APoint pos, newPos;
+			AVector dir, shotDir;
+			mRenderer->GetPickRay(x, GetHeight() - 1 - y, pos, dir);
+			
+			float temp = pos.Y() / dir.Y();
+			
+			newPos = APoint(pos.X() + dir.X() * temp, 0, pos.Z() + dir.Z() * temp);
+			
+			shotDir = APoint::ORIGIN - newPos;
+			shotDir.Normalize();
+		*/
+		AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, (-(y - ((float)GetHeight() / 2.0f)) * sqrt(2.0f)) );
+		shotDir.Normalize();
+
+		projectiles[cur_proj].loc = thePlayer.getLocation();
+		projectiles[cur_proj].state = 1;
+
+		projectiles[cur_proj].x_dir = shotDir.X();
+		projectiles[cur_proj].z_dir = shotDir.Z();
+
+		projectiles[cur_proj].x_dir /= 5;
+		projectiles[cur_proj].z_dir /= 5;
+
+		if(button == 2)
 		{
-			mPickMessage[0] = 0;
+			projectiles[cur_proj].x_dir = 0;
+			projectiles[cur_proj].z_dir = 0;		
 		}
-	}*/
-	return true;
+
+		if(++cur_proj >= NUM_PROJECTILES)
+		{
+			cur_proj = 0; 
+		}
+
+		/*
+		float dir_magnitude = sqrt((projectiles[cur_proj].x_dir * projectiles[cur_proj].x_dir) + (projectiles[cur_proj].z_dir * projectiles[cur_proj].z_dir));
+		projectiles[cur_proj].x_dir /= dir_magnitude;
+		projectiles[cur_proj].z_dir /= dir_magnitude;
+
+		projectiles[cur_proj].x_dir /= 5;
+		projectiles[cur_proj].z_dir /= 5;
+
+		if(++cur_proj >= NUM_PROJECTILES)
+		{
+			cur_proj = 0; 
+		}
+		*/
+
+
+		/*
+		if(num_proj < NUM_PROJECTILES)
+		{
+			num_proj++;
+		}*/
+
+		//do a picking operation
+		
+		
+		/*
+		APoint pos;
+		AVector dir;
+		if (mRenderer->GetPickRay(x, GetHeight() - 1 - y, pos, dir))
+		{
+			mPicker.Execute(mScene, pos, dir, 0.0f, Mathf::MAX_REAL);
+			if (mPicker.Records.size() > 0)
+			{
+				//Display the selected object's name
+				const PickRecord& record = mPicker.GetClosestNonnegative();
+				const Spatial* object = record.Intersected;
+				//sprintf(mPickMessage, "%s", object->GetName().c_str());
+			}
+			else
+			{
+				mPickMessage[0] = 0;
+			}
+		}*/
+		return true;
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -697,7 +702,7 @@ void BumpMaps::CreateScene ()
 		enemies[i] = lazEnemy(&mShapeMaker);
 		enemies[i].radius = 0.5;
 		enemies[i].behavior = i % 3;
-		enemies[i].setHealth(1);
+		enemies[i].setHealth(2);
 
 		mScene->AttachChild(enemies[i].mesh);
 	}
