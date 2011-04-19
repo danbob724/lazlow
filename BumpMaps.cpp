@@ -76,6 +76,7 @@ bool BumpMaps::OnInitialize ()
 
 	liveEnemies = NUM_SPAWNERS;
 	curSpawner = 0;
+	thePlayer.setShotDir(AVector::UNIT_Z);
 
 	//GamePad stuff
 	controller.initialize();
