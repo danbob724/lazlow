@@ -28,6 +28,7 @@ class ShapeMaker
 		TriMesh* CreateSphere();
 		TriMesh* CreateCube();
 		TriMesh* CreateRectangle();
+		TriMesh* CreateDodecahedron();
 
 	protected:
 		Environment* shapeMakerEnv;

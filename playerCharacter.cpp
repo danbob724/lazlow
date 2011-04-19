@@ -15,7 +15,7 @@ PlayerCharacter::PlayerCharacter(ShapeMaker* someShapeMaker, CameraPtr someCamer
 	mShapeMaker = someShapeMaker;
 	curLocation = APoint(0.0f, 0.0f, 0.0f);
 	mMesh = someShapeMaker->CreateTorus();
-	summonCube = someShapeMaker->CreateCube();
+	summonCube = someShapeMaker->CreateDodecahedron();
 	//thePlayer->AttachChild(mMesh);
 	//thePlayer->AttachChild(theSummon);
 	//theSummon->AttachChild(summonCube);	
