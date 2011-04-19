@@ -37,6 +37,7 @@ BumpMaps::BumpMaps ()
 	aPressed = false;
 	sPressed = false;
 	dPressed = false;
+	useGamepad = false;
 }
 //----------------------------------------------------------------------------
 bool BumpMaps::OnInitialize ()
@@ -44,6 +45,8 @@ bool BumpMaps::OnInitialize ()
 	clock0 = clock();
 	clock1 = clock();
 	shot_clock = clock();
+
+	bossMode = false;
 	if (!WindowApplication3::OnInitialize())
     {
         return false;
@@ -173,9 +176,12 @@ AVector BumpMaps::EnemyMove(lazEnemy movingEnemy[], int moveTarget, AVector play
 }
 
 void BumpMaps::TimeBasedMove() {
-	
-	setMotionFromKeyboard();
-	//setMotionFromGamepad();
+
+	if (useGamepad) {
+		setMotionFromGamepad();
+	} else {
+		setMotionFromKeyboard();
+	}
 
 	clock0 = clock();
 	//do the movment-stuff here
@@ -293,9 +299,38 @@ void BumpMaps::TimeBasedMove() {
 	}
 
 //Victory check
-	if(liveEnemies <= 0)
-	{
+
+	if (bossMode && (liveEnemies <= 0)) {
 		sprintf(mPickMessage, "Win!");
+	}
+	
+	if(!bossMode && (liveEnemies <= 0))
+	{
+		//sprintf(mPickMessage, "Win!");
+		enemies[0].mesh->LocalTransform.SetScale(APoint(7.f, 7.f, 0.5f));
+		enemies[0].setHealth(10);
+		enemies[0].behavior = 0;
+		enemies[1].mesh->LocalTransform.SetScale(APoint(7.f, 7.f, 0.5f));
+		enemies[1].setHealth(10);
+		enemies[1].behavior = 0;
+		enemies[2].mesh->LocalTransform.SetScale(APoint(7.f, 7.f, 0.5f));
+		enemies[2].setHealth(10);
+		enemies[2].behavior = 0;
+		enemies[3].mesh->LocalTransform.SetScale(APoint(7.f, 7.f, 0.5f));
+		enemies[3].setHealth(10);
+		enemies[3].behavior = 0;
+
+		enemies[0].mesh->LocalTransform.SetTranslate(APoint(60.f, 0.f, 0.f));
+		enemies[1].mesh->LocalTransform.SetTranslate(APoint(-60.f, 0.f, 0.f));
+		enemies[2].mesh->LocalTransform.SetTranslate(APoint(0.f, 0.f, 60.f));
+		enemies[3].mesh->LocalTransform.SetTranslate(APoint(0.f, 0.f, -60.f));
+
+		liveEnemies += 4;
+		enemies[0].setState(1);
+		enemies[1].setState(1);
+		enemies[2].setState(1);
+		enemies[3].setState(1);
+		bossMode = true;
 	}
 
 //Player Movement
@@ -567,6 +602,19 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 			sPressed = true;
 			return true;
 		}
+	case 'k':
+	case 'K':
+		{
+			useGamepad = false;
+			return true;
+		}
+	case 'g':
+	case 'G':
+		{
+			useGamepad = true;
+			return true;
+		}
+			
 	case 'd':
 	case 'D':
 		{
