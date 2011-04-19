@@ -18,7 +18,7 @@ BumpMaps::BumpMaps ()
     :
 	WindowApplication3("Lazlow!!!", 0, 0, 1024, 768,
         Float4(0.8f, 0.8f, 0.8f, 0.8f)),
-        mTextColor(1.0f, 0.0f, 1.0f, 1.0f)
+        mTextColor(1.0f, 0.0f, 1.0f, 1.0f)//, mySlides()
 {
 	//Application::ThePath = WM5Path + "MyApplications/lazlow/";
 	//Application::ThePath = getRealPath() + "/GCodeBase/";
@@ -78,6 +78,9 @@ bool BumpMaps::OnInitialize ()
     //InitializeCameraMotion(0.01f, 0.001f);
 	InitializeCameraMotion(0.01f, 0.001f, 0.01f, 0.001f);
     InitializeObjectMotion(mScene);
+
+	//mySlides.buildCurSlide();
+	
     return true;
 }
 
@@ -345,11 +348,12 @@ void BumpMaps::TimeBasedMove() {
 
 void BumpMaps::OnIdle ()
 {
+	MeasureTime();
 	switch(gameState)
 	{
 	case 0:
 		//playing
-		MeasureTime();
+		mRenderer->SetCamera(mCamera);
 		controller.poll();
 		if (((float)(clock() - shot_clock) / CLOCKS_PER_SEC) > 0.05) {
 			shot_clock = clock();
@@ -379,8 +383,16 @@ void BumpMaps::OnIdle ()
 			//call TimeBasedMove()
 			TimeBasedMove();
 		}
+		break;
+	case 1:
+		//paused
+		// Draw the foreground polygon last since it has transparency.
+       // mRenderer->SetCamera(mySlides.mScreenCamera);
+        //mRenderer->Draw(mySlides.mForePoly);
+		break;
+	}
 
-		if (mRenderer->PreDraw())
+	if (mRenderer->PreDraw())
 		{
 			mRenderer->ClearBuffers();
 			mRenderer->Draw(mCuller.GetVisibleSet());
@@ -394,11 +406,6 @@ void BumpMaps::OnIdle ()
 		}
 		mScene->Update();
 		UpdateFrameCount();
-		break;
-	case 1:
-		//paused
-		break;
-	}
 }
 
 void BumpMaps::InitializeCameraMotion (float trnSpeed, float rotSpeed, float trnSpeedFactor, float rotSpeedFactor)
@@ -472,7 +479,7 @@ bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 		if(gameState == 0)
 		{
 			gameState = 1;
-			sprintf(mPickMessage, "Paused");
+			sprintf(mPickMessage, "Paused, press \'p\' to unpause.");
 		}
 		else if(gameState == 1)
 		{
