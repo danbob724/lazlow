@@ -173,10 +173,6 @@ void BumpMaps::TimeBasedMove() {
 	clock0 = clock();
 	//do the movment-stuff here
 
-	setMotionFromKeyboard();
-	//setMotionFromGamepad();
-
-
 //Projectiles
 	for(int i = 0; i < NUM_PROJECTILES; i++)
 	{
@@ -294,8 +290,34 @@ void BumpMaps::TimeBasedMove() {
 		sprintf(mPickMessage, "Win!");
 	}
 
+//Player Movement
+
+	setMotionFromKeyboard();
+	//setMotionFromGamepad();
+
+	//check if player is in bounds
+	APoint PlayerLocation = thePlayer.getLocation();
+
+	if((PlayerLocation.X() + currentPlayerMotion.X()) < -50 + thePlayer.radius)
+	{
+		currentPlayerMotion.X() = -50 - PlayerLocation.X() + thePlayer.radius;
+	}
+	else if((PlayerLocation.X() + currentPlayerMotion.X()) > 50 - thePlayer.radius)
+	{
+		currentPlayerMotion.X() = 50 - PlayerLocation.X() - thePlayer.radius;
+	}
+
+	if((PlayerLocation.Z() + currentPlayerMotion.Z()) < -50 + thePlayer.radius)
+	{
+		currentPlayerMotion.Z() = -50 - PlayerLocation.Z() + thePlayer.radius;
+	}
+	else if((PlayerLocation.Z() + currentPlayerMotion.Z()) > 50 - thePlayer.radius)
+	{
+		currentPlayerMotion.Z() = 50 - PlayerLocation.Z() - thePlayer.radius;
+	}
 
 	mCamera->SetPosition(thePlayer.movePlayer(currentPlayerMotion));
+
 	mScene->Update();
 	UpdateBumpMap();
 	mCuller.ComputeVisibleSet(mScene);
