@@ -729,6 +729,9 @@ void BumpMaps::CreateScene ()
 	thePlayer.mMesh->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
 	thePlayer.mMesh->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -15.f, 15.f));
 	mScene->AttachChild(thePlayer.mMesh);
+	thePlayer.summonCube->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, 0.5f*Mathf::PI));
+	thePlayer.summonCube->LocalTransform.SetTranslate(mCamera->GetPosition() + AVector(0.0f, -15.f, 15.f));
+	mScene->AttachChild(thePlayer.summonCube);
 
 	terrain = mShapeMaker.CreateCube();
 	terrain->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, -0.5f*Mathf::PI));
