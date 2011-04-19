@@ -32,6 +32,7 @@ BumpMaps::BumpMaps ()
 
 	thePlayer = PlayerCharacter(&mShapeMaker, mCamera);
 	currentPlayerMotion = AVector(0.0f, 0.0f, 0.0f);
+	activeMines = 0;
 	gameState = 0;
 	wPressed = false;
 	aPressed = false;
@@ -114,9 +115,16 @@ void BumpMaps::EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjecti
 				if((projectileToEnemy.Length() - testingEnemy[testTarget].radius - testingProjectiles[i].radius) <= 0)
 				{
 					testingEnemy[testTarget].hit(1);
-			
-					testingProjectiles[i].state = 0;
-					testingProjectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+		
+					if(testingProjectiles[i].type == 1)
+					{
+						testingProjectiles[i].radius += .05f;
+					}
+					else
+					{
+						testingProjectiles[i].state = 0;
+						testingProjectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+					}
 
 					if(testingEnemy[testTarget].getCurrentHealth() <= 0)
 					{
@@ -188,10 +196,37 @@ void BumpMaps::TimeBasedMove() {
 		}
 	}
 
+//Mines
+	for(int i = 0; i < NUM_MINES; i++)
+	{
+		if(mines[i].active())
+		{
+			
+			if(mines[i].radius > .35)
+			{
+				mines[i].radius += .05f;
+			}
+
+			mines[i].mesh->LocalTransform.SetScale(APoint(mines[i].radius, 0.25f, mines[i].radius));
+			mines[i].Update();
+
+			if(mines[i].radius > 3.0)
+			{
+				mines[i].state = 0;
+				mines[i].radius = 0.35f;
+				mines[i].mesh->LocalTransform.SetScale(APoint(mines[i].radius, 0.25f, mines[i].radius));
+				mines[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
+				activeMines--;
+			}	
+		}
+	}
+
 //Enemies
 	for(int j = 0; j < NUM_ENEMIES; j++)
 	{	
 		EnemyProjectileCollisionTest(enemies, projectiles, j, NUM_ENEMIES, NUM_PROJECTILES);
+		EnemyProjectileCollisionTest(enemies, mines, j, NUM_ENEMIES, NUM_MINES);
+
 		AVector playerToEnemy = thePlayer.getLocation() - enemies[j].loc;
 		
 		if(enemies[j].active()) //if enemy is still active, check for player death
@@ -243,6 +278,8 @@ void BumpMaps::TimeBasedMove() {
 	for(int j = 0; j < NUM_SPAWNERS; j++)
 	{	
 		EnemyProjectileCollisionTest(spawners, projectiles, j, NUM_SPAWNERS, NUM_PROJECTILES);
+		EnemyProjectileCollisionTest(spawners, mines, j, NUM_SPAWNERS, NUM_MINES);
+
 		AVector playerToEnemy = thePlayer.getLocation() - spawners[j].loc;
 		
 		if(spawners[j].active()) //if enemy is still active, check for player death
@@ -657,29 +694,45 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 		shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, (-(y - ((float)GetHeight() / 2.0f)) * sqrt(2.0f)) );	
 		shotDir.Normalize();
 
-		projectiles[cur_proj].loc = thePlayer.getLocation() + shotDir * 2;
-		projectiles[cur_proj].state = 1;	
-
 		if(button == 2)
 		{
-			projectiles[cur_proj].x_dir = 0;
-			projectiles[cur_proj].z_dir = 0;		
+			if(activeMines < 10)
+			{
+				for(int i = 0; i < NUM_MINES; i++)
+				{
+					//find an inactive mine and create it
+					if(!mines[i].active())
+					{				
+						mines[i].type = 1;
+						mines[i].state = 1;
+						mines[i].loc = thePlayer.getLocation() + shotDir * 2;
+						mines[i].x_dir = 0;
+						mines[i].z_dir = 0;
+						activeMines++;
+						break;
+					}
+				}				
+			}
 		}
 		else
 		{
+			projectiles[cur_proj].loc = thePlayer.getLocation() + shotDir * 2;
+			projectiles[cur_proj].state = 1;
+			projectiles[cur_proj].type = 0;
+
 			projectiles[cur_proj].x_dir = shotDir.X();
 			projectiles[cur_proj].z_dir = shotDir.Z();
 
 			projectiles[cur_proj].x_dir /= 5;
 			projectiles[cur_proj].z_dir /= 5;
+
+			if(++cur_proj >= NUM_PROJECTILES)
+			{
+				cur_proj = 0; 
+			}
 		}
 
 		thePlayer.setShotDir(shotDir);
-
-		if(++cur_proj >= NUM_PROJECTILES)
-		{
-			cur_proj = 0; 
-		}
 
 		/*
 		float dir_magnitude = sqrt((projectiles[cur_proj].x_dir * projectiles[cur_proj].x_dir) + (projectiles[cur_proj].z_dir * projectiles[cur_proj].z_dir));
@@ -738,6 +791,15 @@ void BumpMaps::CreateScene ()
 	{
 		projectiles[i] = lazProjectile(&mShapeMaker);
 		mScene->AttachChild(projectiles[i].mesh);
+	}
+	
+	activeMines = 0;
+
+	for(int i = 0; i < NUM_MINES; i++)
+	{
+		mines[i] = lazProjectile(&mShapeMaker);
+		mines[i].mesh->LocalTransform.SetScale(APoint(0.35f, 0.25f, 0.35f));
+		mScene->AttachChild(mines[i].mesh);
 	}
 
 	for(int i = 0; i < NUM_ENEMIES; i++)

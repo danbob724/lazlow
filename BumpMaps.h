@@ -85,6 +85,7 @@ protected:
 	lazEnemy enemies[NUM_ENEMIES];
 	lazEnemy spawners[NUM_SPAWNERS];
 	int liveEnemies;
+	int activeMines;
 	int curSpawner;
 	int gameState; //0 = playing, 1 = paused
 	GamePad controller;
