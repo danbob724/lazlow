@@ -23,9 +23,10 @@ PlayerCharacter::PlayerCharacter(ShapeMaker* someShapeMaker, CameraPtr someCamer
 	summonCube->LocalTransform.SetScale(APoint(0.5f, 0.5f, 0.5f));
 }
 
-void PlayerCharacter::setShotDir(AVector shotVector) {
-	shotVector.Normalize();
-
+void PlayerCharacter::setShotDir(AVector newDir) {
+	newDir.Normalize();
+	shotVector = newDir;
+	shotVector *= 2;
 	summonCube->LocalTransform.SetTranslate(curLocation + shotVector);
 }
 
@@ -37,6 +38,7 @@ void PlayerCharacter::setLocation(APoint desiredLocation) {
 APoint PlayerCharacter::movePlayer(AVector moveVector) {
 	curLocation = curLocation + moveVector;
 	mMesh->LocalTransform.SetTranslate(curLocation);
+	summonCube->LocalTransform.SetTranslate(curLocation + shotVector);
 	//mCamera->SetPosition(curLocation + AVector(0.0f, 15.f, -15.f));
 	return (curLocation + AVector(0.0f, 15.f, -15.f));
 }

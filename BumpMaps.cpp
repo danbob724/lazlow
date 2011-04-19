@@ -616,6 +616,8 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 	AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, (-(y - ((float)GetHeight() / 2.0f)) * sqrt(2.0f)) );
 	shotDir.Normalize();
 
+	thePlayer.setShotDir(shotDir);
+	
 	projectiles[cur_proj].loc = thePlayer.getLocation();
 	projectiles[cur_proj].state = 1;
 
