@@ -22,6 +22,7 @@ class lazProjectile
 		TriMesh* mesh;
 		APoint loc;
 		int state; //0 = inactive, 1 = active
+		int type; //0 = shot, 1 = mine
 		float x_dir, z_dir, radius;
 		void Update();
 		
