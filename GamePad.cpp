@@ -3,7 +3,7 @@
 SDL_Joystick *stick;
 SDL_Event thing;
 
-int minStickValue = 9000;
+int minStickValue = 10000;
 int maxStickValue = 32760;
 
 int minTriggerValue = -32760;
