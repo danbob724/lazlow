@@ -38,6 +38,7 @@ BumpMaps::BumpMaps ()
 	sPressed = false;
 	dPressed = false;
 	useGamepad = false;
+	
 }
 //----------------------------------------------------------------------------
 bool BumpMaps::OnInitialize ()
@@ -896,6 +897,9 @@ void BumpMaps::CreateScene ()
     }
     mScene->AttachChild(mesh);
 	*/
+
+	gameState = 1;
+	sprintf(mPickMessage, "Press \'p\' to unpause and begin the game.");
 }
 //----------------------------------------------------------------------------
 
