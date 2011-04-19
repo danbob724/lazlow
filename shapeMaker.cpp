@@ -24,7 +24,9 @@ void ShapeMaker::setBumpMap(bool useBumps) {
 Wm5::TriMesh* ShapeMaker::CreateDodecahedron() {
 	//stuff here
 	VertexFormat* vformat;
-    if (mUseBumpMap)
+
+	
+	if (mUseBumpMap)
     {
         vformat = VertexFormat::Create(5,
             VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
@@ -39,7 +41,9 @@ Wm5::TriMesh* ShapeMaker::CreateDodecahedron() {
             VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
             VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0);
     }
-
+	
+	//vformat = VertexFormat::Create(2, VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0, VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0);
+	
     TriMesh* mesh = StandardMesh(vformat).Dodecahedron();
     VertexBufferAccessor vba(mesh);
     for (int i = 0; i < vba.GetNumVertices(); ++i)
@@ -47,17 +51,20 @@ Wm5::TriMesh* ShapeMaker::CreateDodecahedron() {
         Float2& tcoord0 = vba.TCoord<Float2>(0, i);
         tcoord0[0] *= 4.0f;
         tcoord0[1] *= 4.0f;
-        if (mUseBumpMap)
+
+		if (mUseBumpMap)
         {
             Float2& tcoord1 = vba.TCoord<Float2>(1, i);
             tcoord1[0] *= 4.0f;
             tcoord1[1] *= 4.0f;
         }
+		
     }
-
+	
     std::string baseName = Environment::GetPathR("Water.wmtf");
     Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
     baseTexture->GenerateMipmaps();
+	
 
     if (mUseBumpMap)
     {
@@ -82,6 +89,15 @@ Wm5::TriMesh* ShapeMaker::CreateDodecahedron() {
             baseTexture, Shader::SF_LINEAR_LINEAR, Shader::SC_REPEAT,
             Shader::SC_REPEAT));
     }
+	
+	/*
+    Texture2DEffect* foreEffect = new0 Texture2DEffect(Shader::SF_LINEAR);
+    mesh->SetEffectInstance(foreEffect->CreateInstance(baseTexture));
+
+    // Make the foreground semitransparent.
+    foreEffect->GetAlphaState(0, 0)->BlendEnabled = true;
+	*/
+	
 	mesh->SetName("Dodecahedron");
     return mesh;
 }
@@ -124,6 +140,7 @@ Wm5::TriMesh* ShapeMaker::CreateTorus ()
     Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
     baseTexture->GenerateMipmaps();
 
+	
     if (mUseBumpMap)
     {
         std::string effectFile = Environment::GetPathR("SimpleBumpMap.wmfx");
