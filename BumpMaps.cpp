@@ -443,6 +443,14 @@ void BumpMaps::setMotionFromGamepad() {
 	//reasonable code above this line
 }
 
+bool BumpMaps::OnSpecialKeyDown(int key, int x, int y) {
+	//do nothing to intercept default keys that we're not using
+}
+
+bool BumpMaps::OnSpecialKeyUp(int key, int x, int y) {
+	//do nothing to intercept default keys that we're not using
+}
+
 bool BumpMaps::OnKeyDown (unsigned char key, int x, int y)
 {
 	/*
