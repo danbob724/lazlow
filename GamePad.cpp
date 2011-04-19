@@ -12,7 +12,8 @@ int maxTriggerValue =  32760;
 GamePad::GamePad(void)
 {
         //leftStick = new AVector();
-        //rightStick = new AVector();   
+        //rightStick = new AVector();
+	rightTrigger = 0.0f;
 
 }//constructor
 
@@ -28,6 +29,8 @@ bool GamePad::initialize()
         if( stick == NULL )
                 return false;
 
+	rightTrigger = 0.0f;
+			
         return true;
 
 }//initialize
@@ -61,9 +64,8 @@ void GamePad::poll()
                 return;
 
         float leftX, leftY, rightX, rightY;
-		bumperDown = false;
 		leftX = leftY = rightX = rightY = rightTrigger = 0.0f;
-
+		bumperDown = startButtonDown = false;
         if( SDL_PollEvent( &thing ) )
         {
 
@@ -130,7 +132,14 @@ void GamePad::poll()
                           //leftY = -(float)(SDL_JoystickGetAxis(stick,1))/(float)maxStickValue;      //DO SHOOTIN' STERFF HERE...!
 						  bumperDown = true;
 
-                        }//if
+                        } else {
+							bumperDown = false;
+						}//if
+						if (SDL_JoystickGetButton(stick, 6)) {
+							startButtonDown = true;
+						} else {
+							startButtonDown = false;
+						}
 
                 }//if joybuttondown
 
