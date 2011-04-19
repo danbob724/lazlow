@@ -617,22 +617,25 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 			shotDir = APoint::ORIGIN - newPos;
 			shotDir.Normalize();
 		*/
-		AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, (-(y - ((float)GetHeight() / 2.0f)) * sqrt(2.0f)) );
-		shotDir.Normalize();
-
+		
 		projectiles[cur_proj].loc = thePlayer.getLocation();
-		projectiles[cur_proj].state = 1;
-
-		projectiles[cur_proj].x_dir = shotDir.X();
-		projectiles[cur_proj].z_dir = shotDir.Z();
-
-		projectiles[cur_proj].x_dir /= 5;
-		projectiles[cur_proj].z_dir /= 5;
+		projectiles[cur_proj].state = 1;	
 
 		if(button == 2)
 		{
 			projectiles[cur_proj].x_dir = 0;
 			projectiles[cur_proj].z_dir = 0;		
+		}
+		else
+		{
+			AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, (-(y - ((float)GetHeight() / 2.0f)) * sqrt(2.0f)) );
+			shotDir.Normalize();
+
+			projectiles[cur_proj].x_dir = shotDir.X();
+			projectiles[cur_proj].z_dir = shotDir.Z();
+
+			projectiles[cur_proj].x_dir /= 5;
+			projectiles[cur_proj].z_dir /= 5;
 		}
 
 		if(++cur_proj >= NUM_PROJECTILES)
@@ -682,6 +685,8 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 				mPickMessage[0] = 0;
 			}
 		}*/
+		return true;
+	default:
 		return true;
 	}
 }
