@@ -17,6 +17,7 @@
 #include "lazProjectile.h"
 #include "lazEnemy.h"
 #include "GamePad.h"
+#include "narrativeSlides.h"
 
 //this nonsense is to get the current working directory
 #include <stdio.h>
@@ -64,6 +65,8 @@ protected:
     void CreateScene ();
     void UpdateBumpMap ();
 
+	lazEnemy* boss;
+	bool useGamepad;
 	void EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjectile testingProjectiles[], int testTarget, int numEnemies, int numProjectiles);
 	AVector EnemyMove(lazEnemy movingEnemy[], int moveTarget, AVector playerEnemyVector);
 	void TimeBasedMove();
@@ -98,6 +101,8 @@ protected:
 	clock_t clock0, clock1;
 	clock_t shot_clock;
 
+	narrativeSlides mySlides;
+	bool bossMode;
 //////////////////////////
 	Picker mPicker;
 	char mPickMessage[1024];
