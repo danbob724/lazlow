@@ -619,6 +619,8 @@ bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
 
 bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 {
+	AVector shotDir;
+
 	switch(gameState)
 	{
 	case 0:
@@ -640,9 +642,10 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 			shotDir.Normalize();
 		*/
 		
-	thePlayer.setShotDir(shotDir);
-	
-		projectiles[cur_proj].loc = thePlayer.getLocation();
+		shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, (-(y - ((float)GetHeight() / 2.0f)) * sqrt(2.0f)) );	
+		shotDir.Normalize();
+
+		projectiles[cur_proj].loc = thePlayer.getLocation() + shotDir * 2;
 		projectiles[cur_proj].state = 1;	
 
 		if(button == 2)
@@ -652,15 +655,14 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 		}
 		else
 		{
-			AVector shotDir = AVector( -(x - ((float)GetWidth() / 2.0f)), 0, (-(y - ((float)GetHeight() / 2.0f)) * sqrt(2.0f)) );
-			shotDir.Normalize();
-
 			projectiles[cur_proj].x_dir = shotDir.X();
 			projectiles[cur_proj].z_dir = shotDir.Z();
 
 			projectiles[cur_proj].x_dir /= 5;
 			projectiles[cur_proj].z_dir /= 5;
 		}
+
+		thePlayer.setShotDir(shotDir);
 
 		if(++cur_proj >= NUM_PROJECTILES)
 		{
