@@ -29,7 +29,7 @@ class PlayerCharacter
 		TriMesh* summonCube;
 		APoint getLocation();
 		APoint movePlayer(AVector moveVector);
-		void setShotDir(AVector shootVector);
+		void setShotDir(AVector newDir);
 
 		float radius;
 
@@ -38,6 +38,7 @@ class PlayerCharacter
 		CameraPtr mCamera;
 		unsigned char curSummon;
 		APoint curLocation;
+		AVector shotVector;
 		Environment* playerCharEnv;
 
 	private:
