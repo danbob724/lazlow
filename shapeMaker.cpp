@@ -21,6 +21,71 @@ void ShapeMaker::setBumpMap(bool useBumps) {
 	mUseBumpMap = useBumps;
 }
 
+Wm5::TriMesh* ShapeMaker::CreateDodecahedron() {
+	//stuff here
+	VertexFormat* vformat;
+    if (mUseBumpMap)
+    {
+        vformat = VertexFormat::Create(5,
+            VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_NORMAL, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_COLOR, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 1);
+    }
+    else
+    {
+        vformat = VertexFormat::Create(2,
+            VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0);
+    }
+
+    TriMesh* mesh = StandardMesh(vformat).Dodecahedron();
+    VertexBufferAccessor vba(mesh);
+    for (int i = 0; i < vba.GetNumVertices(); ++i)
+    {
+        Float2& tcoord0 = vba.TCoord<Float2>(0, i);
+        tcoord0[0] *= 4.0f;
+        tcoord0[1] *= 4.0f;
+        if (mUseBumpMap)
+        {
+            Float2& tcoord1 = vba.TCoord<Float2>(1, i);
+            tcoord1[0] *= 4.0f;
+            tcoord1[1] *= 4.0f;
+        }
+    }
+
+    std::string baseName = Environment::GetPathR("Water.wmtf");
+    Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
+    baseTexture->GenerateMipmaps();
+
+    if (mUseBumpMap)
+    {
+        std::string effectFile = Environment::GetPathR("SimpleBumpMap.wmfx");
+        SimpleBumpMapEffect* effect = new0 SimpleBumpMapEffect(effectFile);
+
+        std::string normalName = Environment::GetPathR("BricksNormal.wmtf");
+        Texture2D* normalTexture = Texture2D::LoadWMTF(normalName);
+        normalTexture->GenerateMipmaps();
+
+        mesh->SetEffectInstance(effect->CreateInstance(baseTexture,
+            normalTexture));
+
+        mLightDirection = AVector::UNIT_Z;
+		//mLightDirection = camDvector;
+		//mLightPosition = camPosition;
+        SimpleBumpMapEffect::ComputeLightVectors(mesh, mLightDirection);
+    }
+    else
+    {
+        mesh->SetEffectInstance(Texture2DEffect::CreateUniqueInstance(
+            baseTexture, Shader::SF_LINEAR_LINEAR, Shader::SC_REPEAT,
+            Shader::SC_REPEAT));
+    }
+	mesh->SetName("Dodecahedron");
+    return mesh;
+}
+
 Wm5::TriMesh* ShapeMaker::CreateTorus ()
 {
     VertexFormat* vformat;
