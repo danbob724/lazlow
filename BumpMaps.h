@@ -17,6 +17,7 @@
 #include "lazProjectile.h"
 #include "lazEnemy.h"
 #include "GamePad.h"
+#include "narrativeSlides.h"
 
 //this nonsense is to get the current working directory
 #include <stdio.h>
@@ -96,6 +97,8 @@ protected:
 
 	clock_t clock0, clock1;
 	clock_t shot_clock;
+
+	narrativeSlides mySlides;
 
 //////////////////////////
 	Picker mPicker;

@@ -18,19 +18,9 @@ narrativeSlides::narrativeSlides() {
 }
 
 void narrativeSlides::buildCurSlide() {
-	std::string path;
-	Texture2D* texture;
-	VertexFormat* vformat = VertexFormat::Create(2, VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0, VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0);
-    int vstride = vformat->GetStride();
-
-    VertexBuffer* vbuffer;
-    VertexBufferAccessor vba(vformat, vbuffer);
+	
 	vbuffer = new0 VertexBuffer(5, vstride);
-
-	IndexBuffer* ibuffer = new0 IndexBuffer(6, sizeof(int));
-    int* indices = (int*)ibuffer->GetData();
-
-	vba.ApplyTo(vformat, vbuffer);
+    vba.ApplyTo(vformat, vbuffer);
     vba.Position<Float3>(0) = Float3(0.0f,  0.0f,  0.0f);
     vba.Position<Float3>(1) = Float3(0.5f,  0.0f,  0.0f);
     vba.Position<Float3>(2) = Float3(0.75f, 0.5f,  0.0f);

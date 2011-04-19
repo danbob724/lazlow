@@ -21,8 +21,16 @@ public:
 	narrativeSlides();
 	CameraPtr mScreenCamera;
 	void buildCurSlide();
-protected:
 	TriMeshPtr mForePoly;
+protected:
+	VertexBuffer* vbuffer;
+	int vstride;
+	VertexBufferAccessor vba;
+	VertexFormat* vformat;
+	IndexBuffer* ibuffer;
+	int* indices;
+	std::string path;
+	Texture2D* texture;
 private:
 
 };
