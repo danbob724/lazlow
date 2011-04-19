@@ -212,9 +212,9 @@ void BumpMaps::TimeBasedMove() {
 	{
 		if(mines[i].active())
 		{		
-			if((thePlayer.getLocation() - mines[i].loc).Length() - thePlayer.radius - mines[i].radius <= 0 && mines[i].radius == .35)
+			if((thePlayer.getLocation() - mines[i].loc).Length() - thePlayer.radius - mines[i].radius <= 0 && mines[i].radius == 0.35f)
 			{
-				mines[i].radius += .05f;
+				mines[i].radius += 3.1f;
 			}
 
 			if(mines[i].radius > .35)
