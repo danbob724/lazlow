@@ -460,14 +460,37 @@ void BumpMaps::OnIdle ()
 			
 			if(controller.rightTrigger > 0.25f) {
 			
-				projectiles[cur_proj].loc = thePlayer.getLocation();
-				projectiles[cur_proj].state = 1;
-			
-				projectiles[cur_proj].x_dir = shotDir.Z();
-				projectiles[cur_proj].z_dir = shotDir.X();
-			
-				projectiles[cur_proj].x_dir /= 5;
-				projectiles[cur_proj].z_dir /= 5;
+				if(shotDir.Length() == 0)
+				{
+					if(activeMines < 10)
+					{
+						for(int i = 0; i < NUM_MINES; i++)
+						{
+							//find an inactive mine and create it
+							if(!mines[i].active())
+							{				
+								mines[i].type = 1;
+								mines[i].state = 1;
+								mines[i].loc = thePlayer.getLocation() + shotDir * 2;
+								mines[i].x_dir = 0;
+								mines[i].z_dir = 0;
+								activeMines++;
+								break;
+							}
+						}				
+					}
+				}
+				else
+				{
+					projectiles[cur_proj].loc = thePlayer.getLocation();
+					projectiles[cur_proj].state = 1;
+				
+					projectiles[cur_proj].x_dir = shotDir.Z();
+					projectiles[cur_proj].z_dir = shotDir.X();
+				
+					projectiles[cur_proj].x_dir /= 5;
+					projectiles[cur_proj].z_dir /= 5;
+				}
 		
 				if(++cur_proj >= NUM_PROJECTILES)
 				{
