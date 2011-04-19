@@ -493,7 +493,7 @@ void BumpMaps::OnIdle ()
 			
 			if(controller.rightTrigger > 0.25f) {
 			
-				if(shotDir.Length() == 0)
+				if(controller.bumperDown)
 				{
 					if(activeMines < 10)
 					{
