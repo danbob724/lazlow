@@ -141,6 +141,7 @@ void BumpMaps::EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjecti
 					}
 					else
 					{
+						testingEnemy[testTarget].radius = testingEnemy[testTarget].getCurrentHealth() * 0.35f; //.7 is diameter
 						testingEnemy[testTarget].mesh->LocalTransform.SetScale(APoint(testingEnemy[testTarget].getCurrentHealth() * 0.7f, testingEnemy[testTarget].getCurrentHealth() * 0.7f, 0.5f)); //cylinder is intially along the z axis
 					}
 				}
@@ -210,8 +211,12 @@ void BumpMaps::TimeBasedMove() {
 	for(int i = 0; i < NUM_MINES; i++)
 	{
 		if(mines[i].active())
-		{
-			
+		{		
+			if((thePlayer.getLocation() - mines[i].loc).Length() - thePlayer.radius - mines[i].radius <= 0 && mines[i].radius == .35)
+			{
+				mines[i].radius += .05f;
+			}
+
 			if(mines[i].radius > .35)
 			{
 				mines[i].radius += .05f;
@@ -348,20 +353,28 @@ void BumpMaps::TimeBasedMove() {
 		enemies[0].mesh->LocalTransform.SetScale(APoint(7.f, 7.f, 0.5f));
 		enemies[0].setHealth(10);
 		enemies[0].behavior = 0;
+		enemies[0].radius = 7.f;
 		enemies[1].mesh->LocalTransform.SetScale(APoint(7.f, 7.f, 0.5f));
 		enemies[1].setHealth(10);
 		enemies[1].behavior = 0;
+		enemies[1].radius = 7.f;
 		enemies[2].mesh->LocalTransform.SetScale(APoint(7.f, 7.f, 0.5f));
 		enemies[2].setHealth(10);
 		enemies[2].behavior = 0;
+		enemies[2].radius = 7.f;
 		enemies[3].mesh->LocalTransform.SetScale(APoint(7.f, 7.f, 0.5f));
 		enemies[3].setHealth(10);
 		enemies[3].behavior = 0;
+		enemies[3].radius = 7.f;
 
-		enemies[0].mesh->LocalTransform.SetTranslate(APoint(60.f, 0.f, 0.f));
-		enemies[1].mesh->LocalTransform.SetTranslate(APoint(-60.f, 0.f, 0.f));
-		enemies[2].mesh->LocalTransform.SetTranslate(APoint(0.f, 0.f, 60.f));
-		enemies[3].mesh->LocalTransform.SetTranslate(APoint(0.f, 0.f, -60.f));
+		enemies[0].loc = APoint(60.f, 0.f, 0.f);
+		enemies[0].mesh->LocalTransform.SetTranslate(enemies[0].loc);
+		enemies[1].loc = APoint(-60.f, 0.f, 0.f);
+		enemies[1].mesh->LocalTransform.SetTranslate(enemies[1].loc);
+		enemies[2].loc = APoint(0.f, 0.f, 60.f);
+		enemies[2].mesh->LocalTransform.SetTranslate(enemies[2].loc);
+		enemies[3].loc = APoint(0.f, 0.f, -60.f);
+		enemies[3].mesh->LocalTransform.SetTranslate(enemies[3].loc);
 
 		liveEnemies += 4;
 		enemies[0].setState(1);
@@ -425,10 +438,10 @@ void BumpMaps::OnIdle ()
 	mRenderer->SetCamera(mCamera);
 	controller.rightTrigger = 0.0f;
 	controller.poll();
-		if (controller.startButtonDown) {
+		if (controller.startButtonDown && useGamepad) {
 			if (gameState == 0) {
 				gameState = 1;
-				sprintf(mPickMessage, "Game paused, press start button to continue.");
+				sprintf(mPickMessage, "Game paused, press start button to continue.  Bleh");
 			} else {
 				gameState = 0;
 				sprintf(mPickMessage, "Unpaused.");
@@ -438,7 +451,7 @@ void BumpMaps::OnIdle ()
 	{
 	case 0:
 		//playing
-		if (((float)(clock() - shot_clock) / CLOCKS_PER_SEC) > 0.05) {
+		if (((float)(clock() - shot_clock) / CLOCKS_PER_SEC) > 0.05 && useGamepad) {
 			shot_clock = clock();
 			AVector shotDir = controller.rightStick;
 			shotDir.Normalize();
