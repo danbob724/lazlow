@@ -38,6 +38,7 @@ public:
         AVector rightStick;
 		float rightTrigger;
 		bool bumperDown;
+		bool startButtonDown;
 };
 
 #endif

@@ -422,17 +422,29 @@ void BumpMaps::TimeBasedMove() {
 void BumpMaps::OnIdle ()
 {
 	MeasureTime();
+	mRenderer->SetCamera(mCamera);
+	controller.rightTrigger = 0.0f;
+	controller.poll();
+		if (controller.startButtonDown) {
+			if (gameState == 0) {
+				gameState = 1;
+				sprintf(mPickMessage, "Game paused, press start button to continue.");
+			} else {
+				gameState = 0;
+				sprintf(mPickMessage, "Unpaused.");
+			}
+		}
 	switch(gameState)
 	{
 	case 0:
 		//playing
-		mRenderer->SetCamera(mCamera);
-		controller.poll();
 		if (((float)(clock() - shot_clock) / CLOCKS_PER_SEC) > 0.05) {
 			shot_clock = clock();
+			AVector shotDir = controller.rightStick;
+			shotDir.Normalize();
+			thePlayer.setShotDir(AVector(shotDir.Z(), 0.0f, shotDir.X()));
+			
 			if(controller.rightTrigger > 0.25f) {
-				AVector shotDir = controller.rightStick;
-				shotDir.Normalize();
 			
 				projectiles[cur_proj].loc = thePlayer.getLocation();
 				projectiles[cur_proj].state = 1;
