@@ -251,17 +251,50 @@ void BumpMaps::TimeBasedMove() {
 			{
 				sprintf(mPickMessage, "Dead.");
 				
-				for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
+				if(!bossMode)
 				{
-					if(enemies[j].active())
+					for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
 					{
-						liveEnemies--;
+						if(enemies[j].active())
+						{
+							liveEnemies--;
+						}
+						enemies[j].setState(0);
+						enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 					}
-					enemies[j].setState(0);
-					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				}
+				else
+				{
+					//move bosses back
+					if(enemies[0].active())
+					{
+						enemies[0].loc = APoint(60.f, 0.f, 0.f);
+						enemies[0].mesh->LocalTransform.SetTranslate(enemies[0].loc);
+					}
+					
+					if(enemies[1].active())
+					{
+						enemies[1].loc = APoint(-60.f, 0.f, 0.f);
+						enemies[1].mesh->LocalTransform.SetTranslate(enemies[1].loc);
+					}
+					
+					if(enemies[2].active())
+					{
+						enemies[2].loc = APoint(0.f, 0.f, 60.f);
+						enemies[2].mesh->LocalTransform.SetTranslate(enemies[2].loc);
+					}
+					
+					if(enemies[3].active())
+					{
+						enemies[3].loc = APoint(0.f, 0.f, -60.f);
+						enemies[3].mesh->LocalTransform.SetTranslate(enemies[3].loc);
+					}					
 
-				currentPlayerMotion = APoint::ORIGIN - thePlayer.getLocation();
+				}
+				
+				//currentPlayerMotion = APoint::ORIGIN - thePlayer.getLocation();
+				currentPlayerMotion = AVector::ZERO;
+				thePlayer.setLocation(APoint::ORIGIN);
 			}
 		}
 
