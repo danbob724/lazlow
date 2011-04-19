@@ -65,6 +65,8 @@ protected:
     void CreateScene ();
     void UpdateBumpMap ();
 
+	lazEnemy* boss;
+	bool useGamepad;
 	void EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjectile testingProjectiles[], int testTarget, int numEnemies, int numProjectiles);
 	AVector EnemyMove(lazEnemy movingEnemy[], int moveTarget, AVector playerEnemyVector);
 	void TimeBasedMove();
@@ -99,7 +101,7 @@ protected:
 	clock_t shot_clock;
 
 	narrativeSlides mySlides;
-
+	bool bossMode;
 //////////////////////////
 	Picker mPicker;
 	char mPickMessage[1024];
