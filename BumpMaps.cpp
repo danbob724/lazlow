@@ -170,6 +170,10 @@ AVector BumpMaps::EnemyMove(lazEnemy movingEnemy[], int moveTarget, AVector play
 }
 
 void BumpMaps::TimeBasedMove() {
+	
+	setMotionFromKeyboard();
+	//setMotionFromGamepad();
+
 	clock0 = clock();
 	//do the movment-stuff here
 
@@ -256,7 +260,8 @@ void BumpMaps::TimeBasedMove() {
 					enemies[j].setState(0);
 					enemies[j].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				}
-
+				
+				currentPlayerMotion = APoint::ORIGIN - thePlayer.getLocation();
 			}
 		}
 
@@ -291,9 +296,6 @@ void BumpMaps::TimeBasedMove() {
 	}
 
 //Player Movement
-
-	setMotionFromKeyboard();
-	//setMotionFromGamepad();
 
 	//check if player is in bounds
 	APoint PlayerLocation = thePlayer.getLocation();
