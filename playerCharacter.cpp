@@ -5,7 +5,6 @@
  */
 
 #include "playerCharacter.h"
-#include "Wm5Environment.h"
 
 PlayerCharacter::PlayerCharacter() {};
 
@@ -16,6 +15,18 @@ PlayerCharacter::PlayerCharacter(ShapeMaker* someShapeMaker, CameraPtr someCamer
 	mShapeMaker = someShapeMaker;
 	curLocation = APoint(0.0f, 0.0f, 0.0f);
 	mMesh = someShapeMaker->CreateTorus();
+	summonCube = someShapeMaker->CreateCube();
+	//thePlayer->AttachChild(mMesh);
+	//thePlayer->AttachChild(theSummon);
+	//theSummon->AttachChild(summonCube);	
+	//theSummon->LocalTransform.SetScale(APoint(0.5f, 0.5f, 0.5f));
+	summonCube->LocalTransform.SetScale(APoint(0.5f, 0.5f, 0.5f));
+}
+
+void PlayerCharacter::setShotDir(AVector shotVector) {
+	shotVector.Normalize();
+
+	summonCube->LocalTransform.SetTranslate(curLocation + shotVector);
 }
 
 void PlayerCharacter::setLocation(APoint desiredLocation) {
