@@ -29,6 +29,7 @@
 #endif
 
 #define NUM_PROJECTILES 15
+#define NUM_MINES 10
 #define NUM_ENEMIES 5
 #define NUM_SPAWNERS 4
 
@@ -80,6 +81,7 @@ protected:
 	TriMesh* terrain;
 	//APoint playerLocation;
 	lazProjectile projectiles[NUM_PROJECTILES];
+	lazProjectile mines[NUM_MINES];
 	lazEnemy enemies[NUM_ENEMIES];
 	lazEnemy spawners[NUM_SPAWNERS];
 	int liveEnemies;
