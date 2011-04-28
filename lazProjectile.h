@@ -17,6 +17,7 @@ class lazProjectile
 	public:
 		lazProjectile();
 		lazProjectile(ShapeMaker* someShapeMaker);
+		lazProjectile(ShapeMaker* someShapeMaker, int type);
 		int active();
 
 		TriMesh* mesh;

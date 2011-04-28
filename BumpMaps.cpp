@@ -935,8 +935,9 @@ void BumpMaps::CreateScene ()
 
 	for(int i = 0; i < NUM_MINES; i++)
 	{
-		mines[i] = lazProjectile(&mShapeMaker);
+		mines[i] = lazProjectile(&mShapeMaker, 1);
 		mines[i].mesh->LocalTransform.SetScale(APoint(0.35f, 0.25f, 0.35f));
+		mines[i].type = 1;
 		mScene->AttachChild(mines[i].mesh);
 	}
 
