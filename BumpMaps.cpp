@@ -475,7 +475,7 @@ void BumpMaps::OnIdle ()
 		if (controller.startButtonDown && useGamepad) {
 			if (gameState == 0) {
 				gameState = 1;
-				sprintf(mPickMessage, "Game paused, press start button to continue.  Bleh");
+				sprintf(mPickMessage, "Game paused, press start button to continue.");
 			} else {
 				gameState = 0;
 				sprintf(mPickMessage, "Unpaused.");
@@ -493,7 +493,7 @@ void BumpMaps::OnIdle ()
 			
 			if(controller.rightTrigger > 0.25f) {
 			
-				if(shotDir.Length() == 0)
+				if(controller.bumperDown)
 				{
 					if(activeMines < 10)
 					{

@@ -30,6 +30,9 @@ bool GamePad::initialize()
                 return false;
 
 	rightTrigger = 0.0f;
+	bumperDown = false;
+	startButtonDown;
+	
 			
         return true;
 
@@ -63,9 +66,9 @@ void GamePad::poll()
         if( !isEnabled() )
                 return;
 
-        float leftX, leftY, rightX, rightY;
+        float leftX, leftY, rightX, rightY, rightTrigger;
 		leftX = leftY = rightX = rightY = rightTrigger = 0.0f;
-		bumperDown = startButtonDown = false;
+		//bumperDown = startButtonDown = false;
         if( SDL_PollEvent( &thing ) )
         {
 
@@ -132,16 +135,22 @@ void GamePad::poll()
                           //leftY = -(float)(SDL_JoystickGetAxis(stick,1))/(float)maxStickValue;      //DO SHOOTIN' STERFF HERE...!
 						  bumperDown = true;
 
-                        } else {
-							bumperDown = false;
-						}//if
+                        }
+
 						if (SDL_JoystickGetButton(stick, 6)) {
 							startButtonDown = true;
-						} else {
-							startButtonDown = false;
 						}
 
                 }//if joybuttondown
+				else if (thing.type == SDL_JOYBUTTONUP) {
+					if (SDL_JoystickGetButton(stick, 5)) {
+						bumperDown = false;
+					}
+
+					if (SDL_JoystickGetButton(stick, 6)) {
+						startButtonDown = false;
+					}
+				} //if joybuttonup
 
         }//if
 

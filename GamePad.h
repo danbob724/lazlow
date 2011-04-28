@@ -17,6 +17,12 @@ using namespace Wm5;
 class GamePad
 {
 
+protected:
+	//float leftX;
+	//float leftY;
+	//float rightX;
+	//float rightY;
+
 public:
 
         GamePad(void);
