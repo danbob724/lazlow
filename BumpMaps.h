@@ -18,6 +18,7 @@
 #include "lazEnemy.h"
 #include "GamePad.h"
 #include "narrativeSlides.h"
+#include "AudioPlayer.h"
 
 //this nonsense is to get the current working directory
 #include <stdio.h>
@@ -80,6 +81,7 @@ protected:
     bool mUseBumpMap;
     Float4 mTextColor;
 //////////////////////
+	AudioPlayer audio;
 	PlayerCharacter thePlayer;
 	TriMesh* terrain;
 	//APoint playerLocation;
