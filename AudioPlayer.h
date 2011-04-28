@@ -1,6 +1,11 @@
-#pragma once
+#ifndef AUDIOPLAYER_H
+#define AUDIOPLAYER_H
 
-#include "SDL_mixer.h"
+#ifdef WIN32
+    #include <SDL/SDL_mixer.h>
+#else
+    #include <SDL/SDL_mixer.h>
+#endif
 
 class AudioPlayer
 {
@@ -20,3 +25,5 @@ public:
 	void closeAudio();
 
 };
+
+#endif
