@@ -78,6 +78,9 @@ bool BumpMaps::OnInitialize ()
 	curSpawner = 0;
 	thePlayer.setShotDir(AVector::UNIT_Z);
 
+	//Audio stuff
+	audio.enableAudio();
+
 	//GamePad stuff
 	controller.initialize();
 
@@ -807,6 +810,7 @@ bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
 bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 {
 	AVector shotDir;
+	audio.playEffect(0);
 
 	switch(gameState)
 	{
