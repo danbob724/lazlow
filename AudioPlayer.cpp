@@ -19,8 +19,8 @@ AudioPlayer::AudioPlayer()
 
 	music = Mix_LoadMUS( "C:/SDL/wuman.wav" );
 
-	shot = Mix_LoadWAV( "toon8.wav" );
-	hit = Mix_LoadWAV( "C:/SDL/toon8" );
+	shot = Mix_LoadWAV( "shot.wav" );
+	hit = Mix_LoadWAV( "hit.wav" );
 
 }//constructor
 

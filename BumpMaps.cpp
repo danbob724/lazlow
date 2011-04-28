@@ -810,8 +810,7 @@ bool BumpMaps::OnKeyUp (unsigned char key, int x, int y) {
 bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 {
 	AVector shotDir;
-	audio.playEffect(0);
-
+	
 	switch(gameState)
 	{
 	case 0:
@@ -851,6 +850,7 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 						mines[i].x_dir = 0;
 						mines[i].z_dir = 0;
 						activeMines++;
+						audio.playEffect(0);
 						break;
 					}
 				}				
@@ -858,6 +858,8 @@ bool BumpMaps::OnMouseClick(int button, int state, int x, int y, unsigned int)
 		}
 		else
 		{
+			audio.playEffect(0);
+
 			projectiles[cur_proj].loc = thePlayer.getLocation() + shotDir * 2;
 			projectiles[cur_proj].state = 1;
 			projectiles[cur_proj].type = 0;
