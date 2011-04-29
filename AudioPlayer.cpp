@@ -7,6 +7,10 @@ Mix_Music* music;
 
 Mix_Chunk* shot;
 Mix_Chunk* hit;
+Mix_Chunk* death;
+Mix_Chunk* minedrop;
+Mix_Chunk* mineblast;
+
 
 AudioPlayer::AudioPlayer()
 {
@@ -21,6 +25,9 @@ AudioPlayer::AudioPlayer()
 
 	shot = Mix_LoadWAV( "shot.wav" );
 	hit = Mix_LoadWAV( "hit.wav" );
+	death = Mix_LoadWAV( "death.wav" );
+	minedrop = Mix_LoadWAV( "minedrop.wav" );
+	mineblast = Mix_LoadWAV( "mineblast.wav" );
 
 }//constructor
 
@@ -62,22 +69,40 @@ void AudioPlayer::playEffect( int which )
 	if( !audioReady() )
 		return;
 
-	if( which == 0 )
+	switch(which)
 	{
+	case(0):
 
 		if( shot == NULL )
 			return;
 
 		Mix_PlayChannel( -1 , shot , 0 );
-
-	}//if
-	else if( which == 1 )
-	{
+		break;
+	case(1):
 
 		if( hit == NULL )
 			return;
 
 		Mix_PlayChannel( -1 , hit , 0 );
+		break;
+	case(2):
+		if( death == NULL )
+			return;
+
+		Mix_PlayChannel( -1 , death , 0 );
+		break;
+	case(3):
+		if( minedrop == NULL )
+			return;
+
+		Mix_PlayChannel( -1 , minedrop , 0 );
+		break;
+	case(4):
+		if( mineblast == NULL )
+			return;
+
+		Mix_PlayChannel( -1 , mineblast , 0 );
+		break;
 
 	}//if
 
