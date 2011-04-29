@@ -130,9 +130,11 @@ void lazMain::EnemyProjectileCollisionTest(lazEnemy testingEnemy[], lazProjectil
 					if(testingProjectiles[i].type == 1)
 					{
 						testingProjectiles[i].radius += .05f;
+						audio.playEffect(4);
 					}
 					else
 					{
+						audio.playEffect(1);
 						testingProjectiles[i].state = 0;
 						testingProjectiles[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 					}
@@ -253,6 +255,7 @@ void lazMain::TimeBasedMove() {
 			if(playerToEnemy.Length() - thePlayer.radius - enemies[j].radius <= 0)
 			{
 				sprintf(mPickMessage, "Dead.");
+				audio.playEffect(2);
 				
 				if(!bossMode)
 				{
@@ -339,6 +342,7 @@ void lazMain::TimeBasedMove() {
 			if(playerToEnemy.Length() - thePlayer.radius - spawners[j].radius <= 0)
 			{
 				sprintf(mPickMessage, "Dead by spawner.");
+				audio.playEffect(2);
 				
 				for(int j = 0; j < NUM_ENEMIES; j++) //despawn all enemies
 				{
@@ -381,13 +385,18 @@ void lazMain::TimeBasedMove() {
 //Victory check
 
 	if (bossMode && (liveEnemies <= 0)) {
+		if(gameState == 0)
+		{
+			audio.playEffect(6);
+			gameState = 1;
+		}
 		sprintf(mPickMessage, "Win!");
 	}
 	
 	if(!bossMode && (liveEnemies <= 0))
 	{
-		//sprintf(mPickMessage, "Win!");
-		enemies[0].mesh->LocalTransform.SetScale(APoint(7.f, 7.f, 0.5f));
+		audio.playEffect(5);
+		//sprintf(mPickMessage, "Win!"sm.SetScale(APoint(7.f, 7.f, 0.5f));
 		enemies[0].setHealth(10);
 		enemies[0].behavior = 0;
 		enemies[0].radius = 7.f;
@@ -844,13 +853,13 @@ bool lazMain::OnMouseClick(int button, int state, int x, int y, unsigned int)
 					//find an inactive mine and create it
 					if(!mines[i].active())
 					{				
+						audio.playEffect(3);
 						mines[i].type = 1;
 						mines[i].state = 1;
 						mines[i].loc = thePlayer.getLocation() + shotDir * 2;
 						mines[i].x_dir = 0;
 						mines[i].z_dir = 0;
-						activeMines++;
-						audio.playEffect(0);
+						activeMines++;			
 						break;
 					}
 				}				
