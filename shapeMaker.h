@@ -30,6 +30,11 @@ class ShapeMaker
 		TriMesh* CreateRectangle();
 		TriMesh* CreateDodecahedron();
 
+		TriMesh* CreateTitle();
+		TriMesh* CreateEnding();
+		TriMesh* CreateStory();
+		TriMesh* CreateControls();
+
 	protected:
 		Environment* shapeMakerEnv;
 		AVector mLightDirection;
