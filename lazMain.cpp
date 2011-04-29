@@ -390,12 +390,13 @@ void lazMain::TimeBasedMove() {
 	if (bossMode && (liveEnemies <= 0)) {
 		if(gameState == 0)
 		{
-			audio.playEffect(6);
+			
 			gameState = 1;
 		}
 		sprintf(mPickMessage, "Win!");
 		currentPlayerMotion = APoint::ORIGIN - thePlayer.getLocation();
 		mScene->AttachChild(endCard);
+		audio.playEffect(6);
 		gameState = 3;
 	}
 	
