@@ -1,5 +1,5 @@
 APP ?= lazlow
-CFG ?= Debug
+CFG ?= Release
 SYS ?= Linux
 GRF ?= Glx
 
