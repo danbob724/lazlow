@@ -395,6 +395,8 @@ void lazMain::TimeBasedMove() {
 		}
 		sprintf(mPickMessage, "Win!");
 		currentPlayerMotion = APoint::ORIGIN - thePlayer.getLocation();
+		mScene->AttachChild(endCard);
+		gameState = 3;
 	}
 	
 	if(!bossMode && (liveEnemies <= 0))
