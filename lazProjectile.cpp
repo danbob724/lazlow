@@ -47,12 +47,14 @@ lazProjectile::lazProjectile(ShapeMaker* someShapeMaker, int type_in) {
 	mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 }
 
+//Updates projectile location
 void lazProjectile::Update() {
 	//do the movement updating
 	loc = loc + AVector(x_dir, 0.0, z_dir);
 	mesh->LocalTransform.SetTranslate(APoint(loc));
 }
 
+//Checks whether the projectile is active
 int lazProjectile::active() {
 	return state; //0 = inactive, 1 = active
 }
