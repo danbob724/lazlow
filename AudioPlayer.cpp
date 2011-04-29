@@ -5,12 +5,7 @@ bool isEnabled;
 
 Mix_Music* music;
 
-Mix_Chunk* shot;
-Mix_Chunk* hit;
-Mix_Chunk* death;
-Mix_Chunk* minedrop;
-Mix_Chunk* mineblast;
-
+Mix_Chunk* sfx[7];
 
 AudioPlayer::AudioPlayer()
 {
@@ -23,11 +18,13 @@ AudioPlayer::AudioPlayer()
 
 	music = Mix_LoadMUS( "C:/SDL/wuman.wav" );
 
-	shot = Mix_LoadWAV( "shot.wav" );
-	hit = Mix_LoadWAV( "hit.wav" );
-	death = Mix_LoadWAV( "death.wav" );
-	minedrop = Mix_LoadWAV( "minedrop.wav" );
-	mineblast = Mix_LoadWAV( "mineblast.wav" );
+	sfx[0] = Mix_LoadWAV( "shot.wav" );
+	sfx[1] = Mix_LoadWAV( "hit.wav" );
+	sfx[2] = Mix_LoadWAV( "death.wav" );
+	sfx[3] = Mix_LoadWAV( "minedrop.wav" );
+	sfx[4] = Mix_LoadWAV( "mineblast.wav" );
+	sfx[5] = Mix_LoadWAV( "bosses.wav" );
+	sfx[6] = Mix_LoadWAV( "win.wav" );
 
 }//constructor
 
@@ -55,9 +52,14 @@ void AudioPlayer::disableAudio()
 void AudioPlayer::closeAudio()
 {
 
-	Mix_FreeMusic( music );
-	Mix_FreeChunk( shot );
-	Mix_FreeChunk( hit );
+	Mix_FreeMusic( music);
+	Mix_FreeChunk(sfx[0]);
+	Mix_FreeChunk(sfx[1]);
+	Mix_FreeChunk(sfx[2]);
+	Mix_FreeChunk(sfx[3]);
+	Mix_FreeChunk(sfx[4]);
+	Mix_FreeChunk(sfx[5]);
+	Mix_FreeChunk(sfx[6]);
 
 	Mix_CloseAudio();
 
@@ -65,46 +67,13 @@ void AudioPlayer::closeAudio()
 
 void AudioPlayer::playEffect( int which )
 {
-
 	if( !audioReady() )
 		return;
 
-	switch(which)
-	{
-	case(0):
+	if(sfx[which] == NULL)
+		return;
 
-		if( shot == NULL )
-			return;
-
-		Mix_PlayChannel( -1 , shot , 0 );
-		break;
-	case(1):
-
-		if( hit == NULL )
-			return;
-
-		Mix_PlayChannel( -1 , hit , 0 );
-		break;
-	case(2):
-		if( death == NULL )
-			return;
-
-		Mix_PlayChannel( -1 , death , 0 );
-		break;
-	case(3):
-		if( minedrop == NULL )
-			return;
-
-		Mix_PlayChannel( -1 , minedrop , 0 );
-		break;
-	case(4):
-		if( mineblast == NULL )
-			return;
-
-		Mix_PlayChannel( -1 , mineblast , 0 );
-		break;
-
-	}//if
+	Mix_PlayChannel( -1 , sfx[which] , 0 );
 
 }//playEffect
 
