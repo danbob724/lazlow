@@ -1,4 +1,4 @@
-APP ?= warmup
+APP ?= lazlow
 CFG ?= Debug
 SYS ?= Linux
 GRF ?= Glx
