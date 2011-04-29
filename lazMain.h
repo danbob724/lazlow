@@ -84,6 +84,10 @@ protected:
 	AudioPlayer audio;
 	PlayerCharacter thePlayer;
 	TriMesh* terrain;
+	TriMesh* titleCard;
+	TriMesh* controlCard;
+	TriMesh* storyCard;
+	TriMesh* endCard;
 	//APoint playerLocation;
 	lazProjectile projectiles[NUM_PROJECTILES];
 	lazProjectile mines[NUM_MINES];
