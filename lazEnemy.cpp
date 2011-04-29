@@ -25,20 +25,24 @@ lazEnemy::lazEnemy(ShapeMaker* someShapeMaker) {
 	mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 }
 
+//This updates the enemy location
 void lazEnemy::Update() {
 	//do the movement updating
 	loc = loc + AVector(x_dir, 0.0f, z_dir);
 	mesh->LocalTransform.SetTranslate(APoint(loc));
 }
 
+//This checks if the enemy is active
 int lazEnemy::active() {
 	return state; //0 = inactive, 1 = active
 }
 
+//This sets the enemy active state
 void lazEnemy::setState(int newState) {
 	state = newState;
 }
 
+//This adjusts the enemy health on a spell hit
 void lazEnemy::hit(int hitValue) {
 	health -= hitValue;
 	if (health <= 0) {
@@ -46,10 +50,12 @@ void lazEnemy::hit(int hitValue) {
 	}
 }
 
+//Returns enemy health
 int lazEnemy::getCurrentHealth() {
 	return health;
 }
 
+//Sets enemy health
 void lazEnemy::setHealth(int healthIn){
 	health = healthIn;
 }

@@ -29,6 +29,7 @@ AudioPlayer::AudioPlayer()
 
 }//constructor
 
+//Checks whether SDL is initialized and audio is currently enabled
 bool AudioPlayer::audioReady()
 {
 
@@ -36,6 +37,7 @@ bool AudioPlayer::audioReady()
 
 }//audioReady
 
+//Enables audio to play if SDL is initialized
 void AudioPlayer::enableAudio()
 {
 
@@ -43,6 +45,7 @@ void AudioPlayer::enableAudio()
 
 }//enableAudio
 
+//Disables audio
 void AudioPlayer::disableAudio()
 {
 
@@ -50,6 +53,7 @@ void AudioPlayer::disableAudio()
 
 }//disableAudio
 
+//Closes audio cleanly...meant for termination
 void AudioPlayer::closeAudio()
 {
 
@@ -67,6 +71,7 @@ void AudioPlayer::closeAudio()
 
 }//closeAudio
 
+//Plays a single sound effect by index
 void AudioPlayer::playEffect( int which )
 {
 	if( !audioReady() )
@@ -79,6 +84,7 @@ void AudioPlayer::playEffect( int which )
 
 }//playEffect
 
+//Plays a music track on infinite loop
 void AudioPlayer::playMusic()
 {
 
@@ -95,6 +101,7 @@ void AudioPlayer::playMusic()
 
 }//playMusic
 
+//Stops music playing...doesn't save location
 void AudioPlayer::stopMusic()
 {
 

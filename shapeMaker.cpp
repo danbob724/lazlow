@@ -57,15 +57,13 @@ Wm5::TriMesh* ShapeMaker::CreateDodecahedron() {
             Float2& tcoord1 = vba.TCoord<Float2>(1, i);
             tcoord1[0] *= 4.0f;
             tcoord1[1] *= 4.0f;
-        }
-		
+        }		
     }
 	
     std::string baseName = Environment::GetPathR("Water.wmtf");
     Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
     baseTexture->GenerateMipmaps();
 	
-
     if (mUseBumpMap)
     {
         std::string effectFile = Environment::GetPathR("SimpleBumpMap.wmfx");
