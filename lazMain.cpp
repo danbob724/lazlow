@@ -33,7 +33,8 @@ lazMain::lazMain ()
 	thePlayer = PlayerCharacter(&mShapeMaker, mCamera);
 	currentPlayerMotion = AVector(0.0f, 0.0f, 0.0f);
 	activeMines = 0;
-	gameState = 0;
+	gameState = 2;
+	cardCounter = 3;
 	wPressed = false;
 	aPressed = false;
 	sPressed = false;
@@ -393,6 +394,7 @@ void lazMain::TimeBasedMove() {
 			gameState = 1;
 		}
 		sprintf(mPickMessage, "Win!");
+		currentPlayerMotion = APoint::ORIGIN - thePlayer.getLocation();
 	}
 	
 	if(!bossMode && (liveEnemies <= 0))
@@ -655,6 +657,27 @@ bool lazMain::OnKeyDown (unsigned char key, int x, int y)
 		{
 			gameState = 0;
 			sprintf(mPickMessage, "Unpaused");
+		}
+		else if(gameState == 2) {
+			if (cardCounter == 3) {
+				titleCard->LocalTransform.SetTranslate(APoint(0.0f, 100.f, 15.f));
+				cardCounter--;
+				return true;
+			}
+			else if (cardCounter == 2) {
+				storyCard->LocalTransform.SetTranslate(APoint(0.0f, 100.f, 15.f));
+				cardCounter--;
+				return true;
+			}
+			else if (cardCounter == 1) {
+				controlCard->LocalTransform.SetTranslate(APoint(0.0f, 100.f, 15.f));
+				cardCounter--;
+				return true;
+			}
+			else {
+				gameState = 0;
+				return true;
+			}
 		}
 
 		return true;
@@ -1013,6 +1036,23 @@ void lazMain::CreateScene ()
 	titleCard->LocalTransform.SetTranslate(APoint(0.0f, 12.f, -12.0f));
 	mScene->AttachChild(titleCard);
 
+	storyCard = mShapeMaker.CreateStory();
+	storyCard->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, -0.75f*Mathf::PI));
+	storyCard->LocalTransform.SetScale(APoint(2.5f, 2.5f, 0.1f));
+	storyCard->LocalTransform.SetTranslate(APoint(0.0f, 11.9f, -11.9f));
+	mScene->AttachChild(storyCard);
+
+	controlCard = mShapeMaker.CreateControls();
+	controlCard->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, -0.75f*Mathf::PI));
+	controlCard->LocalTransform.SetScale(APoint(2.5f, 2.5f, 0.1f));
+	controlCard->LocalTransform.SetTranslate(APoint(0.0f, 11.8f, -11.8f));
+	mScene->AttachChild(controlCard);
+
+	endCard = mShapeMaker.CreateEnding();
+	endCard->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, -0.75f*Mathf::PI));
+	endCard->LocalTransform.SetScale(APoint(2.5f, 2.5f, 0.1f));
+	endCard->LocalTransform.SetTranslate(APoint(0.0f, 12.f, -12.0f));
+
 	//printf("New node...\n");
 	
 	//TriMesh* mesh[4];
@@ -1068,7 +1108,7 @@ void lazMain::CreateScene ()
     mScene->AttachChild(mesh);
 	*/
 
-	gameState = 1;
+	gameState = 2;
 	sprintf(mPickMessage, "Press \'p\' to unpause and begin the game.");
 }
 //----------------------------------------------------------------------------

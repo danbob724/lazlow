@@ -364,6 +364,204 @@ Wm5::TriMesh* ShapeMaker::CreateTitle()
     return mesh;
 }		
 
+Wm5::TriMesh* ShapeMaker::CreateEnding()
+{
+    VertexFormat* vformat;
+    if (mUseBumpMap)
+    {
+        vformat = VertexFormat::Create(5,
+            VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_NORMAL, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_COLOR, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 1);
+    }
+    else
+    {
+        vformat = VertexFormat::Create(2,
+            VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0);
+    }
+
+    TriMesh* mesh = StandardMesh(vformat).Box(1.f, 1.f, 1.f);
+    VertexBufferAccessor vba(mesh);
+    for (int i = 0; i < vba.GetNumVertices(); ++i)
+    {
+        Float2& tcoord0 = vba.TCoord<Float2>(0, i);
+        tcoord0[0] *= 4.0f;
+        tcoord0[1] *= 4.0f;
+        if (mUseBumpMap)
+        {
+            Float2& tcoord1 = vba.TCoord<Float2>(1, i);
+            tcoord1[0] *= 4.0f;
+            tcoord1[1] *= 4.0f;
+        }
+    }
+
+    std::string baseName = Environment::GetPathR("ending.wmtf");
+    Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
+    baseTexture->GenerateMipmaps();
+/*
+    if (mUseBumpMap)
+    {
+        std::string effectFile = Environment::GetPathR("SimpleBumpMap.wmfx");
+        SimpleBumpMapEffect* effect = new0 SimpleBumpMapEffect(effectFile);
+
+        std::string normalName = Environment::GetPathR("BricksNormal.wmtf");
+        Texture2D* normalTexture = Texture2D::LoadWMTF(normalName);
+        normalTexture->GenerateMipmaps();
+
+        mesh->SetEffectInstance(effect->CreateInstance(baseTexture,
+            normalTexture));
+
+        mLightDirection = AVector::UNIT_Z;
+		//mLightDirection = camDvector;
+		//mLightPosition = camPosition;
+        SimpleBumpMapEffect::ComputeLightVectors(mesh, mLightDirection);
+    }
+    else
+    {
+	*/
+        mesh->SetEffectInstance(Texture2DEffect::CreateUniqueInstance(
+            baseTexture, Shader::SF_LINEAR_LINEAR, Shader::SC_REPEAT,
+            Shader::SC_REPEAT));
+ //   }
+	mesh->SetName("Victory");
+    return mesh;
+}
+
+Wm5::TriMesh* ShapeMaker::CreateStory()
+{
+    VertexFormat* vformat;
+    if (mUseBumpMap)
+    {
+        vformat = VertexFormat::Create(5,
+            VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_NORMAL, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_COLOR, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 1);
+    }
+    else
+    {
+        vformat = VertexFormat::Create(2,
+            VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0);
+    }
+
+    TriMesh* mesh = StandardMesh(vformat).Box(1.f, 1.f, 1.f);
+    VertexBufferAccessor vba(mesh);
+    for (int i = 0; i < vba.GetNumVertices(); ++i)
+    {
+        Float2& tcoord0 = vba.TCoord<Float2>(0, i);
+        tcoord0[0] *= 4.0f;
+        tcoord0[1] *= 4.0f;
+        if (mUseBumpMap)
+        {
+            Float2& tcoord1 = vba.TCoord<Float2>(1, i);
+            tcoord1[0] *= 4.0f;
+            tcoord1[1] *= 4.0f;
+        }
+    }
+
+    std::string baseName = Environment::GetPathR("storysplash.wmtf");
+    Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
+    baseTexture->GenerateMipmaps();
+/*
+    if (mUseBumpMap)
+    {
+        std::string effectFile = Environment::GetPathR("SimpleBumpMap.wmfx");
+        SimpleBumpMapEffect* effect = new0 SimpleBumpMapEffect(effectFile);
+
+        std::string normalName = Environment::GetPathR("BricksNormal.wmtf");
+        Texture2D* normalTexture = Texture2D::LoadWMTF(normalName);
+        normalTexture->GenerateMipmaps();
+
+        mesh->SetEffectInstance(effect->CreateInstance(baseTexture,
+            normalTexture));
+
+        mLightDirection = AVector::UNIT_Z;
+		//mLightDirection = camDvector;
+		//mLightPosition = camPosition;
+        SimpleBumpMapEffect::ComputeLightVectors(mesh, mLightDirection);
+    }
+    else
+    {
+	*/
+        mesh->SetEffectInstance(Texture2DEffect::CreateUniqueInstance(
+            baseTexture, Shader::SF_LINEAR_LINEAR, Shader::SC_REPEAT,
+            Shader::SC_REPEAT));
+ //   }
+	mesh->SetName("Story");
+    return mesh;
+}
+
+Wm5::TriMesh* ShapeMaker::CreateControls()
+{
+    VertexFormat* vformat;
+    if (mUseBumpMap)
+    {
+        vformat = VertexFormat::Create(5,
+            VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_NORMAL, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_COLOR, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 1);
+    }
+    else
+    {
+        vformat = VertexFormat::Create(2,
+            VertexFormat::AU_POSITION, VertexFormat::AT_FLOAT3, 0,
+            VertexFormat::AU_TEXCOORD, VertexFormat::AT_FLOAT2, 0);
+    }
+
+    TriMesh* mesh = StandardMesh(vformat).Box(1.f, 1.f, 1.f);
+    VertexBufferAccessor vba(mesh);
+    for (int i = 0; i < vba.GetNumVertices(); ++i)
+    {
+        Float2& tcoord0 = vba.TCoord<Float2>(0, i);
+        tcoord0[0] *= 4.0f;
+        tcoord0[1] *= 4.0f;
+        if (mUseBumpMap)
+        {
+            Float2& tcoord1 = vba.TCoord<Float2>(1, i);
+            tcoord1[0] *= 4.0f;
+            tcoord1[1] *= 4.0f;
+        }
+    }
+
+    std::string baseName = Environment::GetPathR("controls.wmtf");
+    Texture2D* baseTexture = Texture2D::LoadWMTF(baseName);
+    baseTexture->GenerateMipmaps();
+/*
+    if (mUseBumpMap)
+    {
+        std::string effectFile = Environment::GetPathR("SimpleBumpMap.wmfx");
+        SimpleBumpMapEffect* effect = new0 SimpleBumpMapEffect(effectFile);
+
+        std::string normalName = Environment::GetPathR("BricksNormal.wmtf");
+        Texture2D* normalTexture = Texture2D::LoadWMTF(normalName);
+        normalTexture->GenerateMipmaps();
+
+        mesh->SetEffectInstance(effect->CreateInstance(baseTexture,
+            normalTexture));
+
+        mLightDirection = AVector::UNIT_Z;
+		//mLightDirection = camDvector;
+		//mLightPosition = camPosition;
+        SimpleBumpMapEffect::ComputeLightVectors(mesh, mLightDirection);
+    }
+    else
+    {
+	*/
+        mesh->SetEffectInstance(Texture2DEffect::CreateUniqueInstance(
+            baseTexture, Shader::SF_LINEAR_LINEAR, Shader::SC_REPEAT,
+            Shader::SC_REPEAT));
+ //   }
+	mesh->SetName("Controls");
+    return mesh;
+}
+
 Wm5::TriMesh* ShapeMaker::CreateCube ()
 {
     VertexFormat* vformat;
