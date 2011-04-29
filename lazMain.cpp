@@ -1003,6 +1003,12 @@ void lazMain::CreateScene ()
 	terrain->LocalTransform.SetTranslate(APoint(0.0f, -0.5f, 0.0f));
 	mScene->AttachChild(terrain);
 
+	titleCard = mShapeMaker.CreateTitle();
+	titleCard->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, -0.75f*Mathf::PI));
+	titleCard->LocalTransform.SetScale(APoint(2.5f, 2.5f, 0.1f));
+	titleCard->LocalTransform.SetTranslate(APoint(0.0f, 12.f, -12.0f));
+	mScene->AttachChild(titleCard);
+
 	//printf("New node...\n");
 	
 	//TriMesh* mesh[4];
