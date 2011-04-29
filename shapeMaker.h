@@ -34,6 +34,7 @@ class ShapeMaker
 		TriMesh* CreateEnding();
 		TriMesh* CreateStory();
 		TriMesh* CreateControls();
+		TriMesh* CreateJoke();
 
 	protected:
 		Environment* shapeMakerEnv;

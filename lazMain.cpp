@@ -34,7 +34,7 @@ lazMain::lazMain ()
 	currentPlayerMotion = AVector(0.0f, 0.0f, 0.0f);
 	activeMines = 0;
 	gameState = 2;
-	cardCounter = 3;
+	cardCounter = 4;
 	wPressed = false;
 	aPressed = false;
 	sPressed = false;
@@ -662,13 +662,18 @@ bool lazMain::OnKeyDown (unsigned char key, int x, int y)
 			sprintf(mPickMessage, "Unpaused");
 		}
 		else if(gameState == 2) {
-			if (cardCounter == 3) {
+			if (cardCounter == 4) {
 				titleCard->LocalTransform.SetTranslate(APoint(0.0f, 100.f, 15.f));
 				cardCounter--;
 				return true;
 			}
-			else if (cardCounter == 2) {
+			else if (cardCounter == 3) {
 				storyCard->LocalTransform.SetTranslate(APoint(0.0f, 100.f, 15.f));
+				cardCounter--;
+				return true;
+			}
+			else if (cardCounter == 2) {
+				torusCard->LocalTransform.SetTranslate(APoint(0.0f, 100.f, 15.f));
 				cardCounter--;
 				return true;
 			}
@@ -1044,6 +1049,12 @@ void lazMain::CreateScene ()
 	storyCard->LocalTransform.SetScale(APoint(2.5f, 2.5f, 0.1f));
 	storyCard->LocalTransform.SetTranslate(APoint(0.0f, 11.9f, -11.9f));
 	mScene->AttachChild(storyCard);
+
+	torusCard = mShapeMaker.CreateJoke();
+	torusCard->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, -0.75f*Mathf::PI));
+	torusCard->LocalTransform.SetScale(APoint(2.5f, 2.5f, 0.1f));
+	torusCard->LocalTransform.SetTranslate(APoint(0.0f, 11.85f, -11.85f));
+	mScene->AttachChild(torusCard);
 
 	controlCard = mShapeMaker.CreateControls();
 	controlCard->LocalTransform.SetRotate(HMatrix(AVector::UNIT_X, -0.75f*Mathf::PI));

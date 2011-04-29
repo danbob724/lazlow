@@ -88,6 +88,7 @@ protected:
 	TriMesh* controlCard;
 	TriMesh* storyCard;
 	TriMesh* endCard;
+	TriMesh* torusCard;
 	int cardCounter;
 	//APoint playerLocation;
 	lazProjectile projectiles[NUM_PROJECTILES];
