@@ -39,6 +39,7 @@ bool GamePad::initialize()
 }//initialize
 
 //--------------------------------------------------
+//Checks if there is a stick ready to be used
 bool GamePad::isEnabled()
 {
 
@@ -52,6 +53,7 @@ bool GamePad::isEnabled()
 
 }//isEnabled    
 //--------------------------------------------------
+//Closes the joystick...meant for termination
 void GamePad::closeStick()
 {
         SDL_JoystickClose(stick);
@@ -60,6 +62,9 @@ void GamePad::closeStick()
 }//closeStick
 
 //--------------------------------------------------
+//This is where all of the gamepad polling happens.
+//This checks axis values, accounts for deadzones,
+//checks the trigger values and button presses.
 void GamePad::poll()
 {
 
