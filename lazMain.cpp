@@ -220,6 +220,7 @@ void lazMain::TimeBasedMove() {
 		{		
 			if((thePlayer.getLocation() - mines[i].loc).Length() - thePlayer.radius - mines[i].radius <= 0 && mines[i].radius == 0.35f)
 			{
+				audio.playEffect(7);
 				mines[i].radius += 3.1f;
 			}
 
@@ -238,6 +239,7 @@ void lazMain::TimeBasedMove() {
 				mines[i].mesh->LocalTransform.SetScale(APoint(mines[i].radius, 0.25f, mines[i].radius));
 				mines[i].mesh->LocalTransform.SetTranslate(APoint(0.0f, 100.0f, 0.0f));
 				activeMines--;
+				sprintf(mPickMessage, "Mines Available: %d", NUM_MINES - activeMines);
 			}	
 		}
 	}
@@ -520,6 +522,7 @@ void lazMain::OnIdle ()
 								mines[i].x_dir = 0;
 								mines[i].z_dir = 0;
 								activeMines++;
+								sprintf(mPickMessage, "Mines Available: %d", NUM_MINES - activeMines);
 								break;
 							}
 						}				
@@ -859,7 +862,8 @@ bool lazMain::OnMouseClick(int button, int state, int x, int y, unsigned int)
 						mines[i].loc = thePlayer.getLocation() + shotDir * 2;
 						mines[i].x_dir = 0;
 						mines[i].z_dir = 0;
-						activeMines++;			
+						activeMines++;	
+						sprintf(mPickMessage, "Mines Available: %d", NUM_MINES - activeMines);
 						break;
 					}
 				}				

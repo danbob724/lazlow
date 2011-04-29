@@ -5,7 +5,7 @@ bool isEnabled;
 
 Mix_Music* music;
 
-Mix_Chunk* sfx[7];
+Mix_Chunk* sfx[8];
 
 AudioPlayer::AudioPlayer()
 {
@@ -25,6 +25,7 @@ AudioPlayer::AudioPlayer()
 	sfx[4] = Mix_LoadWAV( "mineblast.wav" );
 	sfx[5] = Mix_LoadWAV( "bosses.wav" );
 	sfx[6] = Mix_LoadWAV( "win.wav" );
+	sfx[7] = Mix_LoadWAV( "minepick.wav" );
 
 }//constructor
 
@@ -60,6 +61,7 @@ void AudioPlayer::closeAudio()
 	Mix_FreeChunk(sfx[4]);
 	Mix_FreeChunk(sfx[5]);
 	Mix_FreeChunk(sfx[6]);
+	Mix_FreeChunk(sfx[7]);
 
 	Mix_CloseAudio();
 
